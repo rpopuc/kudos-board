@@ -1,0 +1,18 @@
+class Panel {
+  + _id: ObjectId
+  + name: string
+  + password: string
+  + createdAt: Date
+  + slug: string
+}
+
+class Kudos {
+  + _id: ObjectId
+  + toName: string
+  + fromName: string
+  + description: string
+  + panelId: ObjectId
+  + createdAt: Date
+}
+
+Panel "1" --> "0..*" Kudos

@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: ./.docker/build/app
+    volumes:
+      - ./:/var/www/
+    tty: true
+    ports:
+      - 80:80
+
