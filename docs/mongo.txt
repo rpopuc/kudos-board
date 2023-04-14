@@ -1,4 +1,4 @@
-docker-compose exec mongo bash
+docker-compose exec database bash
 mongo
 use app
 db.panels.find()
