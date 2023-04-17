@@ -1,6 +1,7 @@
-class Kudos
-{
-  index(req: any, res: any) {
+import { Request, Response } from "express";
+
+class Kudos {
+  index(req: Request, res: Response) {
     res.send("Kudos::index");
   }
 }

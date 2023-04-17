@@ -1,6 +1,7 @@
-class Panel
-{
-  index(req: any, res: any) {
+import { Request, Response } from "express";
+
+class Panel {
+  index(req: Request, res: Response) {
     res.send("Panel::index");
   }
 }
