@@ -8,6 +8,8 @@ services:
     volumes:
       - ./:/var/www/
     tty: true
+    environment:
+      - PORT=80
     ports:
       - 80:80
 
