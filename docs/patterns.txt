@@ -1,0 +1,3 @@
+Prettier - Code formatter para typescript
+
+ctrl + shift + p -> format with Prettier ou save on format with Prettier
