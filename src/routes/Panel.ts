@@ -6,6 +6,7 @@ class Panel {
     const controller = new PanelController();
 
     app.get("/panel", controller.index);
+    app.post("/panel", controller.store);
   }
 }
 
