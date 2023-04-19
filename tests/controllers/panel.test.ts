@@ -22,7 +22,7 @@ describe("Panel Controller", () => {
       jest.spyOn(useCase, "handle").mockReturnValue(new Panel(panelData));
 
       const panelController = new PanelController(useCase);
-      panelController.store(mockRequest, mockResponse);
+      panelController.store()(mockRequest, mockResponse);
 
       expect(useCase.handle).toHaveBeenCalledWith(mockRequest.body);
     });

@@ -9,14 +9,18 @@ class Panel {
     this.useCase = useCase;
   }
 
-  index(req: Request, res: Response) {
-    res.send("Panel::index");
+  index(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      res.send("Panel::index");
+    };
   }
 
-  store(req: Request, res: Response) {
-    const panel = this.useCase.handle(req.body);
+  store(): (req: Request, res: Response) => void {
+    return (req: Request, res: Response) => {
+      const panel = this.useCase.handle(req.body);
 
-    res.send(`POST request to the Panel::${panel.slug}`);
+      res.send(`POST request to the Panel::${panel.slug}`);
+    };
   }
 }
 
