@@ -8,7 +8,7 @@ class Panel {
 
     const controller = new PanelController(useCase);
 
-    app.get("/panel", controller.index());
+    app.get("/panel/:slug", controller.index());
     app.post("/panel", controller.store());
   }
 }

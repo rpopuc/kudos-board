@@ -11,7 +11,7 @@ class Panel {
 
   index(): (req: Request, res: Response) => void {
     return (req: Request, res: Response) => {
-      res.send("Panel::index");
+      res.send(`Panel::index${req.params.slug}`);
     };
   }
 
