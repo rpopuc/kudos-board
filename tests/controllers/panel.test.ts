@@ -4,7 +4,29 @@ import Panel from "../../src/domains/entities/Panel";
 import PanelController from "../../src/controllers/Panel";
 
 describe("Panel Controller", () => {
-  describe("can store a panel", () => {
+  describe("@index", () => {
+    it("should show a stored panel", () => {
+      const mockRequest = {
+        params: {
+          slug: "1",
+        },
+        body: {}
+      } as unknown as Request;
+
+      const mockResponse = {
+        send: jest.fn(),
+      } as unknown as Response;
+
+      const useCase = new CreatePanel();
+
+      const panelController = new PanelController(useCase);
+      panelController.index()(mockRequest, mockResponse);
+
+      expect(mockResponse.send).toHaveBeenCalledWith(`Panel::index${mockRequest.params.slug}`);
+    });
+  });
+
+  describe("@store", () => {
     it("should create a panel and return a success message", () => {
       const mockRequest = {
         body: {
