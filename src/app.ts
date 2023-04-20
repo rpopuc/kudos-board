@@ -3,6 +3,9 @@ import PanelRouter from "./routes/Panel";
 import KudosRouter from "./routes/Kudos";
 
 const app = express();
+
+app.use(express.json());
+
 PanelRouter.setup(app);
 KudosRouter.setup(app);
 

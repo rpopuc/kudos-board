@@ -4,6 +4,13 @@ Node application for creating and displaying Kudos card panels.
 
 ## Setup
 
+Primeiro, é necessário definir os arquivos de configuração a partir dos arquivos de exemplo:
+
+```bash
+cp .env.example .env
+cp docker-compose.override.example.yml docker-compose.override.yml
+```
+
 Para rodar aplicação docker rode:
 
 ```bash

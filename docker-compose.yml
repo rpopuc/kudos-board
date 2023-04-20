@@ -10,8 +10,6 @@ services:
     tty: true
     environment:
       - PORT=80
-    ports:
-      - 80:80
 
   database:
     image: mongo:latest
