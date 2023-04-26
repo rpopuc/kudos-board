@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import CreatePanel from "../domains/useCases/CreatePanel";
+import CreatePanel from "../domains/Panel/UseCases/CreatePanel";
 
 class Panel {
   useCase: CreatePanel;

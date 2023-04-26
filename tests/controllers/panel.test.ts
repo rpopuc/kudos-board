@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import CreatePanel from "../../src/domains/useCases/CreatePanel";
-import Panel from "../../src/domains/entities/Panel";
+import CreatePanel from "../../src/domains/Panel/UseCases/CreatePanel";
+import Panel from "../../src/domains/Panel/Entities/Panel";
 import PanelController from "../../src/controllers/Panel";
+import PanelRepository from "../../src/domains/Panel/Repositories/PanelRepository";
 
 describe("Panel Controller", () => {
   describe("@index", () => {
@@ -17,7 +18,8 @@ describe("Panel Controller", () => {
         send: jest.fn(),
       } as unknown as Response;
 
-      const useCase = new CreatePanel();
+      const panelRepository = new PanelRepository
+      const useCase = new CreatePanel(panelRepository);
 
       const panelController = new PanelController(useCase);
       panelController.index()(mockRequest, mockResponse);
@@ -39,7 +41,8 @@ describe("Panel Controller", () => {
         send: jest.fn(),
       } as unknown as Response;
 
-      const useCase = new CreatePanel();
+      const panelRepository = new PanelRepository
+      const useCase = new CreatePanel(panelRepository);
       const panelData = { slug: "test-panel" };
       jest.spyOn(useCase, "handle").mockReturnValue(new Panel(panelData));
 
