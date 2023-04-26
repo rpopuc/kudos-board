@@ -1,6 +1,8 @@
+<p align="center"><img src="./public/logo.png" alt="Logo Kudos Panel" width="100" height="100"></p>
+
 # Kudos Board
 
-Node application for creating and displaying Kudos card panels.
+This is a learning project of a Node application for creating and displaying Kudos card panels.
 
 ## Setup
 
