@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+# Run tests
+docker-compose exec -T app npm test
+
+# Validate code with Prettier
+docker-compose exec -T app npm run prettier
