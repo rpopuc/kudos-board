@@ -1,4 +1,4 @@
-import Panel from "../../../../src/domains/Panel/Entities/Panel";
+import Panel from "@/domains/Panel/Entities/Panel";
 
 describe("Panel", () => {
   describe("constructor", () => {

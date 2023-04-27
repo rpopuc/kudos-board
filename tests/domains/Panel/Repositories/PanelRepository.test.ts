@@ -1,5 +1,5 @@
-import PanelRepository from '../../../../src/domains/Panel/Repositories/PanelRepository';
-import Panel from '../../../../src/domains/Panel/Entities/Panel';
+import PanelRepository from '@/domains/Panel/Repositories/PanelRepository';
+import Panel from '@/domains/Panel/Entities/Panel';
 
 describe('PanelRepository', () => {
   describe('create', () => {
