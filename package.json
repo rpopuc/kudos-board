@@ -9,7 +9,9 @@
     "test:coverage": "jest --coverage --coverageReporters=json-summary",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --watch ./src ./index.ts"
+    "dev": "ts-node-dev --respawn --watch ./src ./index.ts",
+    "prettier": "prettier -c 'src/**/*.ts' 'tests/**/*.ts'",
+    "prettier:fix": "prettier -w 'src/**/*.ts' 'tests/**/*.ts'"
   },
   "author": "",
   "license": "ISC",
