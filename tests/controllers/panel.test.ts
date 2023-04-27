@@ -11,14 +11,14 @@ describe("Panel Controller", () => {
         params: {
           slug: "1",
         },
-        body: {}
+        body: {},
       } as unknown as Request;
 
       const mockResponse = {
         send: jest.fn(),
       } as unknown as Response;
 
-      const panelRepository = new PanelRepository
+      const panelRepository = new PanelRepository();
       const useCase = new CreatePanel(panelRepository);
 
       const panelController = new PanelController(useCase);
@@ -41,7 +41,7 @@ describe("Panel Controller", () => {
         send: jest.fn(),
       } as unknown as Response;
 
-      const panelRepository = new PanelRepository
+      const panelRepository = new PanelRepository();
       const useCase = new CreatePanel(panelRepository);
       const panelData = { slug: "test-panel" };
       jest.spyOn(useCase, "handle").mockReturnValue(new Panel(panelData));

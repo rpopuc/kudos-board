@@ -23,3 +23,16 @@ jobs:
 
       - name: Validate Coverage
         run: node .github/coverage.js
+
+      - name: Prettier Check
+        run: npm run prettier
+
+      - name: Fail if Prettier check failed
+        run: |
+          if [ $? -eq 0 ]
+          then
+            echo "All files are formatted correctly."
+          else
+            echo "There are some files that are not formatted correctly."
+            exit 1
+          fi
