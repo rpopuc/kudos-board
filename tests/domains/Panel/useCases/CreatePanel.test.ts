@@ -1,6 +1,6 @@
-import CreatePanel from "../../../../src/domains/Panel/UseCases/CreatePanel";
-import PanelEntity from "../../../../src/domains/Panel/Entities/Panel";
-import Repository from "../../../../src/domains/Panel/Repositories/PanelRepository";
+import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
+import PanelEntity from "@/domains/Panel/Entities/Panel";
+import Repository from "@/domains/Panel/Repositories/PanelRepository";
 
 describe("CreatePanel", () => {
   describe("handle", () => {

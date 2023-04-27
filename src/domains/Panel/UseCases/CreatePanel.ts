@@ -1,5 +1,5 @@
-import PanelEntity from "../Entities/Panel";
-import Repository from "../Repositories/PanelRepository"
+import PanelEntity from "@/domains/Panel/Entities/Panel";
+import Repository from "@/domains/Panel/Repositories/PanelRepository"
 
 class CreatePanel {
   constructor(

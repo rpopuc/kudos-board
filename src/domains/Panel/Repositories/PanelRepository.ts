@@ -1,4 +1,4 @@
-import PanelEntity from "../Entities/Panel";
+import PanelEntity from "@/domains/Panel/Entities/Panel";
 
 class PanelRepository
 {
