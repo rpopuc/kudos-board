@@ -4,6 +4,8 @@
   "description": "Node application for creating and displaying Kudos card panels.",
   "main": "index.js",
   "scripts": {
+    "validate-installation": "./scripts/install.sh && echo 'Installation validated successfully.'",
+    "postinstall": "npm run validate-installation",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage --coverageReporters=json-summary",
