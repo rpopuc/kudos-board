@@ -15,5 +15,25 @@ describe("PanelRepository", () => {
       expect(panelEntity.slug).not.toBeUndefined();
       expect(panelEntity.title).toBe(panelData.title);
     });
+
+    it("should find a PanelEntity by slug", () => {
+      const panelRepository = new PanelRepository();
+      const panelData = {
+        title: "Test Panel",
+      };
+
+      const panelEntity = panelRepository.create(panelData);
+      const foundPanel = panelRepository.findBySlug(panelEntity.slug);
+
+      expect(foundPanel).not.toBeUndefined();
+      expect(foundPanel?.title).toBe(panelData.title);
+    });
+
+    it("should not find a invalid PanelEntity by slug", () => {
+      const panelRepository = new PanelRepository();
+      const foundPanel = panelRepository.findBySlug("invalid_slug");
+
+      expect(foundPanel).toBeUndefined();
+    });
   });
 });
