@@ -1,5 +1,6 @@
 import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
 import Panel from "@/domains/Panel/Entities/Panel";
+import PanelData from "@/domains/Panel/DTO/PanelData";
 
 describe("PanelRepository", () => {
   describe("create", () => {
@@ -7,7 +8,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         title: "Test Panel",
-      };
+      } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);
 
@@ -20,7 +21,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         title: "Test Panel",
-      };
+      } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);
       const foundPanel = panelRepository.findBySlug(panelEntity.slug);

@@ -1,4 +1,5 @@
 import PanelEntity from "@/domains/Panel/Entities/Panel";
+import PanelData from "@/domains/Panel/DTO/PanelData";
 
 class PanelRepository {
   private panels: PanelEntity[];
@@ -7,10 +8,7 @@ class PanelRepository {
     this.panels = [];
   }
 
-  /**
-   * todo: set a type for panelData
-   */
-  create(panelData: any): PanelEntity {
+  create(panelData: PanelData): PanelEntity {
     const panel = new PanelEntity(panelData);
     this.panels.push(panel);
     return panel;
