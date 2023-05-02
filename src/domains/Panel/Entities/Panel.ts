@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 class Panel {
   public title: string;
   public slug: string;
@@ -5,7 +7,7 @@ class Panel {
   public createdAt: string;
 
   constructor(data: any) {
-    this.slug = "_futuro_slug_aleatorio";
+    this.slug = randomUUID();
     this.title = data.title;
     this.owner = data.owner;
     this.createdAt = data.createdAt;
