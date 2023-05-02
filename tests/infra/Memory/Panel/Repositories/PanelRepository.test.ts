@@ -1,4 +1,4 @@
-import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
+import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelData from "@/domains/Panel/DTO/PanelData";
 

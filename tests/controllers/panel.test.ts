@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelController from "@/controllers/Panel";
-import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
+// import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
+import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 
 describe("Panel Controller", () => {
   describe("@index", () => {
