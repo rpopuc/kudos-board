@@ -1,7 +1,7 @@
 import express from "express";
-import PanelController from "../controllers/Panel";
+import PanelController from "@/controllers/Panel";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
-import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
+import { PanelRepository } from "@/types";
 
 class Panel {
   static setup(app: express.Application) {

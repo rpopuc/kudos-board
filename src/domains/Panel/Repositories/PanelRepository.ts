@@ -1,9 +1,10 @@
 import PanelEntity from "@/domains/Panel/Entities/Panel";
+import PanelData from "@/domains/Panel/DTO/PanelData";
 
-class PanelRepository {
-  create(panelData: any): PanelEntity {
-    return new PanelEntity(panelData);
-  }
+interface PanelRepository {
+  create(panelData: PanelData): PanelEntity;
+
+  findBySlug(slug: string): PanelEntity | undefined;
 }
 
 export default PanelRepository;

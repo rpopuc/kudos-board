@@ -16,5 +16,20 @@ describe("Panel", () => {
       expect(panel.owner).toEqual(data.owner);
       expect(panel.createdAt).toEqual(data.createdAt);
     });
+
+    it("should initialize the slug randomly", () => {
+      const data = {
+        title: "Example Title",
+        owner: "Example Owner",
+        createdAt: "2022-04-19",
+      };
+
+      const panelOne = new Panel(data);
+      const panelTwo = new Panel(data);
+
+      expect(panelOne.slug).not.toBeUndefined();
+      expect(panelTwo.slug).not.toBeUndefined();
+      expect(panelOne.slug).not.toEqual(panelTwo.slug);
+    });
   });
 });
