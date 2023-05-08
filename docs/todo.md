@@ -1,3 +1,17 @@
-[] - Tornar o slug como um uuid
-[] - Index do controller chamar o Repository
-[] - Criar contrato para repositório e implementar em memória
+- Criar Painel (definir senha para administrador e de acesso opcional)
+- Edicão de Painel
+- Exclusão de Painel
+- Arquivamento de Painel
+- Visualizacão do Painel
+- Exportar para arquivo PDF
+- Exportar para arquivo jpeg
+- Exportar para arquivo csv
+
+- Listagem de Kudos
+- Criacão de Kudos
+- Edicão de Kudos
+- Exclusão de Kudos
+- Visualizacão de Kudos
+- Exportar para arquivo PDF
+- Exportar para arquivo jpeg
+- Exportar para arquivo csv
