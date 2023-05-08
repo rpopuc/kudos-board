@@ -1,7 +1,11 @@
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
+
 import PanelEntity from "@/domains/Panel/Entities/Panel";
 import PanelRepositoryInterface from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
 
+@injectable()
 class PanelRepository implements PanelRepositoryInterface {
   private panels: PanelEntity[];
 

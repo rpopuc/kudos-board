@@ -1,11 +1,14 @@
 import express from "express";
 import PanelController from "@/controllers/Panel";
+
+import { Container } from "@/inversify.config";
+import { TYPES } from "@/types";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
-import { PanelRepository } from "@/types";
+import PanelRepositoryInterface from "@/domains/Panel/Repositories/PanelRepository";
 
 class Panel {
   static setup(app: express.Application) {
-    const repository = new PanelRepository();
+    const repository = Container.get<PanelRepositoryInterface>(TYPES.PanelRepository);
 
     const useCase = new CreatePanel(repository);
 
