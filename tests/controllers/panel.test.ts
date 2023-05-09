@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelController from "@/controllers/Panel";
-// import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 
 describe("Panel Controller", () => {
@@ -23,7 +22,7 @@ describe("Panel Controller", () => {
       const useCase = new CreatePanel(panelRepository);
 
       const panelController = new PanelController(useCase);
-      panelController.index()(mockRequest, mockResponse);
+      panelController.index()(mockRequest, mockResponse, () => {});
 
       expect(mockResponse.send).toHaveBeenCalledWith(`Panel::index${mockRequest.params.slug}`);
     });
@@ -45,10 +44,10 @@ describe("Panel Controller", () => {
       const panelRepository = new PanelRepository();
       const useCase = new CreatePanel(panelRepository);
       const panelData = { slug: "test-panel" };
-      jest.spyOn(useCase, "handle").mockReturnValue(new Panel(panelData));
+      jest.spyOn(useCase, "handle").mockResolvedValueOnce(new Panel(panelData));
 
       const panelController = new PanelController(useCase);
-      panelController.store()(mockRequest, mockResponse);
+      panelController.store()(mockRequest, mockResponse, () => {});
 
       expect(useCase.handle).toHaveBeenCalledWith(mockRequest.body);
     });
