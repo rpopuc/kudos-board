@@ -9,13 +9,11 @@ import PanelRepositoryInterface from "@/domains/Panel/Repositories/PanelReposito
 class Panel {
   static setup(app: express.Application) {
     const repository = Container.get<PanelRepositoryInterface>(TYPES.PanelRepository);
-
     const useCase = new CreatePanel(repository);
-
     const controller = new PanelController(useCase);
 
-    app.get("/panel/:slug", controller.index());
     app.post("/panel", controller.store());
+    app.get("/panel/:slug", controller.index());
   }
 }
 
