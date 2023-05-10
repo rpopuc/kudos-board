@@ -55,7 +55,7 @@ describe("CreatePanel", () => {
         password: "Panel password",
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have a title");
+      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have title");
     });
 
     it("should throw an error if owner is missing", async () => {
@@ -65,7 +65,7 @@ describe("CreatePanel", () => {
         password: "Panel password",
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have an owner");
+      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have owner");
     });
 
     it("should throw an error if password is missing", async () => {
@@ -75,7 +75,7 @@ describe("CreatePanel", () => {
         password: "",
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have a password");
+      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have password");
     });
   });
 });

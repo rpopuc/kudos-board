@@ -1,21 +1,22 @@
 import PanelEntity from "@/domains/Panel/Entities/Panel";
 import Repository from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
+import EmptyData from "@/domains/shared/exceptions/EmptyData";
 
 class CreatePanel {
   constructor(private repository: Repository) {}
 
   validate(panelData: PanelData): void {
     if (!panelData.title) {
-      throw new Error("Does not have a title");
+      throw new EmptyData("EMPTY_TITLE", "title");
     }
 
     if (!panelData.owner) {
-      throw new Error("Does not have an owner");
+      throw new EmptyData("EMPTY_OWNER", "owner");
     }
 
     if (!panelData.password) {
-      throw new Error("Does not have a password");
+      throw new EmptyData("EMPTY_PASSWORD", "password");
     }
   }
 
