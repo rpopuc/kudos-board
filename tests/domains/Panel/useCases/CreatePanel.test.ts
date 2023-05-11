@@ -33,7 +33,7 @@ describe("CreatePanel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
-        password: "123456",
+        password: "test123456",
       } as PanelData;
 
       const panelRepository = {

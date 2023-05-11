@@ -8,6 +8,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         title: "Test Panel",
+        password: "teste12345",
       } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);
@@ -21,6 +22,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         title: "Test Panel",
+        password: "teste12345",
       } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);

@@ -34,6 +34,7 @@ describe("Panel Controller", () => {
         body: {
           description: "This is a test panel",
           name: "Test Panel",
+          password: "teste12345",
         },
       } as Request;
 
@@ -43,7 +44,7 @@ describe("Panel Controller", () => {
 
       const panelRepository = new PanelRepository();
       const useCase = new CreatePanel(panelRepository);
-      const panelData = { slug: "test-panel" };
+      const panelData = { slug: "test-panel", password: "teste12345" };
       jest.spyOn(useCase, "handle").mockResolvedValueOnce(new Panel(panelData));
 
       const panelController = new PanelController(useCase);

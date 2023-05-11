@@ -7,6 +7,7 @@ describe("Panel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
+        password: "teste12345",
       };
 
       const panel = new Panel(data);
@@ -22,6 +23,7 @@ describe("Panel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
+        password: "teste12345",
       };
 
       const panelOne = new Panel(data);
