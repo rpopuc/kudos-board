@@ -15,8 +15,8 @@ class CreatePanel {
       throw new EmptyData("EMPTY_OWNER", "owner");
     }
 
-    if (!panelData.password) {
-      throw new EmptyData("EMPTY_PASSWORD", "password");
+    if (!panelData.password.isValid()) {
+      throw new EmptyData("INVALID_PASSWORD", "password");
     }
   }
 

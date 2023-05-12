@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { RequestHandler } from "express";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 class Panel {
   constructor(private useCase: CreatePanel) {}
@@ -14,7 +15,10 @@ class Panel {
 
   store(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const panel = await this.useCase.handle(req.body);
+      const data = req.body;
+      data.password = new PlainTextPassword(data.password);
+
+      const panel = await this.useCase.handle(data);
 
       res.json(panel);
     });

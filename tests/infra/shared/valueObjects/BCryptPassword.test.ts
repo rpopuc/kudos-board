@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import Password from "@/domains/shared/valueObjects/Password";
+import Password from "@/infra/shared/ValueObjects/BCryptPassword";
 
 describe("Password", () => {
   const plainTextPassword = "myPassword123";
@@ -22,8 +22,10 @@ describe("Password", () => {
       expect(bcrypt.hashSync).toHaveBeenCalledWith(plainTextPassword, expect.any(String));
     });
 
-    it("should throw an error if the password does not meet the validation requirements", () => {
-      expect(() => new Password("short")).toThrowError("Invalid password");
+    it("should invalidate password does not meet the validation requirements", () => {
+      const password = new Password("short");
+
+      expect(password.isValid()).toBe(false);
     });
   });
 

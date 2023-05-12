@@ -2,6 +2,7 @@ import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
 import PanelEntity from "@/domains/Panel/Entities/Panel";
 import Repository from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("CreatePanel", () => {
   describe("handle", () => {
@@ -33,7 +34,7 @@ describe("CreatePanel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
-        password: "test123456",
+        password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
       const panelRepository = {
@@ -52,7 +53,7 @@ describe("CreatePanel", () => {
       const invalidPanelData: PanelData = {
         title: "",
         owner: "Panel owner",
-        password: "Panel password",
+        password: new PlainTextPassword("Panel password"),
       };
 
       await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have title");
@@ -62,7 +63,7 @@ describe("CreatePanel", () => {
       const invalidPanelData: PanelData = {
         title: "Panel title",
         owner: "",
-        password: "Panel password",
+        password: new PlainTextPassword("Panel password"),
       };
 
       await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have owner");
@@ -72,7 +73,7 @@ describe("CreatePanel", () => {
       const invalidPanelData: PanelData = {
         title: "Panel title",
         owner: "Panel owner",
-        password: "",
+        password: new PlainTextPassword(""),
       };
 
       await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have password");

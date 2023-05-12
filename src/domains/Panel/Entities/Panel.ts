@@ -14,8 +14,8 @@ class Panel {
     this.title = data.title;
     this.owner = data.owner;
     this.createdAt = data.createdAt;
-    this.password = new Password(data.password);
-    this.clientPassword = data.clientPassword ? new Password(data.clientPassword) : null;
+    this.password = data.password;
+    this.clientPassword = data.clientPassword;
   }
 }
 
