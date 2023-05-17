@@ -4,7 +4,7 @@ interface PanelData {
   title: string;
   slug?: string;
   owner: string;
-  createdAt?: string;
+  createdAt?: Date;
   password: Password;
   clientPassword?: Password;
 }

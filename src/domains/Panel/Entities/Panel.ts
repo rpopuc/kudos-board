@@ -5,7 +5,7 @@ class Panel {
   public title: string;
   public slug: string;
   public owner: string;
-  public createdAt: string;
+  public createdAt: Date;
   public password: Password;
   public clientPassword: Password | null;
 

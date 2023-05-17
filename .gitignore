@@ -3,3 +3,4 @@ node_modules/
 dist/
 docker-compose.override.yml
 .DS_Store
+.local

@@ -1,4 +1,6 @@
 - Criar Painel (definir senha para administrador e de acesso opcional)
+  - Melhorar teste da resposta do store
+  - Adicionar Presenter no Controller store
 - Edicão de Painel
 - Exclusão de Painel
 - Arquivamento de Painel

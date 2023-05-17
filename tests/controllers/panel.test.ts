@@ -38,9 +38,7 @@ describe("Panel Controller", () => {
         },
       } as Request;
 
-      const mockResponse = {
-        send: jest.fn(),
-      } as unknown as Response;
+      const mockResponse = {} as unknown as Response;
 
       const panelRepository = new PanelRepository();
       const useCase = new CreatePanel(panelRepository);
