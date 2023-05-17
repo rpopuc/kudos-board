@@ -23,6 +23,8 @@ class CreatePanel {
   async handle(panelData: PanelData): Promise<PanelEntity> {
     this.validate(panelData);
 
+    panelData.createdAt = new Date();
+
     return this.repository.create(panelData);
   }
 }

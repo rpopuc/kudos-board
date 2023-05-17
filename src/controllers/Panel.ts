@@ -18,9 +18,9 @@ class Panel {
       const data = req.body;
       data.password = new PlainTextPassword(data.password);
 
-      const panel = await this.useCase.handle(data);
+      const { owner, title, slug, createdAt } = await this.useCase.handle(data);
 
-      res.json(panel);
+      res.json({ owner, title, slug, createdAt });
     });
   }
 }
