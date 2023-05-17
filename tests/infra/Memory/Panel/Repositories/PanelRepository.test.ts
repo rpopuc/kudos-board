@@ -1,13 +1,16 @@
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelData from "@/domains/Panel/DTO/PanelData";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("PanelRepository", () => {
   describe("create", () => {
     it("should create a PanelEntity", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
+        owner: "123",
         title: "Test Panel",
+        password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);
@@ -20,7 +23,9 @@ describe("PanelRepository", () => {
     it("should find a PanelEntity by slug", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
+        owner: "123",
         title: "Test Panel",
+        password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
       const panelEntity = panelRepository.create(panelData);

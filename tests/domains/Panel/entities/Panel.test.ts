@@ -1,4 +1,5 @@
 import Panel from "@/domains/Panel/Entities/Panel";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("Panel", () => {
   describe("constructor", () => {
@@ -7,6 +8,7 @@ describe("Panel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
+        password: "teste12345",
       };
 
       const panel = new Panel(data);
@@ -22,6 +24,7 @@ describe("Panel", () => {
         title: "Example Title",
         owner: "Example Owner",
         createdAt: "2022-04-19",
+        password: new PlainTextPassword("teste12345"),
       };
 
       const panelOne = new Panel(data);

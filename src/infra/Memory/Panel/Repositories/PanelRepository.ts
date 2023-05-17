@@ -15,7 +15,9 @@ class PanelRepository implements PanelRepositoryInterface {
 
   create(panelData: PanelData): PanelEntity {
     const panel = new PanelEntity(panelData);
+
     this.panels.push(panel);
+
     return panel;
   }
 
