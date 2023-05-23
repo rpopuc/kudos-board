@@ -1,4 +1,3 @@
-import InvalidPassword from "@/domains/shared/exceptions/InvalidPassword";
 import Password from "@/domains/shared/valueObjects/Password";
 
 export default class PlainTextPassword implements Password {
