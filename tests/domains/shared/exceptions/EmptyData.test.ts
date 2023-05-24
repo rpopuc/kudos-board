@@ -1,4 +1,5 @@
 import EmptyData from "@/domains/shared/exceptions/EmptyData";
+import Error from "@/domains/shared/exceptions/Error";
 
 describe("EmptyData", () => {
   it("should create an instance of Error", () => {

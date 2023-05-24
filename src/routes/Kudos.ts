@@ -1,5 +1,5 @@
 import express from "express";
-import KudosController from "@/controllers/Kudos";
+import KudosController from "@/controllers/KudosController";
 
 class Kudos {
   static setup(app: express.Application) {

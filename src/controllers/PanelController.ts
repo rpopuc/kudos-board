@@ -5,7 +5,7 @@ import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
 
-class Panel {
+class PanelController {
   constructor(private useCase: CreatePanel) {}
 
   index(): RequestHandler {
@@ -19,13 +19,20 @@ class Panel {
       const data = req.body;
       data.password = new PlainTextPassword(data.password);
 
-      const panel = await this.useCase.handle(data);
-
+      const response = await this.useCase.handle(data);
       const presenter = new PanelPresenter();
 
-      res.json(presenter.single(panel));
+      if (response.ok && response.panel !== null) {
+        res.json(presenter.single(response.panel));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
+      }
     });
   }
 }
 
-export default Panel;
+export default PanelController;

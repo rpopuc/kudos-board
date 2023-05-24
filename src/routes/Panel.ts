@@ -1,5 +1,5 @@
 import express from "express";
-import PanelController from "@/controllers/Panel";
+import PanelController from "@/controllers/PanelController";
 
 import { Container } from "@/inversify.config";
 import { TYPES } from "@/types";
