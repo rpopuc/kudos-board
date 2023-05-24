@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import { RequestHandler } from "express";
 import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
+import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
 
 class Panel {
   constructor(private useCase: CreatePanel) {}
@@ -18,9 +19,11 @@ class Panel {
       const data = req.body;
       data.password = new PlainTextPassword(data.password);
 
-      const { owner, title, slug, createdAt } = await this.useCase.handle(data);
+      const panel = await this.useCase.handle(data);
 
-      res.json({ owner, title, slug, createdAt });
+      const presenter = new PanelPresenter();
+
+      res.json(presenter.single(panel));
     });
   }
 }

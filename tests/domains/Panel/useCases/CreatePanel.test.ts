@@ -29,7 +29,7 @@ describe("CreatePanel", () => {
       createPanel = new CreatePanel(repositoryMock);
     });
 
-    it("should return a new panel entity with the correct data", () => {
+    it("should return a new panel entity with the correct data", async () => {
       const panelData = {
         title: "Example Title",
         owner: "Example Owner",
@@ -37,14 +37,17 @@ describe("CreatePanel", () => {
         password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
+      const memoryPanelEntity = new PanelEntity(panelData);
+
       const panelRepository = {
-        create: jest.fn().mockReturnValue(new PanelEntity(panelData)),
+        create: jest.fn().mockReturnValue(memoryPanelEntity),
         findBySlug: jest.fn(),
       } as Repository;
 
       const createPanel = new CreatePanel(panelRepository);
-      createPanel.handle(panelData);
+      const response = await createPanel.handle(panelData);
 
+      expect(response).toStrictEqual(memoryPanelEntity);
       expect(panelRepository.create).toHaveBeenCalledTimes(1);
       expect(panelRepository.create).toHaveBeenCalledWith(panelData);
     });
