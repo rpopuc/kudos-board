@@ -5,7 +5,7 @@ import SuccessfulResponse from "@/domains/Panel/UseCases/Response/SuccessfulResp
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelController from "@/controllers/PanelController";
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
-import Error from "@/domains/shared/exceptions/Error";
+import Error from "@/domains/shared/exceptions/BusinessError";
 
 describe("Panel Controller", () => {
   describe("@index", () => {

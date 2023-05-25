@@ -1,4 +1,4 @@
-class Error {
+class BusinessError {
   public readonly message: string;
   public readonly status: string;
 
@@ -8,4 +8,4 @@ class Error {
   }
 }
 
-export default Error;
+export default BusinessError;

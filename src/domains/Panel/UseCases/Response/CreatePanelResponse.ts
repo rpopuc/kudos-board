@@ -1,10 +1,10 @@
-import Error from "@/domains/shared/exceptions/Error";
+import BusinessError from "@/domains/shared/exceptions/BusinessError";
 import PanelEntity from "@/domains/Panel/Entities/Panel";
 
 class CreatePanelResponse {
-  constructor(public ok: boolean, public panel: PanelEntity | null = null, public errors: Error[] = []) {}
+  constructor(public ok: boolean, public panel: PanelEntity | null = null, public errors: BusinessError[] = []) {}
 
-  addError(error: Error) {
+  addError(error: BusinessError) {
     this.errors.push(error);
     this.ok = false;
   }

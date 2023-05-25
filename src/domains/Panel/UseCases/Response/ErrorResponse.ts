@@ -1,8 +1,8 @@
 import CreatePanelResponse from "@/domains/Panel/UseCases/Response/CreatePanelResponse";
-import Error from "@/domains/shared/exceptions/Error";
+import BusinessError from "@/domains/shared/exceptions/BusinessError";
 
 class ErrorResponse extends CreatePanelResponse {
-  constructor(errors: Error[]) {
+  constructor(errors: BusinessError[]) {
     super(false, null, errors);
   }
 }

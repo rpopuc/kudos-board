@@ -1,6 +1,6 @@
-import Error from "./Error";
+import BusinessError from "@/domains/shared/exceptions/BusinessError";
 
-class EmptyData extends Error {
+class EmptyData extends BusinessError {
   constructor(status: string, dataName: string, message: string | null = null) {
     super(status, message ? message : `Does not have ${dataName}`);
   }
