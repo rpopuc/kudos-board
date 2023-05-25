@@ -1,4 +1,4 @@
-import BusinessError from "@/domains/shared/exceptions/BusinessError";
+import BusinessError from "@/domains/shared/errors/BusinessError";
 
 class ValidationResponse {
   constructor(public ok: boolean, public errors: BusinessError[] = []) {}

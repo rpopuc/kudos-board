@@ -1,5 +1,5 @@
 import CreatePanelResponse from "@/domains/Panel/UseCases/Response/CreatePanelResponse";
-import BusinessError from "@/domains/shared/exceptions/BusinessError";
+import BusinessError from "@/domains/shared/errors/BusinessError";
 
 class ErrorResponse extends CreatePanelResponse {
   constructor(errors: BusinessError[]) {

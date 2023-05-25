@@ -1,4 +1,4 @@
-import BusinessError from "@/domains/shared/exceptions/BusinessError";
+import BusinessError from "@/domains/shared/errors/BusinessError";
 
 class EmptyData extends BusinessError {
   constructor(status: string, dataName: string, message: string | null = null) {

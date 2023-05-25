@@ -1,6 +1,6 @@
 import Repository from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
-import EmptyData from "@/domains/shared/exceptions/EmptyData";
+import EmptyData from "@/domains/shared/errors/EmptyData";
 import ValidationResponse from "@/domains/shared/ValidationResponse";
 import CreatePanelResponse from "@/domains/Panel/UseCases/Response/CreatePanelResponse";
 import SuccessfulResponse from "@/domains/Panel/UseCases/Response/SuccessfulResponse";

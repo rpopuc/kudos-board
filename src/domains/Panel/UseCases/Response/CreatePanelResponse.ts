@@ -1,4 +1,4 @@
-import BusinessError from "@/domains/shared/exceptions/BusinessError";
+import BusinessError from "@/domains/shared/errors/BusinessError";
 import PanelEntity from "@/domains/Panel/Entities/Panel";
 
 class CreatePanelResponse {
