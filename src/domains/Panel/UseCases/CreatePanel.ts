@@ -1,31 +1,45 @@
-import PanelEntity from "@/domains/Panel/Entities/Panel";
 import Repository from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
-import EmptyData from "@/domains/shared/exceptions/EmptyData";
+import EmptyData from "@/domains/shared/errors/EmptyData";
+import ValidationResponse from "@/domains/shared/ValidationResponse";
+import CreatePanelResponse from "@/domains/Panel/UseCases/Response/CreatePanelResponse";
+import SuccessfulResponse from "@/domains/Panel/UseCases/Response/SuccessfulResponse";
+import ErrorResponse from "@/domains/Panel/UseCases/Response/ErrorResponse";
 
 class CreatePanel {
   constructor(private repository: Repository) {}
 
-  validate(panelData: PanelData): void {
+  validate(panelData: PanelData): ValidationResponse {
+    const result = new ValidationResponse(true);
+
     if (!panelData.title) {
-      throw new EmptyData("EMPTY_TITLE", "title");
+      result.addError(new EmptyData("EMPTY_TITLE", "title"));
     }
 
     if (!panelData.owner) {
-      throw new EmptyData("EMPTY_OWNER", "owner");
+      result.addError(new EmptyData("EMPTY_OWNER", "owner"));
     }
 
     if (!panelData.password.isValid()) {
-      throw new EmptyData("INVALID_PASSWORD", "password");
+      result.addError(new EmptyData("EMPTY_PASSWORD", "password"));
     }
+
+    return result;
   }
 
-  async handle(panelData: PanelData): Promise<PanelEntity> {
-    this.validate(panelData);
+  async handle(panelData: PanelData): Promise<CreatePanelResponse> {
+    const validation = this.validate(panelData);
 
-    panelData.createdAt = new Date();
+    if (!validation.ok) {
+      return new ErrorResponse(validation.errors);
+    }
 
-    return this.repository.create(panelData);
+    const newPanel = this.repository.create({
+      ...panelData,
+      createdAt: new Date(),
+    });
+
+    return new SuccessfulResponse(newPanel);
   }
 }
 

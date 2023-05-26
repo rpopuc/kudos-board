@@ -33,7 +33,6 @@ describe("CreatePanel", () => {
       const panelData = {
         title: "Example Title",
         owner: "Example Owner",
-        createdAt: new Date(),
         password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
@@ -47,9 +46,15 @@ describe("CreatePanel", () => {
       const createPanel = new CreatePanel(panelRepository);
       const response = await createPanel.handle(panelData);
 
-      expect(response).toStrictEqual(memoryPanelEntity);
       expect(panelRepository.create).toHaveBeenCalledTimes(1);
-      expect(panelRepository.create).toHaveBeenCalledWith(panelData);
+      expect(panelRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: panelData.title,
+          owner: panelData.owner,
+          password: panelData.password,
+        }),
+      );
+      expect(response.panel).toStrictEqual(memoryPanelEntity);
     });
 
     it("should throw an error if title is missing", async () => {
@@ -59,7 +64,12 @@ describe("CreatePanel", () => {
         password: new PlainTextPassword("Panel password"),
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have title");
+      const response = await createPanel.handle(invalidPanelData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have title");
+      expect(response.errors[0].status).toBe("EMPTY_TITLE");
+      expect(response.panel).toBe(null);
     });
 
     it("should throw an error if owner is missing", async () => {
@@ -69,7 +79,12 @@ describe("CreatePanel", () => {
         password: new PlainTextPassword("Panel password"),
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have owner");
+      const response = await createPanel.handle(invalidPanelData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have owner");
+      expect(response.errors[0].status).toBe("EMPTY_OWNER");
+      expect(response.panel).toBe(null);
     });
 
     it("should throw an error if password is missing", async () => {
@@ -79,7 +94,12 @@ describe("CreatePanel", () => {
         password: new PlainTextPassword(""),
       };
 
-      await expect(createPanel.handle(invalidPanelData)).rejects.toThrow("Does not have password");
+      const response = await createPanel.handle(invalidPanelData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have password");
+      expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
+      expect(response.panel).toBe(null);
     });
   });
 });
