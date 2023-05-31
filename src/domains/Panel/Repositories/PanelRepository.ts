@@ -4,7 +4,9 @@ import PanelData from "@/domains/Panel/DTO/PanelData";
 interface PanelRepository {
   create(panelData: PanelData): PanelEntity;
 
-  findBySlug(slug: string): PanelEntity | undefined;
+  update(slug: string, panelData: PanelData): PanelEntity | null;
+
+  findBySlug(slug: string): PanelEntity | null;
 }
 
 export default PanelRepository;

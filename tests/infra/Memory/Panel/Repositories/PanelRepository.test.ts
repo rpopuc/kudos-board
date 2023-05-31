@@ -20,6 +20,27 @@ describe("PanelRepository", () => {
       expect(panelEntity.title).toBe(panelData.title);
     });
 
+    test("should update an existing panel correctly", () => {
+      const panelData: PanelData = {
+        owner: "123",
+        title: "Test Panel",
+        password: new PlainTextPassword("teste12345"),
+      } as PanelData;
+
+      const updatedPanelData: PanelData = {
+        owner: "123",
+        title: "Test Panel Updated",
+        password: new PlainTextPassword("teste12345"),
+      } as PanelData;
+
+      const Panel = new PanelRepository();
+
+      const createdPanel = Panel.create(panelData);
+      const updatedPanel = Panel.update(createdPanel.slug, updatedPanelData);
+
+      expect(updatedPanel).toEqual(createdPanel);
+    });
+
     it("should find a PanelEntity by slug", () => {
       const panelRepository = new PanelRepository();
       const panelData = {
@@ -39,7 +60,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
       const foundPanel = panelRepository.findBySlug("invalid_slug");
 
-      expect(foundPanel).toBeUndefined();
+      expect(foundPanel).toBeNull();
     });
   });
 });
