@@ -21,8 +21,16 @@ class PanelRepository implements PanelRepositoryInterface {
     return panel;
   }
 
-  findBySlug(slug: string): PanelEntity | undefined {
-    return this.panels.find(panel => panel.slug == slug);
+  update(slug: string, panelData: PanelData): PanelEntity | null {
+    const panel = this.findBySlug(slug);
+
+    return panel;
+  }
+
+  findBySlug(slug: string): PanelEntity | null {
+    const panel = this.panels.find(panel => panel.slug == slug);
+
+    return panel ? panel : null;
   }
 }
 
