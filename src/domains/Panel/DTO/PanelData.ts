@@ -5,6 +5,7 @@ interface PanelData {
   slug?: string;
   owner: string;
   createdAt?: Date;
+  updatedAt?: Date;
   password: Password;
   clientPassword?: Password;
 }

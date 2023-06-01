@@ -18,14 +18,15 @@ describe("UpdatePanel", () => {
 
   it("should update an existing panel", async () => {
     const panelSlug = "my-panel";
+    const currentUpdatedAt = new Date("2021-01-01 00:00:00");
     const existingPanelData: PanelData = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
+      updatedAt: currentUpdatedAt,
     };
-    const updatedPanelData: PanelData = {
+    const updatedPanelData: UpdatePanelData = {
       title: "New Title",
-      owner: "New Owner",
       password: new PlainTextPassword("newPassword"),
     };
 
@@ -35,10 +36,14 @@ describe("UpdatePanel", () => {
     const result = await updatePanel.handle(panelSlug, updatedPanelData);
 
     expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
-    expect(mockRepository.update).toHaveBeenCalledWith(panelSlug, {
-      ...existingPanelData,
-      ...updatedPanelData,
-    });
+    expect(mockRepository.update).toHaveBeenCalledWith(
+      panelSlug,
+      expect.objectContaining({
+        title: updatedPanelData.title,
+        password: updatedPanelData.password,
+        owner: existingPanelData.owner,
+      }),
+    );
     expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
     expect(result.panel).toEqual(updatedPanelData);
   });

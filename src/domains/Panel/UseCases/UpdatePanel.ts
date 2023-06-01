@@ -46,6 +46,9 @@ class UpdatePanel {
     const updatedPanelData = {
       ...existingPanel,
       ...updatePanelData,
+      ...{
+        updatedAt: new Date(),
+      },
     } as PanelData;
 
     const updatedPanel = this.repository.update(panelSlug, updatedPanelData);
