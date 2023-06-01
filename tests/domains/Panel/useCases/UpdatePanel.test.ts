@@ -1,5 +1,6 @@
 import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
 import PanelData from "@/domains/Panel/DTO/PanelData";
+import UpdatePanelData from "@/domains/Panel/DTO/UpdatePanelData";
 import UpdateSuccessfulResponse from "@/domains/Panel/UseCases/Response/UpdateSuccessfulResponse";
 import ErrorResponse from "@/domains/Panel/UseCases/Response/ErrorResponse";
 import BusinessError from "@/domains/shared/errors/BusinessError";
@@ -51,10 +52,8 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("oldPassword"),
     };
 
-    const invalidPanelData: PanelData = {
+    const invalidPanelData: UpdatePanelData = {
       title: "",
-      owner: "Panel owner",
-      password: new PlainTextPassword("Panel password"),
     };
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
@@ -69,46 +68,18 @@ describe("UpdatePanel", () => {
     expect(response.panel).toBe(null);
   });
 
-  it("should throw an error if owner is missing", async () => {
-    const panelSlug = "my-panel";
-
-    const invalidPanelData: PanelData = {
-      title: "Panel title",
-      owner: "",
-      password: new PlainTextPassword("Panel password"),
-    };
-
-    const existingPanelData: PanelData = {
-      title: "Old Title",
-      owner: "Old Owner",
-      password: new PlainTextPassword("oldPassword"),
-    };
-
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
-
-    const response = await updatePanel.handle(panelSlug, invalidPanelData);
-
-    expect(response.ok).toBe(false);
-    expect(response.errors).toHaveLength(1);
-    expect(response.errors[0].message).toBe("Does not have owner");
-    expect(response.errors[0].status).toBe("EMPTY_OWNER");
-    expect(response.panel).toBe(null);
-  });
-
   it("should throw an error if password is missing", async () => {
     const panelSlug = "my-panel";
 
-    const invalidPanelData: PanelData = {
-      title: "Panel title",
-      owner: "Panel owner",
-      password: new PlainTextPassword(""),
-    };
-
     const existingPanelData: PanelData = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
+    };
+
+    const invalidPanelData: UpdatePanelData = {
+      title: "Panel title",
+      password: new PlainTextPassword(""),
     };
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
@@ -118,8 +89,34 @@ describe("UpdatePanel", () => {
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
-    expect(response.errors[0].message).toBe("Does not have password");
-    expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
+    expect(response.errors[0].message).toBe("Invalid password");
+    expect(response.errors[0].status).toBe("INVALID_PASSWORD");
+    expect(response.panel).toBe(null);
+  });
+
+  it("should throw an error if client password is missing", async () => {
+    const panelSlug = "my-panel";
+
+    const existingPanelData: PanelData = {
+      title: "Old Title",
+      owner: "Old Owner",
+      password: new PlainTextPassword("oldPassword"),
+    };
+
+    const invalidPanelData: UpdatePanelData = {
+      title: "Panel title",
+      clientPassword: new PlainTextPassword(""),
+    };
+
+    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
+    mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
+
+    const response = await updatePanel.handle(panelSlug, invalidPanelData);
+
+    expect(response.ok).toBe(false);
+    expect(response.errors).toHaveLength(1);
+    expect(response.errors[0].message).toBe("Invalid client password");
+    expect(response.errors[0].status).toBe("INVALID_CLIENT_PASSWORD");
     expect(response.panel).toBe(null);
   });
 
