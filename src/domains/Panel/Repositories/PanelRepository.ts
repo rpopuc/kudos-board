@@ -6,6 +6,8 @@ interface PanelRepository {
 
   update(slug: string, panelData: PanelData): PanelEntity | null;
 
+  delete(slug: string): boolean;
+
   findBySlug(slug: string): PanelEntity | null;
 }
 

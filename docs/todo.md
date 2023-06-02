@@ -1,9 +1,5 @@
-- Edicão de Painel
-  - Ajustar validações
-    - Owner não pode ser alterado
-    - Slug não pode ser alterado
-    - Created_at não pode ser alterado
 - Exclusão de Painel
+  - Regras de exclusão (owner, por exemplo)
 - Arquivamento de Painel
 - Visualizacão do Painel
 - Exportar para arquivo PDF
@@ -20,3 +16,4 @@
 - Exportar para arquivo csv
 
 - Parâmetros como objetos para facilitar o uso (?)
+- Melhorar testes usando mock repository ao invés da infra
