@@ -41,6 +41,21 @@ describe("PanelRepository", () => {
       expect(updatedPanel).toEqual(createdPanel);
     });
 
+    test("should delete an existing panel correctly", () => {
+      const panelData: PanelData = {
+        owner: "123",
+        title: "Test Panel",
+        password: new PlainTextPassword("teste12345"),
+      } as PanelData;
+
+      const panelRepository = new PanelRepository();
+
+      const createdPanel = panelRepository.create(panelData);
+      const response = panelRepository.delete(createdPanel.slug);
+
+      expect(response).toBeTruthy();
+    });
+
     it("should find a PanelEntity by slug", () => {
       const panelRepository = new PanelRepository();
       const panelData = {

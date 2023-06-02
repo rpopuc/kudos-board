@@ -27,6 +27,12 @@ class PanelRepository implements PanelRepositoryInterface {
     return panel;
   }
 
+  delete(slug: string): boolean {
+    this.panels = this.panels.filter(panel => panel.slug !== slug);
+
+    return true;
+  }
+
   findBySlug(slug: string): PanelEntity | null {
     const panel = this.panels.find(panel => panel.slug == slug);
 

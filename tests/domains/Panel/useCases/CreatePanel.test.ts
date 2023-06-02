@@ -41,6 +41,7 @@ describe("CreatePanel", () => {
       const panelRepository = {
         create: jest.fn().mockReturnValue(memoryPanelEntity),
         update: jest.fn(),
+        delete: jest.fn(),
         findBySlug: jest.fn(),
       } as Repository;
 
