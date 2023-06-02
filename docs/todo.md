@@ -1,5 +1,8 @@
 - Edicão de Painel
-  - Ajustar testes
+  - Ajustar validações
+    - Owner não pode ser alterado
+    - Slug não pode ser alterado
+    - Created_at não pode ser alterado
 - Exclusão de Painel
 - Arquivamento de Painel
 - Visualizacão do Painel
