@@ -1,5 +1,6 @@
 - Exclusão de Painel
   - Regras de exclusão (owner, por exemplo)
+  - Colocar na Controller a exclusão
 - Arquivamento de Painel
 - Visualizacão do Painel
 - Exportar para arquivo PDF
@@ -17,3 +18,4 @@
 
 - Parâmetros como objetos para facilitar o uso (?)
 - Melhorar testes usando mock repository ao invés da infra
+- Substituir "thrown" por algum substantivo nos erros dos testes
