@@ -1,6 +1,4 @@
-- Exclusão de Painel
-  - Regras de exclusão (owner, por exemplo)
-  - Colocar na Controller a exclusão
+- Atualizar o handle do useCase update para que tenha o owner
 - Arquivamento de Painel
 - Visualizacão do Painel
 - Exportar para arquivo PDF
