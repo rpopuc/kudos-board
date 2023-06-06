@@ -1,5 +1,4 @@
-- Exclusão de Painel
-  - Regras de exclusão (owner, por exemplo)
+- Atualizar o handle do useCase update para que tenha o owner
 - Arquivamento de Painel
 - Visualizacão do Painel
 - Exportar para arquivo PDF
@@ -17,3 +16,4 @@
 
 - Parâmetros como objetos para facilitar o uso (?)
 - Melhorar testes usando mock repository ao invés da infra
+- Substituir "thrown" por algum substantivo nos erros dos testes
