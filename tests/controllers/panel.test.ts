@@ -55,7 +55,10 @@ describe("Panel Controller", () => {
           description: "This is a test panel",
           password: "teste12345",
         },
-      } as Request;
+        headers: {
+          "user-id": "user-1",
+        },
+      } as Partial<Request> as Request;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -85,7 +88,10 @@ describe("Panel Controller", () => {
           description: "This is a test panel",
           password: "teste12345",
         },
-      } as Request;
+        headers: {
+          "user-id": "user-1",
+        },
+      } as Partial<Request> as Request;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
