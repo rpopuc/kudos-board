@@ -1,19 +1,22 @@
-- Atualizar o handle do useCase update para que tenha o owner
+- Usar o userId via header
+- Atualizar tipagem dos Requests `Request<{id: string}>` onde tiver unkown
 - Arquivamento de Painel
 - Visualizacão do Painel
-- Exportar para arquivo PDF
-- Exportar para arquivo jpeg
-- Exportar para arquivo csv
 
 - Listagem de Kudos
 - Criacão de Kudos
 - Edicão de Kudos
 - Exclusão de Kudos
 - Visualizacão de Kudos
-- Exportar para arquivo PDF
-- Exportar para arquivo jpeg
-- Exportar para arquivo csv
 
 - Parâmetros como objetos para facilitar o uso (?)
 - Melhorar testes usando mock repository ao invés da infra
 - Substituir "thrown" por algum substantivo nos erros dos testes
+
+- Exportar para arquivo PDF
+- Exportar para arquivo jpeg
+- Exportar para arquivo csv
+
+- Exportar para arquivo PDF
+- Exportar para arquivo jpeg
+- Exportar para arquivo csv

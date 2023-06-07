@@ -108,6 +108,7 @@ describe("Panel Controller", () => {
     it("should update a panel and return a success message", async () => {
       const mockRequest = {
         body: {
+          userId: "user-1",
           owner: "test",
           title: "Test Panel",
           description: "This is a test panel",
@@ -129,7 +130,7 @@ describe("Panel Controller", () => {
 
       await panelController.update()(mockRequest, mockResponse, () => {});
 
-      expect(updatePanelUseCase.handle).toHaveBeenCalledWith("1", mockRequest.body);
+      expect(updatePanelUseCase.handle).toHaveBeenCalledWith("1", "user-1", mockRequest.body);
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({
           owner: "test",
