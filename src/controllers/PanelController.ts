@@ -23,6 +23,7 @@ class PanelController {
   store(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
+      data.owner = req.headers["user-id"] as string;
       data.password = new PlainTextPassword(data.password);
 
       const response = await this.createPanelUseCase.handle(data);
