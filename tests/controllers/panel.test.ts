@@ -34,11 +34,11 @@ describe("Panel Controller", () => {
           slug: "1",
         },
         body: {},
-      } as unknown as Request;
+      } as Request<{ slug: string }>;
 
       const mockResponse = {
         send: jest.fn(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       panelController.index()(mockRequest, mockResponse, () => {});
 
@@ -60,7 +60,7 @@ describe("Panel Controller", () => {
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
 
@@ -90,7 +90,7 @@ describe("Panel Controller", () => {
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       jest
         .spyOn(createPanelUseCase, "handle")
@@ -115,12 +115,12 @@ describe("Panel Controller", () => {
           password: "teste12345",
         },
         params: { id: "1" },
-      } as unknown as Request;
+      } as Request<{ id: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
 
@@ -150,12 +150,12 @@ describe("Panel Controller", () => {
         params: {
           id: "1",
         },
-      } as unknown as Request;
+      } as Request<{ id: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       jest
         .spyOn(updatePanelUseCase, "handle")
@@ -176,12 +176,12 @@ describe("Panel Controller", () => {
           userId: "user-1",
         },
         params: { id: "panel-1" },
-      } as unknown as Request;
+      } as Request<{ id: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       jest.spyOn(deletePanelUseCase, "handle").mockResolvedValueOnce(new DeletePanelResponse(true));
 
@@ -201,12 +201,12 @@ describe("Panel Controller", () => {
         params: {
           id: "panel-1",
         },
-      } as unknown as Request;
+      } as Request<{ id: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
-      } as unknown as Response;
+      } as Partial<Response> as Response;
 
       jest
         .spyOn(deletePanelUseCase, "handle")

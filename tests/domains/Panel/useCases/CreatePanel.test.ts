@@ -10,21 +10,19 @@ describe("CreatePanel", () => {
     let createPanel: CreatePanel;
 
     beforeEach(() => {
-      repositoryMock = jest.mock("@/domains/Panel/Repositories/PanelRepository", () => {
-        return jest.fn().mockImplementation(() => {
-          return {
-            create: jest.fn((panelData: PanelData) => {
-              return Promise.resolve({
-                id: "123",
-                title: panelData.title,
-                owner: panelData.owner,
-                password: panelData.password,
-              });
-            }),
-            findBySlug: jest.fn(() => {}),
-          };
-        });
-      }) as unknown as Repository;
+      repositoryMock = {
+        create: jest.fn().mockImplementation((panelData: PanelData) => {
+          return Promise.resolve({
+            id: "123",
+            title: panelData.title,
+            owner: panelData.owner,
+            password: panelData.password,
+          });
+        }),
+        update: jest.fn(),
+        delete: jest.fn(),
+        findBySlug: jest.fn(),
+      } as Repository;
 
       createPanel = new CreatePanel(repositoryMock);
     });

@@ -1,7 +1,6 @@
 - Usar o userId via header
-- Atualizar tipagem dos Requests `Request<{id: string}>` onde tiver unkown
+- Visualização do Painel
 - Arquivamento de Painel
-- Visualizacão do Painel
 
 - Listagem de Kudos
 - Criacão de Kudos
