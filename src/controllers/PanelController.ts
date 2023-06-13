@@ -43,11 +43,12 @@ class PanelController {
   update(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const panelId = req.params.id;
+      const userId = req.body.userId;
       const data = req.body;
 
       data.password = new PlainTextPassword(data.password);
 
-      const response = await this.updatePanelUseCase.handle(panelId, data);
+      const response = await this.updatePanelUseCase.handle(panelId, userId, data);
       const presenter = new PanelPresenter();
 
       if (response.ok && response.panel !== null) {

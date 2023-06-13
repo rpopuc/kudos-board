@@ -30,11 +30,15 @@ class UpdatePanel {
     return result;
   }
 
-  async handle(panelSlug: string, updatePanelData: UpdatePanelData): Promise<UpdatePanelResponse> {
+  async handle(panelSlug: string, userId: string, updatePanelData: UpdatePanelData): Promise<UpdatePanelResponse> {
     const existingPanel = this.repository.findBySlug(panelSlug);
 
     if (!existingPanel) {
       return new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not found a panel with the provided ID.")]);
+    }
+
+    if (existingPanel.owner !== userId) {
+      return new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not edit a panel that is not yours.")]);
     }
 
     const validation = this.validate(updatePanelData);

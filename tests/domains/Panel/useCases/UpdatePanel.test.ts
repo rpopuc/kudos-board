@@ -33,7 +33,7 @@ describe("UpdatePanel", () => {
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
     mockRepository.update = jest.fn().mockReturnValue(updatedPanelData);
 
-    const result = await updatePanel.handle(panelSlug, updatedPanelData);
+    const result = await updatePanel.handle(panelSlug, "Old Owner", updatedPanelData);
 
     expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(mockRepository.update).toHaveBeenCalledWith(
@@ -64,7 +64,7 @@ describe("UpdatePanel", () => {
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
     mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
 
-    const response = await updatePanel.handle(panelSlug, invalidPanelData);
+    const response = await updatePanel.handle(panelSlug, "Old Owner", invalidPanelData);
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -90,7 +90,7 @@ describe("UpdatePanel", () => {
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
     mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
 
-    const response = await updatePanel.handle(panelSlug, invalidPanelData);
+    const response = await updatePanel.handle(panelSlug, "Old Owner", invalidPanelData);
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -116,7 +116,7 @@ describe("UpdatePanel", () => {
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
     mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
 
-    const response = await updatePanel.handle(panelSlug, invalidPanelData);
+    const response = await updatePanel.handle(panelSlug, "Old Owner", invalidPanelData);
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -135,7 +135,7 @@ describe("UpdatePanel", () => {
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(undefined);
 
-    const result = await updatePanel.handle(panelSlug, updatedPanelData);
+    const result = await updatePanel.handle(panelSlug, "New Owner", updatedPanelData);
 
     expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(result).toBeInstanceOf(ErrorResponse);
@@ -162,11 +162,37 @@ describe("UpdatePanel", () => {
     mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
     mockRepository.update = jest.fn().mockImplementation(() => null);
 
-    const result = await updatePanel.handle(panelSlug, updatedPanelData);
+    const result = await updatePanel.handle(panelSlug, existingPanelData.owner, updatedPanelData);
 
     expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("PANEL_NOT_UPDATED");
     expect(result.errors[0].message).toBe("Internal error");
+  });
+
+  it("should throw an error if the user is not the panel's owner", async () => {
+    const panelSlug = "my-panel";
+
+    const existingPanelData: PanelData = {
+      title: "Old Title",
+      owner: "Owner",
+      password: new PlainTextPassword("oldPassword"),
+    };
+
+    const updatedPanelData: PanelData = {
+      title: "New Title",
+      owner: "New Owner",
+      password: new PlainTextPassword("newPassword"),
+    };
+
+    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
+    mockRepository.update = jest.fn().mockImplementation(() => null);
+
+    const result = await updatePanel.handle(panelSlug, "other-owner", updatedPanelData);
+
+    expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
+    expect(result).toBeInstanceOf(ErrorResponse);
+    expect(result.errors[0].status).toBe("NOT_AUTHORIZED");
+    expect(result.errors[0].message).toBe("You can not edit a panel that is not yours.");
   });
 });
