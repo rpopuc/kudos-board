@@ -12,6 +12,10 @@
 - Melhorar testes usando mock repository ao invés da infra
 - Substituir "thrown" por algum substantivo nos erros dos testes
 
+- MongoRepository
+
+- Frontend
+
 - Exportar para arquivo PDF
 - Exportar para arquivo jpeg
 - Exportar para arquivo csv

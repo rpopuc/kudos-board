@@ -33,7 +33,7 @@ describe("Panel Controller", () => {
     panelController = new PanelController(createPanelUseCase, deletePanelUseCase, updatePanelUseCase, showPanelUseCase);
   });
 
-  describe("@index", () => {
+  describe("@show", () => {
     it("should show a stored panel", async () => {
       const mockRequest = {
         params: {
@@ -52,7 +52,7 @@ describe("Panel Controller", () => {
 
       jest.spyOn(showPanelUseCase, "handle").mockResolvedValueOnce(new ShowPanelResponse(true, new Panel(panelData)));
 
-      await panelController.index()(mockRequest, mockResponse, () => {});
+      await panelController.show()(mockRequest, mockResponse, () => {});
 
       expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
       expect(mockResponse.json).toHaveBeenCalledWith(
@@ -86,7 +86,7 @@ describe("Panel Controller", () => {
           new ShowPanelErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find panel.")]),
         );
 
-      await panelController.index()(mockRequest, mockResponse, () => {});
+      await panelController.show()(mockRequest, mockResponse, () => {});
 
       expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
       expect(mockResponse.status).toHaveBeenCalledWith(400);
