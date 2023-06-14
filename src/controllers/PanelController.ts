@@ -6,17 +6,32 @@ import DeletePanel from "@/domains/Panel/UseCases/DeletePanel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
 import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
+import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
 
 class PanelController {
   constructor(
     private createPanelUseCase: CreatePanel,
     private deletePanelUseCase: DeletePanel,
     private updatePanelUseCase: UpdatePanel,
+    private showPanelUseCase: ShowPanel,
   ) {}
 
   index(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      res.send(`Panel::index${req.params.slug}`);
+      const data = req.body;
+
+      const response = await this.showPanelUseCase.handle(req.params.slug, data.clientPassword);
+      const presenter = new PanelPresenter();
+
+      if (response.ok && response.panel !== null) {
+        res.json(presenter.single(response.panel));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
+      }
     });
   }
 

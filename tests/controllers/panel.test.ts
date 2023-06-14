@@ -7,9 +7,13 @@ import DeletePanelResponse from "@/domains/Panel/UseCases/Response/DeletePanelRe
 import Panel from "@/domains/Panel/Entities/Panel";
 import PanelController from "@/controllers/PanelController";
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
-import Error from "@/domains/shared/errors/BusinessError";
+import BusinessError from "@/domains/shared/errors/BusinessError";
 import DeletePanel from "@/domains/Panel/UseCases/DeletePanel";
 import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
+import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
+import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelResponse";
+import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
+import ShowPanelErrorResponse from "@/domains/Panel/UseCases/Response/ShowPanelErrorResponse";
 
 describe("Panel Controller", () => {
   let panelController: PanelController;
@@ -17,32 +21,76 @@ describe("Panel Controller", () => {
   let createPanelUseCase: CreatePanel;
   let deletePanelUseCase: DeletePanel;
   let updatePanelUseCase: UpdatePanel;
+  let showPanelUseCase: ShowPanel;
 
   beforeEach(() => {
     panelRepository = new PanelRepository();
     createPanelUseCase = new CreatePanel(panelRepository);
     deletePanelUseCase = new DeletePanel(panelRepository);
     updatePanelUseCase = new UpdatePanel(panelRepository);
+    showPanelUseCase = new ShowPanel(panelRepository);
 
-    panelController = new PanelController(createPanelUseCase, deletePanelUseCase, updatePanelUseCase);
+    panelController = new PanelController(createPanelUseCase, deletePanelUseCase, updatePanelUseCase, showPanelUseCase);
   });
 
   describe("@index", () => {
-    it("should show a stored panel", () => {
+    it("should show a stored panel", async () => {
       const mockRequest = {
         params: {
-          slug: "1",
+          slug: "test-panel",
         },
-        body: {},
+        body: {
+          clientPassword: "teste12345",
+        },
       } as Request<{ slug: string }>;
 
       const mockResponse = {
-        send: jest.fn(),
+        json: jest.fn(),
       } as Partial<Response> as Response;
 
-      panelController.index()(mockRequest, mockResponse, () => {});
+      const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
 
-      expect(mockResponse.send).toHaveBeenCalledWith(`Panel::index${mockRequest.params.slug}`);
+      jest.spyOn(showPanelUseCase, "handle").mockResolvedValueOnce(new ShowPanelResponse(true, new Panel(panelData)));
+
+      await panelController.index()(mockRequest, mockResponse, () => {});
+
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          owner: "test",
+          title: "Test Panel",
+        }),
+      );
+    });
+
+    it("should return an error message when panel not found", async () => {
+      const mockRequest = {
+        params: {
+          slug: "test-panel",
+        },
+        body: {
+          clientPassword: "teste12345",
+        },
+      } as Request<{ slug: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
+
+      jest
+        .spyOn(showPanelUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ShowPanelErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find panel.")]),
+        );
+
+      await panelController.index()(mockRequest, mockResponse, () => {});
+
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find panel."] });
     });
   });
 
@@ -100,7 +148,7 @@ describe("Panel Controller", () => {
 
       jest
         .spyOn(createPanelUseCase, "handle")
-        .mockResolvedValueOnce(new ErrorResponse([new Error("ERROR", "Error creating panel")]));
+        .mockResolvedValueOnce(new ErrorResponse([new BusinessError("ERROR", "Error creating panel")]));
 
       await panelController.store()(mockRequest, mockResponse, () => {});
 
@@ -165,7 +213,7 @@ describe("Panel Controller", () => {
 
       jest
         .spyOn(updatePanelUseCase, "handle")
-        .mockResolvedValueOnce(new ErrorResponse([new Error("ERROR", "Error updating panel")]));
+        .mockResolvedValueOnce(new ErrorResponse([new BusinessError("ERROR", "Error updating panel")]));
 
       await panelController.update()(mockRequest, mockResponse, () => {});
 
@@ -217,7 +265,7 @@ describe("Panel Controller", () => {
       jest
         .spyOn(deletePanelUseCase, "handle")
         .mockResolvedValueOnce(
-          new ErrorResponse([new Error("NOT_AUTHORIZED", "You can not delete a panel that is not yours.")]),
+          new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not delete a panel that is not yours.")]),
         );
 
       await panelController.delete()(mockRequest, mockResponse, () => {});
