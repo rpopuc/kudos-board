@@ -16,7 +16,7 @@ class PanelController {
     private showPanelUseCase: ShowPanel,
   ) {}
 
-  index(): RequestHandler {
+  show(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
 
