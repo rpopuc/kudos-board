@@ -13,6 +13,7 @@ import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
 import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelResponse";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
+import type { PanelPresentation } from "@/domains/shared/presenters/PanelPresenter";
 import ShowPanelErrorResponse from "@/domains/Panel/UseCases/Response/ShowPanelErrorResponse";
 
 describe("Panel Controller", () => {
@@ -58,7 +59,7 @@ describe("Panel Controller", () => {
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
       const panel = new Panel(panelData);
-      const presenterData = { owner: "test", title: "Test Panel" };
+      const presenterData = { owner: "test", title: "Test Panel" } as PanelPresentation;
 
       jest.spyOn(showPanelUseCase, "handle").mockResolvedValueOnce(new ShowPanelResponse(true, panel));
       jest.spyOn(presenter, "single").mockReturnValue(presenterData);
@@ -126,7 +127,7 @@ describe("Panel Controller", () => {
       const presenterData = {
         owner: "test",
         title: "Test Panel",
-      };
+      } as PanelPresentation;
 
       jest.spyOn(createPanelUseCase, "handle").mockResolvedValueOnce(new SuccessfulResponse(panel));
       jest.spyOn(presenter, "single").mockReturnValue(presenterData);
@@ -190,7 +191,7 @@ describe("Panel Controller", () => {
       } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
-      const presenterData = { owner: "test", title: "Test Panel" };
+      const presenterData = { owner: "test", title: "Test Panel" } as PanelPresentation;
       const panel = new Panel(panelData);
 
       jest.spyOn(presenter, "single").mockReturnValue(presenterData);
