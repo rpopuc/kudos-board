@@ -22,6 +22,7 @@ describe("Panel Controller", () => {
   let deletePanelUseCase: DeletePanel;
   let updatePanelUseCase: UpdatePanel;
   let showPanelUseCase: ShowPanel;
+  let presenter: PanelPresenter;
 
   beforeEach(() => {
     panelRepository = new PanelRepository();
@@ -29,8 +30,15 @@ describe("Panel Controller", () => {
     deletePanelUseCase = new DeletePanel(panelRepository);
     updatePanelUseCase = new UpdatePanel(panelRepository);
     showPanelUseCase = new ShowPanel(panelRepository);
+    presenter = new PanelPresenter();
 
-    panelController = new PanelController(createPanelUseCase, deletePanelUseCase, updatePanelUseCase, showPanelUseCase);
+    panelController = new PanelController(
+      createPanelUseCase,
+      deletePanelUseCase,
+      updatePanelUseCase,
+      showPanelUseCase,
+      presenter,
+    );
   });
 
   describe("@show", () => {
