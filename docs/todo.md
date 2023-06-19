@@ -1,5 +1,3 @@
-- Visualização do Painel
-  - Validar presenter nos testes da controller
 - Arquivamento de Painel
 
 - Listagem de Kudos
