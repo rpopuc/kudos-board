@@ -14,6 +14,7 @@ class PanelController {
     private deletePanelUseCase: DeletePanel,
     private updatePanelUseCase: UpdatePanel,
     private showPanelUseCase: ShowPanel,
+    private presenter: PanelPresenter,
   ) {}
 
   show(): RequestHandler {
@@ -21,10 +22,9 @@ class PanelController {
       const data = req.body;
 
       const response = await this.showPanelUseCase.handle(req.params.slug, data.clientPassword);
-      const presenter = new PanelPresenter();
 
       if (response.ok && response.panel !== null) {
-        res.json(presenter.single(response.panel));
+        res.json(this.presenter.single(response.panel));
       } else {
         res
           .json({
@@ -42,10 +42,9 @@ class PanelController {
       data.password = new PlainTextPassword(data.password);
 
       const response = await this.createPanelUseCase.handle(data);
-      const presenter = new PanelPresenter();
 
       if (response.ok && response.panel !== null) {
-        res.json(presenter.single(response.panel));
+        res.json(this.presenter.single(response.panel));
       } else {
         res
           .json({
@@ -65,10 +64,9 @@ class PanelController {
       data.password = new PlainTextPassword(data.password);
 
       const response = await this.updatePanelUseCase.handle(panelId, userId, data);
-      const presenter = new PanelPresenter();
 
       if (response.ok && response.panel !== null) {
-        res.json(presenter.single(response.panel));
+        res.json(this.presenter.single(response.panel));
       } else {
         res
           .json({

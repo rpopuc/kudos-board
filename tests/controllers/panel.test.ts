@@ -13,6 +13,7 @@ import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
 import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelResponse";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
+import type { PanelPresentation } from "@/domains/shared/presenters/PanelPresenter";
 import ShowPanelErrorResponse from "@/domains/Panel/UseCases/Response/ShowPanelErrorResponse";
 
 describe("Panel Controller", () => {
@@ -22,6 +23,7 @@ describe("Panel Controller", () => {
   let deletePanelUseCase: DeletePanel;
   let updatePanelUseCase: UpdatePanel;
   let showPanelUseCase: ShowPanel;
+  let presenter: PanelPresenter;
 
   beforeEach(() => {
     panelRepository = new PanelRepository();
@@ -29,8 +31,15 @@ describe("Panel Controller", () => {
     deletePanelUseCase = new DeletePanel(panelRepository);
     updatePanelUseCase = new UpdatePanel(panelRepository);
     showPanelUseCase = new ShowPanel(panelRepository);
+    presenter = new PanelPresenter();
 
-    panelController = new PanelController(createPanelUseCase, deletePanelUseCase, updatePanelUseCase, showPanelUseCase);
+    panelController = new PanelController(
+      createPanelUseCase,
+      deletePanelUseCase,
+      updatePanelUseCase,
+      showPanelUseCase,
+      presenter,
+    );
   });
 
   describe("@show", () => {
@@ -49,18 +58,17 @@ describe("Panel Controller", () => {
       } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
+      const panel = new Panel(panelData);
+      const presenterData = { owner: "test", title: "Test Panel" } as PanelPresentation;
 
-      jest.spyOn(showPanelUseCase, "handle").mockResolvedValueOnce(new ShowPanelResponse(true, new Panel(panelData)));
+      jest.spyOn(showPanelUseCase, "handle").mockResolvedValueOnce(new ShowPanelResponse(true, panel));
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
 
       await panelController.show()(mockRequest, mockResponse, () => {});
 
       expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
-      expect(mockResponse.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          owner: "test",
-          title: "Test Panel",
-        }),
-      );
+      expect(presenter.single).toHaveBeenCalledWith(panel);
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
 
     it("should return an error message when panel not found", async () => {
@@ -78,16 +86,17 @@ describe("Panel Controller", () => {
         json: jest.fn().mockReturnThis(),
       } as Partial<Response> as Response;
 
-      const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
-
       jest
         .spyOn(showPanelUseCase, "handle")
         .mockResolvedValueOnce(
           new ShowPanelErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find panel.")]),
         );
 
+      jest.spyOn(presenter, "single");
+
       await panelController.show()(mockRequest, mockResponse, () => {});
 
+      expect(presenter.single).not.toHaveBeenCalled();
       expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find panel."] });
@@ -114,18 +123,20 @@ describe("Panel Controller", () => {
       } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
+      const panel = new Panel(panelData);
+      const presenterData = {
+        owner: "test",
+        title: "Test Panel",
+      } as PanelPresentation;
 
-      jest.spyOn(createPanelUseCase, "handle").mockResolvedValueOnce(new SuccessfulResponse(new Panel(panelData)));
+      jest.spyOn(createPanelUseCase, "handle").mockResolvedValueOnce(new SuccessfulResponse(panel));
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
 
       await panelController.store()(mockRequest, mockResponse, () => {});
 
       expect(createPanelUseCase.handle).toHaveBeenCalledWith(mockRequest.body);
-      expect(mockResponse.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          owner: "test",
-          title: "Test Panel",
-        }),
-      );
+      expect(presenter.single).toHaveBeenCalledWith(panel);
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
 
     it("should validate data when creating a panel", async () => {
@@ -146,6 +157,8 @@ describe("Panel Controller", () => {
         json: jest.fn().mockReturnThis(),
       } as Partial<Response> as Response;
 
+      jest.spyOn(presenter, "single");
+
       jest
         .spyOn(createPanelUseCase, "handle")
         .mockResolvedValueOnce(new ErrorResponse([new BusinessError("ERROR", "Error creating panel")]));
@@ -153,6 +166,7 @@ describe("Panel Controller", () => {
       await panelController.store()(mockRequest, mockResponse, () => {});
 
       expect(createPanelUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(presenter.single).not.toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Error creating panel"] });
     });
@@ -177,20 +191,16 @@ describe("Panel Controller", () => {
       } as Partial<Response> as Response;
 
       const panelData = { owner: "test", slug: "test-panel", title: "Test Panel", password: "teste12345" };
+      const presenterData = { owner: "test", title: "Test Panel" } as PanelPresentation;
+      const panel = new Panel(panelData);
 
-      jest
-        .spyOn(updatePanelUseCase, "handle")
-        .mockResolvedValueOnce(new UpdateSuccessfulResponse(new Panel(panelData)));
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
+      jest.spyOn(updatePanelUseCase, "handle").mockResolvedValueOnce(new UpdateSuccessfulResponse(panel));
 
       await panelController.update()(mockRequest, mockResponse, () => {});
 
       expect(updatePanelUseCase.handle).toHaveBeenCalledWith("1", "user-1", mockRequest.body);
-      expect(mockResponse.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          owner: "test",
-          title: "Test Panel",
-        }),
-      );
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
 
     it("should validate data when updating a panel", async () => {
@@ -262,6 +272,8 @@ describe("Panel Controller", () => {
         json: jest.fn().mockReturnThis(),
       } as Partial<Response> as Response;
 
+      jest.spyOn(presenter, "single");
+
       jest
         .spyOn(deletePanelUseCase, "handle")
         .mockResolvedValueOnce(
@@ -271,6 +283,7 @@ describe("Panel Controller", () => {
       await panelController.delete()(mockRequest, mockResponse, () => {});
 
       expect(deletePanelUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(presenter.single).not.toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ message: "You can not delete a panel that is not yours." });
     });
