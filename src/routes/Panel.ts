@@ -9,6 +9,7 @@ import DeletePanel from "@/domains/Panel/UseCases/DeletePanel";
 import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
+import ArchivePanel from "@/domains/Panel/UseCases/ArchivePanel";
 
 class Panel {
   static setup(app: express.Application) {
@@ -16,6 +17,7 @@ class Panel {
 
     const createPanelUseCase = new CreatePanel(repository);
     const deletePanelUseCase = new DeletePanel(repository);
+    const archivePanelUseCase = new ArchivePanel(repository);
     const updatePanelUseCase = new UpdatePanel(repository);
     const showPanelUseCase = new ShowPanel(repository);
     const presenter = new PanelPresenter();
@@ -25,10 +27,12 @@ class Panel {
       deletePanelUseCase,
       updatePanelUseCase,
       showPanelUseCase,
+      archivePanelUseCase,
       presenter,
     );
 
     app.post("/panel", controller.store());
+    app.put("/panel/archive/:slug", controller.archive());
     app.put("/panel/:slug", controller.update());
     app.delete("/panel/:slug", controller.delete());
     app.get("/panel/:slug", controller.show());

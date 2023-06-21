@@ -15,6 +15,8 @@ import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelRespon
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
 import type { PanelPresentation } from "@/domains/shared/presenters/PanelPresenter";
 import ShowPanelErrorResponse from "@/domains/Panel/UseCases/Response/ShowPanelErrorResponse";
+import ArchivePanel from "@/domains/Panel/UseCases/ArchivePanel";
+import ArchivePanelResponse from "@/domains/Panel/UseCases/Response/ArchivePanelResponse";
 
 describe("Panel Controller", () => {
   let panelController: PanelController;
@@ -23,6 +25,7 @@ describe("Panel Controller", () => {
   let deletePanelUseCase: DeletePanel;
   let updatePanelUseCase: UpdatePanel;
   let showPanelUseCase: ShowPanel;
+  let archivePanelUseCase: ArchivePanel;
   let presenter: PanelPresenter;
 
   beforeEach(() => {
@@ -31,6 +34,7 @@ describe("Panel Controller", () => {
     deletePanelUseCase = new DeletePanel(panelRepository);
     updatePanelUseCase = new UpdatePanel(panelRepository);
     showPanelUseCase = new ShowPanel(panelRepository);
+    archivePanelUseCase = new ArchivePanel(panelRepository);
     presenter = new PanelPresenter();
 
     panelController = new PanelController(
@@ -38,6 +42,7 @@ describe("Panel Controller", () => {
       deletePanelUseCase,
       updatePanelUseCase,
       showPanelUseCase,
+      archivePanelUseCase,
       presenter,
     );
   });
@@ -231,6 +236,37 @@ describe("Panel Controller", () => {
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Error updating panel"] });
     });
+
+    it("should validate when panel does not exist", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Panel",
+          description: "This is a test panel",
+          password: "teste12345",
+        },
+        params: {
+          id: "1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(updatePanelUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not found a panel with the provided ID.")]),
+        );
+
+      await panelController.update()(mockRequest, mockResponse, () => {});
+
+      expect(updatePanelUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not found a panel with the provided ID."] });
+    });
   });
 
   describe("@delete", () => {
@@ -257,7 +293,7 @@ describe("Panel Controller", () => {
       );
     });
 
-    it("should validate data when updating a panel", async () => {
+    it("should validate data when deleting a panel", async () => {
       const mockRequest = {
         body: {
           userId: "user-1",
@@ -286,6 +322,90 @@ describe("Panel Controller", () => {
       expect(presenter.single).not.toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ message: "You can not delete a panel that is not yours." });
+    });
+  });
+
+  describe("@archive", () => {
+    it("should arhcive a panel and return a success message", async () => {
+      const mockRequest = {
+        body: {
+          userId: "user-1",
+        },
+        params: { id: "panel-1" },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      jest.spyOn(archivePanelUseCase, "handle").mockResolvedValueOnce(new ArchivePanelResponse(true));
+
+      await panelController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archivePanelUseCase.handle).toHaveBeenCalledWith("panel-1", "user-1");
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "Panel archived successfully" }),
+      );
+    });
+
+    it("should validate data when archiving a panel", async () => {
+      const mockRequest = {
+        body: {
+          userId: "user-1",
+        },
+        params: {
+          id: "panel-1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(archivePanelUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not archive a panel that is not yours.")]),
+        );
+
+      await panelController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archivePanelUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["You can not archive a panel that is not yours."] });
+    });
+
+    it("should validate when panel does not exist", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Panel",
+          description: "This is a test panel",
+          password: "teste12345",
+        },
+        params: {
+          id: "1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(archivePanelUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "You can not archive a panel that does not exist.")]),
+        );
+
+      await panelController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archivePanelUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["You can not archive a panel that does not exist."] });
     });
   });
 });

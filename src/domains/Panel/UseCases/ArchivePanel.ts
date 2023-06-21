@@ -13,7 +13,7 @@ class ArchivePanel {
 
     if (!panel) {
       return new ArchivePanelErrorResponse([
-        new BusinessError("NOT_FOUND", "You can not archive a panel that does not exist."),
+        new BusinessError("PANEL_NOT_FOUND", "You can not archive a panel that does not exist."),
       ]);
     }
 

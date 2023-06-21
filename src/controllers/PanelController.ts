@@ -7,6 +7,7 @@ import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
 import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
+import ArchivePanel from "@/domains/Panel/UseCases/ArchivePanel";
 
 class PanelController {
   constructor(
@@ -14,6 +15,7 @@ class PanelController {
     private deletePanelUseCase: DeletePanel,
     private updatePanelUseCase: UpdatePanel,
     private showPanelUseCase: ShowPanel,
+    private archivePanelUseCase: ArchivePanel,
     private presenter: PanelPresenter,
   ) {}
 
@@ -88,6 +90,21 @@ class PanelController {
         res.status(200).json({ message: "Panel deleted successfully" });
       } else {
         res.status(400).json({ message: deletePanelResponse.errors.map(error => error.message).join("\n") });
+      }
+    });
+  }
+
+  archive(): RequestHandler {
+    return asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const panelId = req.params.id;
+      const userId = req.body.userId;
+
+      const archivePanelResponse = await this.archivePanelUseCase.handle(panelId, userId);
+
+      if (archivePanelResponse.ok) {
+        res.status(200).json({ message: "Panel archived successfully" });
+      } else {
+        res.status(400).json({ errors: archivePanelResponse.errors.map(error => error.message) });
       }
     });
   }

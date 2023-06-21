@@ -47,7 +47,7 @@ describe("ArchivePanel", () => {
     const operationResponse = await archivePanel.handle(panel.slug, "1");
 
     expect(operationResponse.ok).toBe(false);
-    expect(operationResponse.errors[0].status).toBe("NOT_FOUND");
+    expect(operationResponse.errors[0].status).toBe("PANEL_NOT_FOUND");
     expect(operationResponse.errors[0].message).toBe("You can not archive a panel that does not exist.");
     expect(panel.status).toBe(Status.ACTIVE);
   });
