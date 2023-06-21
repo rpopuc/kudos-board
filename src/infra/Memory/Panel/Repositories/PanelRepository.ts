@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
 
-import PanelEntity from "@/domains/Panel/Entities/Panel";
+import PanelEntity, { Status } from "@/domains/Panel/Entities/Panel";
 import PanelRepositoryInterface from "@/domains/Panel/Repositories/PanelRepository";
 import PanelData from "@/domains/Panel/DTO/PanelData";
 
@@ -29,6 +29,18 @@ class PanelRepository implements PanelRepositoryInterface {
 
   delete(slug: string): boolean {
     this.panels = this.panels.filter(panel => panel.slug !== slug);
+
+    return true;
+  }
+
+  archive(slug: string): boolean {
+    const panel = this.findBySlug(slug);
+
+    if (!panel) {
+      return false;
+    }
+
+    panel.status = Status.ARCHIVED;
 
     return true;
   }

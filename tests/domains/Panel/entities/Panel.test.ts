@@ -1,4 +1,4 @@
-import Panel from "@/domains/Panel/Entities/Panel";
+import Panel, { Status } from "@/domains/Panel/Entities/Panel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("Panel", () => {
@@ -17,6 +17,7 @@ describe("Panel", () => {
       expect(panel.slug).not.toBeUndefined();
       expect(panel.owner).toEqual(data.owner);
       expect(panel.createdAt).toEqual(data.createdAt);
+      expect(panel.status).toBe(Status.ACTIVE);
     });
 
     it("should initialize the slug randomly", () => {
@@ -25,6 +26,7 @@ describe("Panel", () => {
         owner: "Example Owner",
         createdAt: "2022-04-19",
         password: new PlainTextPassword("teste12345"),
+        status: Status.ARCHIVED,
       };
 
       const panelOne = new Panel(data);
@@ -33,6 +35,7 @@ describe("Panel", () => {
       expect(panelOne.slug).not.toBeUndefined();
       expect(panelTwo.slug).not.toBeUndefined();
       expect(panelOne.slug).not.toEqual(panelTwo.slug);
+      expect(panelOne.status).toBe(Status.ARCHIVED);
     });
   });
 });

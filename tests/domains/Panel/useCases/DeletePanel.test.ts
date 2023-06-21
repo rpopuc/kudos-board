@@ -18,6 +18,7 @@ describe("DeletePanel", () => {
     const mockedRepository = {
       create: jest.fn(),
       update: jest.fn(),
+      archive: jest.fn(),
       delete: jest.fn().mockReturnValue(true),
       findBySlug: jest.fn().mockReturnValue(memoryPanelEntity),
     } as PanelRepository;
@@ -33,6 +34,7 @@ describe("DeletePanel", () => {
     const mockedRepository = {
       create: jest.fn(),
       update: jest.fn(),
+      archive: jest.fn(),
       delete: jest.fn().mockReturnValue(false),
       findBySlug: jest.fn(),
     } as PanelRepository;
@@ -57,6 +59,7 @@ describe("DeletePanel", () => {
     const mockedRepository = {
       create: jest.fn(),
       update: jest.fn(),
+      archive: jest.fn(),
       delete: jest.fn().mockReturnValue(false),
       findBySlug: jest.fn().mockReturnValue(memoryPanelEntity),
     } as PanelRepository;
@@ -80,6 +83,7 @@ describe("DeletePanel", () => {
     const mockedRepository = {
       create: jest.fn(),
       update: jest.fn(),
+      archive: jest.fn(),
       delete: jest.fn().mockReturnValue(false),
       findBySlug: jest.fn().mockReturnValue(new PanelEntity(panelData)),
     } as PanelRepository;

@@ -20,6 +20,7 @@ describe("ShowPanel", () => {
     mockRepository = {
       create: jest.fn(),
       update: jest.fn(),
+      archive: jest.fn(),
       delete: jest.fn().mockReturnValue(true),
       findBySlug: jest.fn(),
     } as PanelRepository;
