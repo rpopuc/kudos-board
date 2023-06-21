@@ -47,7 +47,7 @@ describe("DeletePanel", () => {
     expect(operationResponse.ok).toBe(true);
   });
 
-  test("should thrown an error when trying to delete a panel", async () => {
+  test("should return an error when trying to delete a panel", async () => {
     const panelData = {
       title: "Example Title",
       owner: "1",
@@ -73,7 +73,7 @@ describe("DeletePanel", () => {
     expect(operationResponse.ok).toBe(false);
   });
 
-  test("should thrown an error when trying to delete a panel from another owner", async () => {
+  test("should return an error when trying to delete a panel from another owner", async () => {
     const panelData = {
       title: "Example Title",
       owner: "2",

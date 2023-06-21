@@ -48,7 +48,7 @@ describe("UpdatePanel", () => {
     expect(result.panel).toEqual(updatedPanelData);
   });
 
-  it("should throw an error if title is missing", async () => {
+  it("should return an error if title is missing", async () => {
     const panelSlug = "my-panel";
 
     const existingPanelData: PanelData = {
@@ -73,7 +73,7 @@ describe("UpdatePanel", () => {
     expect(response.panel).toBe(null);
   });
 
-  it("should throw an error if password is missing", async () => {
+  it("should return an error if password is missing", async () => {
     const panelSlug = "my-panel";
 
     const existingPanelData: PanelData = {
@@ -99,7 +99,7 @@ describe("UpdatePanel", () => {
     expect(response.panel).toBe(null);
   });
 
-  it("should throw an error if client password is missing", async () => {
+  it("should return an error if client password is missing", async () => {
     const panelSlug = "my-panel";
 
     const existingPanelData: PanelData = {
@@ -144,7 +144,7 @@ describe("UpdatePanel", () => {
     ]);
   });
 
-  it("should throw an error if the response from update do not succeeded", async () => {
+  it("should return an error if the response from update do not succeeded", async () => {
     const panelSlug = "my-panel";
 
     const existingPanelData: PanelData = {
@@ -170,7 +170,7 @@ describe("UpdatePanel", () => {
     expect(result.errors[0].message).toBe("Internal error");
   });
 
-  it("should throw an error if the user is not the panel's owner", async () => {
+  it("should return an error if the user is not the panel's owner", async () => {
     const panelSlug = "my-panel";
 
     const existingPanelData: PanelData = {
