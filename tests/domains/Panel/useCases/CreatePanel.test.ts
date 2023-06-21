@@ -59,7 +59,7 @@ describe("CreatePanel", () => {
       expect(response.panel).toStrictEqual(memoryPanelEntity);
     });
 
-    it("should throw an error if title is missing", async () => {
+    it("should return an error if title is missing", async () => {
       const invalidPanelData: PanelData = {
         title: "",
         owner: "Panel owner",
@@ -74,7 +74,7 @@ describe("CreatePanel", () => {
       expect(response.panel).toBe(null);
     });
 
-    it("should throw an error if owner is missing", async () => {
+    it("should return an error if owner is missing", async () => {
       const invalidPanelData: PanelData = {
         title: "Panel title",
         owner: "",
@@ -89,7 +89,7 @@ describe("CreatePanel", () => {
       expect(response.panel).toBe(null);
     });
 
-    it("should throw an error if password is missing", async () => {
+    it("should return an error if password is missing", async () => {
       const invalidPanelData: PanelData = {
         title: "Panel title",
         owner: "Panel owner",

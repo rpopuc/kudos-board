@@ -52,7 +52,7 @@ describe("ArchivePanel", () => {
     expect(panel.status).toBe(Status.ACTIVE);
   });
 
-  it("should throw an error if the user is not the panel's owner", async () => {
+  it("should return an error if the user is not the panel's owner", async () => {
     const panelData = {
       title: "Example Title",
       owner: "1",
@@ -73,7 +73,7 @@ describe("ArchivePanel", () => {
     expect(operationResponse.errors[0].message).toBe("You can not archive a panel that is not yours.");
   });
 
-  it("should throw an error if the archive action failed", async () => {
+  it("should return an error if the archive action failed", async () => {
     const panelData = {
       title: "Example Title",
       owner: "1",
