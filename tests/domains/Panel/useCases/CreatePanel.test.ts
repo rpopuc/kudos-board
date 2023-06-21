@@ -20,6 +20,7 @@ describe("CreatePanel", () => {
           });
         }),
         update: jest.fn(),
+        archive: jest.fn(),
         delete: jest.fn(),
         findBySlug: jest.fn(),
       } as Repository;
@@ -38,6 +39,7 @@ describe("CreatePanel", () => {
 
       const panelRepository = {
         create: jest.fn().mockReturnValue(memoryPanelEntity),
+        archive: jest.fn(),
         update: jest.fn(),
         delete: jest.fn(),
         findBySlug: jest.fn(),

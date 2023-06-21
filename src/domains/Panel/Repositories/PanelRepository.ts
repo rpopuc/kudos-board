@@ -8,6 +8,8 @@ interface PanelRepository {
 
   delete(slug: string): boolean;
 
+  archive(slug: string): boolean;
+
   findBySlug(slug: string): PanelEntity | null;
 }
 
