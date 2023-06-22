@@ -1,8 +1,8 @@
-import UpdatePanelResponse from "@/domains/Panel/UseCases/Response/UpdatePanelResponse";
-import BusinessError from "@/domains/shared/errors/BusinessError";
-import PanelEntity from "@/domains/Panel/Entities/Panel";
+import UpdatePanelResponse from "@/domain/Panel/UseCases/Response/UpdatePanelResponse";
+import BusinessError from "@/domain/shared/errors/BusinessError";
+import PanelEntity from "@/domain/Panel/Entities/Panel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("UpdatePanelResponse", () => {
   test("deve adicionar um erro corretamente", () => {

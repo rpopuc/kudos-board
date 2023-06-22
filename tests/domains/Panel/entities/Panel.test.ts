@@ -1,4 +1,4 @@
-import Panel, { Status } from "@/domains/Panel/Entities/Panel";
+import Panel, { Status } from "@/domain/Panel/Entities/Panel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("Panel", () => {

@@ -1,9 +1,9 @@
-import DeletePanel from "@/domains/Panel/UseCases/DeletePanel";
-import PanelEntity from "@/domains/Panel/Entities/Panel";
-import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
-import DeletePanelErrorResponse from "@/domains/Panel/UseCases/Response/DeletePanelErrorResponse";
+import DeletePanel from "@/domain/Panel/UseCases/DeletePanel";
+import PanelEntity from "@/domain/Panel/Entities/Panel";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
+import DeletePanelErrorResponse from "@/domain/Panel/UseCases/Response/DeletePanelErrorResponse";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("DeletePanel", () => {
   test("should delete an existing panel successfuly", async () => {

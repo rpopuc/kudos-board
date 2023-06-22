@@ -1,6 +1,6 @@
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
-import Panel, { Status } from "@/domains/Panel/Entities/Panel";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import Panel, { Status } from "@/domain/Panel/Entities/Panel";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("PanelRepository", () => {
