@@ -4,6 +4,7 @@ import "reflect-metadata";
 import PanelEntity, { Status } from "@/domain/Panel/Entities/Panel";
 import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
 import PanelData from "@/domain/Panel/DTO/PanelData";
+import { UpdateData } from "@/domain/Panel/Repositories/PanelRepository";
 
 @injectable()
 class PanelRepository implements PanelRepositoryInterface {
@@ -21,7 +22,7 @@ class PanelRepository implements PanelRepositoryInterface {
     return panel;
   }
 
-  update(slug: string, panelData: PanelData): PanelEntity | null {
+  update({ slug, panelData }: UpdateData): PanelEntity | null {
     const panel = this.findBySlug(slug);
 
     return panel;

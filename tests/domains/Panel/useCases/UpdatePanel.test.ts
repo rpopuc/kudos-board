@@ -36,14 +36,14 @@ describe("UpdatePanel", () => {
     const result = await updatePanel.handle(panelSlug, "Old Owner", updatedPanelData);
 
     expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
-    expect(mockRepository.update).toHaveBeenCalledWith(
-      panelSlug,
-      expect.objectContaining({
+    expect(mockRepository.update).toHaveBeenCalledWith({
+      slug: panelSlug,
+      panelData: expect.objectContaining({
         title: updatedPanelData.title,
         password: updatedPanelData.password,
         owner: existingPanelData.owner,
       }),
-    );
+    });
     expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
     expect(result.panel).toEqual(updatedPanelData);
   });

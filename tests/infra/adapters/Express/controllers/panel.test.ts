@@ -343,7 +343,10 @@ describe("Panel Controller", () => {
 
       await panelController.archive()(mockRequest, mockResponse, () => {});
 
-      expect(archivePanelUseCase.handle).toHaveBeenCalledWith("panel-1", "user-1");
+      expect(archivePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "panel-1",
+        userId: "user-1",
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({ message: "Panel archived successfully" }),
       );

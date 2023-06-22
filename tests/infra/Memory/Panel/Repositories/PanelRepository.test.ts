@@ -36,7 +36,7 @@ describe("PanelRepository", () => {
       const Panel = new PanelRepository();
 
       const createdPanel = Panel.create(panelData);
-      const updatedPanel = Panel.update(createdPanel.slug, updatedPanelData);
+      const updatedPanel = Panel.update({ slug: createdPanel.slug, panelData: updatedPanelData });
 
       expect(updatedPanel).toEqual(createdPanel);
     });

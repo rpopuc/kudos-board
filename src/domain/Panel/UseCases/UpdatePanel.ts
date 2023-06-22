@@ -55,7 +55,7 @@ class UpdatePanel {
       },
     } as PanelData;
 
-    const updatedPanel = this.repository.update(panelSlug, updatedPanelData);
+    const updatedPanel = this.repository.update({ slug: panelSlug, panelData: updatedPanelData });
 
     if (!updatedPanel) {
       return new ErrorResponse([new BusinessError("PANEL_NOT_UPDATED", "Internal error")]);

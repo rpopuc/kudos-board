@@ -25,7 +25,7 @@ describe("ArchivePanel", () => {
 
     const archivePanel = new ArchivePanel(repository);
 
-    const operationResponse = await archivePanel.handle(panel.slug, "1");
+    const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
     expect(panel.status).toBe(Status.ARCHIVED);
@@ -44,7 +44,7 @@ describe("ArchivePanel", () => {
 
     const archivePanel = new ArchivePanel(repository);
 
-    const operationResponse = await archivePanel.handle(panel.slug, "1");
+    const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(false);
     expect(operationResponse.errors[0].status).toBe("PANEL_NOT_FOUND");
@@ -65,7 +65,7 @@ describe("ArchivePanel", () => {
 
     const archivePanel = new ArchivePanel(repository);
 
-    const operationResponse = await archivePanel.handle(panel.slug, "2");
+    const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "2" });
 
     expect(operationResponse.ok).toBe(false);
     expect(operationResponse).toBeInstanceOf(ArchivePanelErrorResponse);
@@ -87,7 +87,7 @@ describe("ArchivePanel", () => {
 
     const archivePanel = new ArchivePanel(repository);
 
-    const operationResponse = await archivePanel.handle(panel.slug, "1");
+    const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(false);
     expect(operationResponse).toBeInstanceOf(ArchivePanelErrorResponse);
