@@ -3,10 +3,15 @@ import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelRespons
 import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
+export type ShowPanelData = {
+  panelSlug: string;
+  clientPassword: string;
+};
+
 class ShowPanel {
   constructor(private repository: Repository) {}
 
-  async handle(panelSlug: string, clientPassword: string): Promise<ShowPanelResponse> {
+  async handle({ panelSlug, clientPassword }: ShowPanelData): Promise<ShowPanelResponse> {
     const panel = this.repository.findBySlug(panelSlug);
 
     if (!panel) {

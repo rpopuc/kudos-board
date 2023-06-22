@@ -37,7 +37,7 @@ describe("ShowPanel", () => {
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
 
-    const response = await showPanel.handle(panelSlug, "");
+    const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
     expect(response instanceof ShowPanelResponse).toBe(true);
     expect(response.ok).toBe(true);
@@ -49,7 +49,7 @@ describe("ShowPanel", () => {
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(null);
 
-    const response = await showPanel.handle(panelSlug, "");
+    const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
     expect(response instanceof ShowPanelErrorResponse).toBe(true);
     expect(response.errors[0].message).toBe("Could not found a panel with the provided ID.");
@@ -68,7 +68,7 @@ describe("ShowPanel", () => {
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
 
-    const response = await showPanel.handle(panelSlug, clientPassword);
+    const response = await showPanel.handle({ panelSlug, clientPassword });
 
     expect(response instanceof ShowPanelResponse).toBe(true);
     expect(response.ok).toBe(true);
@@ -87,7 +87,7 @@ describe("ShowPanel", () => {
 
     mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
 
-    const response = await showPanel.handle(panelSlug, clientPassword);
+    const response = await showPanel.handle({ panelSlug, clientPassword });
 
     expect(response instanceof ShowPanelErrorResponse).toBe(true);
     expect(response.errors[0].message).toBe("You can not access this panel.");

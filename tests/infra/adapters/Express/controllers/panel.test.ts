@@ -71,7 +71,7 @@ describe("Panel Controller", () => {
 
       await panelController.show()(mockRequest, mockResponse, () => {});
 
-      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith({ panelSlug: "test-panel", clientPassword: "teste12345" });
       expect(presenter.single).toHaveBeenCalledWith(panel);
       expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
@@ -102,7 +102,7 @@ describe("Panel Controller", () => {
       await panelController.show()(mockRequest, mockResponse, () => {});
 
       expect(presenter.single).not.toHaveBeenCalled();
-      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith({ panelSlug: "test-panel", clientPassword: "teste12345" });
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find panel."] });
     });

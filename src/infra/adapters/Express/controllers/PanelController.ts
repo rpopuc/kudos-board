@@ -23,7 +23,10 @@ class PanelController {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
 
-      const response = await this.showPanelUseCase.handle(req.params.slug, data.clientPassword);
+      const response = await this.showPanelUseCase.handle({
+        panelSlug: req.params.slug,
+        clientPassword: data.clientPassword,
+      });
 
       if (response.ok && response.panel !== null) {
         res.json(this.presenter.single(response.panel));
