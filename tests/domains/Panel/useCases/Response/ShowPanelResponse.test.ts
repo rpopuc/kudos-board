@@ -1,8 +1,8 @@
-import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelResponse";
-import BusinessError from "@/domains/shared/errors/BusinessError";
-import PanelEntity from "@/domains/Panel/Entities/Panel";
+import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
+import BusinessError from "@/domain/shared/errors/BusinessError";
+import PanelEntity from "@/domain/Panel/Entities/Panel";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("ShowPanelResponse", () => {
   test("should add an error", () => {

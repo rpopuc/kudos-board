@@ -6,7 +6,7 @@ const threshold = {
 }
 
 const fs = require('fs')
-const coverage = JSON.parse(fs.readFileSync('./tests/coverage/coverage-summary.json')).total
+const coverage = JSON.parse(fs.readFileSync('.coverage/coverage-summary.json')).total
 const failed = Object.keys(threshold).some(key => {
   return coverage[key].pct < threshold[key]
 })

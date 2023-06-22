@@ -1,4 +1,4 @@
-import InvalidPassword from "@/domains/shared/errors/InvalidPassword";
+import InvalidPassword from "@/domain/shared/errors/InvalidPassword";
 
 describe("InvalidPassword", () => {
   it("should create an instance of Error", () => {

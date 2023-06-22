@@ -1,9 +1,9 @@
-import PanelEntity, { Status } from "@/domains/Panel/Entities/Panel";
+import PanelEntity, { Status } from "@/domain/Panel/Entities/Panel";
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domains/Panel/DTO/PanelData";
-import ArchivePanel from "@/domains/Panel/UseCases/ArchivePanel";
-import ArchivePanelErrorResponse from "@/domains/Panel/UseCases/Response/ArchivePanelErrorResponse";
+import PanelData from "@/domain/Panel/DTO/PanelData";
+import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
+import ArchivePanelErrorResponse from "@/domain/Panel/UseCases/Response/ArchivePanelErrorResponse";
 
 describe("ArchivePanel", () => {
   let repository: PanelRepository;

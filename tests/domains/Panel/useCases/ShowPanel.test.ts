@@ -1,10 +1,10 @@
-import ShowPanel from "@/domains/Panel/UseCases/ShowPanel";
-import PanelRepository from "@/domains/Panel/Repositories/PanelRepository";
-import ShowPanelResponse from "@/domains/Panel/UseCases/Response/ShowPanelResponse";
-import ShowPanelErrorResponse from "@/domains/Panel/UseCases/Response/ShowPanelErrorResponse";
-import BusinessError from "@/domains/shared/errors/BusinessError";
+import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
+import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
+import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
+import BusinessError from "@/domain/shared/errors/BusinessError";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("ShowPanel", () => {
   let showPanel: ShowPanel;

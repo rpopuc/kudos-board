@@ -1,5 +1,5 @@
-import ErrorResponse from "@/domains/Panel/UseCases/Response/ErrorResponse";
-import Error from "@/domains/shared/errors/BusinessError";
+import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import Error from "@/domain/shared/errors/BusinessError";
 
 describe("ErrorResponse", () => {
   it("should initialize with errors and set ok to false", () => {

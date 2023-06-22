@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import Password from "@/domains/shared/valueObjects/Password";
+import Password from "@/domain/shared/valueObjects/Password";
 
 const SALT_ROUNDS = 10;
 

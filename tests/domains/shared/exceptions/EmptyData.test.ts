@@ -1,5 +1,5 @@
-import EmptyData from "@/domains/shared/errors/EmptyData";
-import Error from "@/domains/shared/errors/BusinessError";
+import EmptyData from "@/domain/shared/errors/EmptyData";
+import Error from "@/domain/shared/errors/BusinessError";
 
 describe("EmptyData", () => {
   it("should create an instance of Error", () => {

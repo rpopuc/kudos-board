@@ -1,9 +1,9 @@
-import UpdatePanel from "@/domains/Panel/UseCases/UpdatePanel";
-import PanelData from "@/domains/Panel/DTO/PanelData";
-import UpdatePanelData from "@/domains/Panel/DTO/UpdatePanelData";
-import UpdateSuccessfulResponse from "@/domains/Panel/UseCases/Response/UpdateSuccessfulResponse";
-import ErrorResponse from "@/domains/Panel/UseCases/Response/ErrorResponse";
-import BusinessError from "@/domains/shared/errors/BusinessError";
+import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
+import PanelData from "@/domain/Panel/DTO/PanelData";
+import UpdatePanelData from "@/domain/Panel/DTO/UpdatePanelData";
+import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import BusinessError from "@/domain/shared/errors/BusinessError";
 import MockRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 

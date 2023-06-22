@@ -1,4 +1,4 @@
-import Password from "@/domains/shared/valueObjects/Password";
+import Password from "@/domain/shared/valueObjects/Password";
 
 export default class PlainTextPassword implements Password {
   private value: string;

@@ -1,5 +1,5 @@
-import SuccessfulResponse from "@/domains/Panel/UseCases/Response/SuccessfulResponse";
-import PanelEntity from "@/domains/Panel/Entities/Panel";
+import SuccessfulResponse from "@/domain/Panel/UseCases/Response/SuccessfulResponse";
+import PanelEntity from "@/domain/Panel/Entities/Panel";
 
 describe("SuccessfulResponse", () => {
   it("should initialize with ok set to true and panel", () => {

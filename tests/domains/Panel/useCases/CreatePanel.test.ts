@@ -1,7 +1,7 @@
-import CreatePanel from "@/domains/Panel/UseCases/CreatePanel";
-import PanelEntity from "@/domains/Panel/Entities/Panel";
-import Repository from "@/domains/Panel/Repositories/PanelRepository";
-import PanelData from "@/domains/Panel/DTO/PanelData";
+import CreatePanel from "@/domain/Panel/UseCases/CreatePanel";
+import PanelEntity from "@/domain/Panel/Entities/Panel";
+import Repository from "@/domain/Panel/Repositories/PanelRepository";
+import PanelData from "@/domain/Panel/DTO/PanelData";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("CreatePanel", () => {

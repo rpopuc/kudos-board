@@ -1,5 +1,5 @@
-import CreatePanelResponse from "@/domains/Panel/UseCases/Response/CreatePanelResponse";
-import Error from "@/domains/shared/errors/BusinessError";
+import CreatePanelResponse from "@/domain/Panel/UseCases/Response/CreatePanelResponse";
+import Error from "@/domain/shared/errors/BusinessError";
 
 describe("CreatePanelResponse", () => {
   let response: CreatePanelResponse;

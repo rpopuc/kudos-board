@@ -1,4 +1,4 @@
-import Error from "@/domains/shared/errors/BusinessError";
+import Error from "@/domain/shared/errors/BusinessError";
 
 describe("Error", () => {
   it("should create an instance of Error", () => {

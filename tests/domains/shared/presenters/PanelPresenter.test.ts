@@ -1,5 +1,5 @@
-import Panel from "@/domains/Panel/Entities/Panel";
-import PanelPresenter from "@/domains/shared/presenters/PanelPresenter";
+import Panel from "@/domain/Panel/Entities/Panel";
+import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 
 describe("PanelPresenter", () => {
   it("should present a single Panel", () => {
