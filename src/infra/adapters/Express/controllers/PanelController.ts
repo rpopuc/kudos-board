@@ -23,7 +23,10 @@ class PanelController {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
 
-      const response = await this.showPanelUseCase.handle(req.params.slug, data.clientPassword);
+      const response = await this.showPanelUseCase.handle({
+        panelSlug: req.params.slug,
+        clientPassword: data.clientPassword,
+      });
 
       if (response.ok && response.panel !== null) {
         res.json(this.presenter.single(response.panel));
@@ -59,13 +62,13 @@ class PanelController {
 
   update(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const panelId = req.params.id;
+      const panelSlug = req.params.slug;
       const userId = req.body.userId;
       const data = req.body;
 
       data.password = new PlainTextPassword(data.password);
 
-      const response = await this.updatePanelUseCase.handle(panelId, userId, data);
+      const response = await this.updatePanelUseCase.handle({ panelSlug, userId, updatePanelData: data });
 
       if (response.ok && response.panel !== null) {
         res.json(this.presenter.single(response.panel));
@@ -81,10 +84,10 @@ class PanelController {
 
   delete(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const panelId = req.params.id;
+      const panelSlug = req.params.slug;
       const userId = req.body.userId;
 
-      const deletePanelResponse = await this.deletePanelUseCase.handle(panelId, userId);
+      const deletePanelResponse = await this.deletePanelUseCase.handle({ panelSlug, userId });
 
       if (deletePanelResponse.ok) {
         res.status(200).json({ message: "Panel deleted successfully" });
@@ -99,7 +102,7 @@ class PanelController {
       const panelId = req.params.id;
       const userId = req.body.userId;
 
-      const archivePanelResponse = await this.archivePanelUseCase.handle(panelId, userId);
+      const archivePanelResponse = await this.archivePanelUseCase.handle({ panelSlug: panelId, userId });
 
       if (archivePanelResponse.ok) {
         res.status(200).json({ message: "Panel archived successfully" });

@@ -9,6 +9,12 @@ import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import InvalidPassword from "@/domain/shared/errors/InvalidPassword";
 
+export type UpdatePanelRequest = {
+  panelSlug: string;
+  userId: string;
+  updatePanelData: UpdatePanelData;
+};
+
 class UpdatePanel {
   constructor(private repository: Repository) {}
 
@@ -30,7 +36,7 @@ class UpdatePanel {
     return result;
   }
 
-  async handle(panelSlug: string, userId: string, updatePanelData: UpdatePanelData): Promise<UpdatePanelResponse> {
+  async handle({ panelSlug, userId, updatePanelData }: UpdatePanelRequest): Promise<UpdatePanelResponse> {
     const existingPanel = this.repository.findBySlug(panelSlug);
 
     if (!existingPanel) {
@@ -55,7 +61,7 @@ class UpdatePanel {
       },
     } as PanelData;
 
-    const updatedPanel = this.repository.update(panelSlug, updatedPanelData);
+    const updatedPanel = this.repository.update({ slug: panelSlug, panelData: updatedPanelData });
 
     if (!updatedPanel) {
       return new ErrorResponse([new BusinessError("PANEL_NOT_UPDATED", "Internal error")]);

@@ -5,10 +5,15 @@ import ArchivePanelErrorResponse from "@/domain/Panel/UseCases/Response/ArchiveP
 
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
+export type ArchivePanelData = {
+  panelSlug: string;
+  userId: string;
+};
+
 class ArchivePanel {
   constructor(private repository: Repository) {}
 
-  async handle(panelSlug: string, userId: string): Promise<ArchivePanelResponse> {
+  async handle({ panelSlug, userId }: ArchivePanelData): Promise<ArchivePanelResponse> {
     const panel = this.repository.findBySlug(panelSlug);
 
     if (!panel) {

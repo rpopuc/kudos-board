@@ -25,7 +25,7 @@ describe("DeletePanel", () => {
 
     const deletePanel = new DeletePanel(mockedRepository);
 
-    const operationResponse = await deletePanel.handle(memoryPanelEntity.slug, "1");
+    const operationResponse = await deletePanel.handle({ panelSlug: memoryPanelEntity.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
   });
@@ -42,7 +42,7 @@ describe("DeletePanel", () => {
     const deletePanel = new DeletePanel(mockedRepository);
 
     const panelSlug = "panel";
-    const operationResponse = await deletePanel.handle(panelSlug, "1");
+    const operationResponse = await deletePanel.handle({ panelSlug, userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
   });
@@ -66,7 +66,7 @@ describe("DeletePanel", () => {
 
     const deletePanel = new DeletePanel(mockedRepository);
 
-    const operationResponse = await deletePanel.handle(memoryPanelEntity.slug, "1");
+    const operationResponse = await deletePanel.handle({ panelSlug: memoryPanelEntity.slug, userId: "1" });
 
     expect(operationResponse).toBeInstanceOf(DeletePanelErrorResponse);
     expect(operationResponse.errors[0].status).toBe("PANEL_NOT_DELETED");
@@ -91,7 +91,7 @@ describe("DeletePanel", () => {
     const deletePanel = new DeletePanel(mockedRepository);
 
     const panelSlug = "panel";
-    const operationResponse = await deletePanel.handle(panelSlug, "1");
+    const operationResponse = await deletePanel.handle({ panelSlug, userId: "1" });
 
     expect(operationResponse).toBeInstanceOf(DeletePanelErrorResponse);
     expect(operationResponse.errors[0].status).toBe("NOT_AUTHORIZED");

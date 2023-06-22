@@ -71,7 +71,7 @@ describe("Panel Controller", () => {
 
       await panelController.show()(mockRequest, mockResponse, () => {});
 
-      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith({ panelSlug: "test-panel", clientPassword: "teste12345" });
       expect(presenter.single).toHaveBeenCalledWith(panel);
       expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
@@ -102,7 +102,7 @@ describe("Panel Controller", () => {
       await panelController.show()(mockRequest, mockResponse, () => {});
 
       expect(presenter.single).not.toHaveBeenCalled();
-      expect(showPanelUseCase.handle).toHaveBeenCalledWith("test-panel", "teste12345");
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith({ panelSlug: "test-panel", clientPassword: "teste12345" });
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find panel."] });
     });
@@ -187,8 +187,8 @@ describe("Panel Controller", () => {
           description: "This is a test panel",
           password: "teste12345",
         },
-        params: { id: "1" },
-      } as Request<{ id: string }>;
+        params: { slug: "1" },
+      } as Request<{ slug: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -204,7 +204,11 @@ describe("Panel Controller", () => {
 
       await panelController.update()(mockRequest, mockResponse, () => {});
 
-      expect(updatePanelUseCase.handle).toHaveBeenCalledWith("1", "user-1", mockRequest.body);
+      expect(updatePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "1",
+        userId: "user-1",
+        updatePanelData: mockRequest.body,
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
 
@@ -275,8 +279,8 @@ describe("Panel Controller", () => {
         body: {
           userId: "user-1",
         },
-        params: { id: "panel-1" },
-      } as Request<{ id: string }>;
+        params: { slug: "panel-1" },
+      } as Request<{ slug: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -287,7 +291,10 @@ describe("Panel Controller", () => {
 
       await panelController.delete()(mockRequest, mockResponse, () => {});
 
-      expect(deletePanelUseCase.handle).toHaveBeenCalledWith("panel-1", "user-1");
+      expect(deletePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "panel-1",
+        userId: "user-1",
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({ message: "Panel deleted successfully" }),
       );
@@ -343,7 +350,10 @@ describe("Panel Controller", () => {
 
       await panelController.archive()(mockRequest, mockResponse, () => {});
 
-      expect(archivePanelUseCase.handle).toHaveBeenCalledWith("panel-1", "user-1");
+      expect(archivePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "panel-1",
+        userId: "user-1",
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({ message: "Panel archived successfully" }),
       );
