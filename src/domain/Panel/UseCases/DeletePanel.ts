@@ -3,10 +3,15 @@ import DeletePanelResponse from "@/domain/Panel/UseCases/Response/DeletePanelRes
 import DeletePanelErrorResponse from "@/domain/Panel/UseCases/Response/DeletePanelErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
+export type DeletePanelData = {
+  panelSlug: string;
+  userId: string;
+};
+
 class DeletePanel {
   constructor(private repository: Repository) {}
 
-  async handle(panelSlug: string, userId: string): Promise<DeletePanelResponse> {
+  async handle({ panelSlug, userId }: DeletePanelData): Promise<DeletePanelResponse> {
     const panel = this.repository.findBySlug(panelSlug);
 
     if (!panel) {

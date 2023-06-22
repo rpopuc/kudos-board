@@ -275,8 +275,8 @@ describe("Panel Controller", () => {
         body: {
           userId: "user-1",
         },
-        params: { id: "panel-1" },
-      } as Request<{ id: string }>;
+        params: { slug: "panel-1" },
+      } as Request<{ slug: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -287,7 +287,10 @@ describe("Panel Controller", () => {
 
       await panelController.delete()(mockRequest, mockResponse, () => {});
 
-      expect(deletePanelUseCase.handle).toHaveBeenCalledWith("panel-1", "user-1");
+      expect(deletePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "panel-1",
+        userId: "user-1",
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({ message: "Panel deleted successfully" }),
       );

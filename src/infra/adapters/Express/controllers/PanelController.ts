@@ -81,10 +81,10 @@ class PanelController {
 
   delete(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const panelId = req.params.id;
+      const panelSlug = req.params.slug;
       const userId = req.body.userId;
 
-      const deletePanelResponse = await this.deletePanelUseCase.handle(panelId, userId);
+      const deletePanelResponse = await this.deletePanelUseCase.handle({ panelSlug, userId });
 
       if (deletePanelResponse.ok) {
         res.status(200).json({ message: "Panel deleted successfully" });
