@@ -187,8 +187,8 @@ describe("Panel Controller", () => {
           description: "This is a test panel",
           password: "teste12345",
         },
-        params: { id: "1" },
-      } as Request<{ id: string }>;
+        params: { slug: "1" },
+      } as Request<{ slug: string }>;
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -204,7 +204,11 @@ describe("Panel Controller", () => {
 
       await panelController.update()(mockRequest, mockResponse, () => {});
 
-      expect(updatePanelUseCase.handle).toHaveBeenCalledWith("1", "user-1", mockRequest.body);
+      expect(updatePanelUseCase.handle).toHaveBeenCalledWith({
+        panelSlug: "1",
+        userId: "user-1",
+        updatePanelData: mockRequest.body,
+      });
       expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
     });
 
