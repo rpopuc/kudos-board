@@ -8,6 +8,7 @@ interface KudosData {
   from: From;
   to: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export default KudosData;
