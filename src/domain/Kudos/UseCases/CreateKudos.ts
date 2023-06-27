@@ -29,7 +29,7 @@ class CreateKudos {
     }
 
     if (!kudosData.panelSlug) {
-      result.addError(new EmptyData("EMPTY_PANEL", "panel"));
+      result.addError(new EmptyData("EMPTY_PANEL_SLUG", "panel slug"));
     }
 
     return result;

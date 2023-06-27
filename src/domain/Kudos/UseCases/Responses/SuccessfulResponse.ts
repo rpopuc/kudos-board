@@ -2,8 +2,8 @@ import CreateKudosResponse from "@/domain/Kudos/UseCases/Responses/CreateKudosRe
 import KudosEntity from "@/domain/Kudos/Entities/Kudos";
 
 class SuccessfulResponse extends CreateKudosResponse {
-  constructor(panel: KudosEntity) {
-    super(true, panel);
+  constructor(kudos: KudosEntity) {
+    super(true, kudos);
   }
 }
 
