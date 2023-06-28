@@ -2,26 +2,17 @@ import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
 import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
-import BusinessError from "@/domain/shared/errors/BusinessError";
-import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("ShowPanel", () => {
   let showPanel: ShowPanel;
   let mockRepository: PanelRepository;
 
   beforeEach(() => {
-    const panelData = {
-      title: "Example Title",
-      owner: "1",
-      password: new PlainTextPassword("teste12345"),
-    } as PanelData;
-
     mockRepository = {
       create: jest.fn(),
       update: jest.fn(),
       archive: jest.fn(),
-      delete: jest.fn().mockReturnValue(true),
+      delete: jest.fn(),
       findBySlug: jest.fn(),
     } as PanelRepository;
 
