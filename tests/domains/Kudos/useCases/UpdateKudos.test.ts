@@ -5,7 +5,6 @@ import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSu
 import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
-import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("UpdateKudos", () => {
   let updateKudos: UpdateKudos;

@@ -1,6 +1,3 @@
-- Parâmetros como objetos para facilitar o uso (?)
-- Melhorar testes usando mock repository ao invés da infra!!!
-
 - MongoRepository
 
 - Listagem de Kudos

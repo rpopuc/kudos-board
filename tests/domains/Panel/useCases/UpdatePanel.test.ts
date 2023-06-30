@@ -4,67 +4,84 @@ import UpdatePanelData from "@/domain/Panel/DTO/UpdatePanelData";
 import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuccessfulResponse";
 import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
-import MockRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
+import Panel from "@/domain/Panel/Entities/Panel";
 
 describe("UpdatePanel", () => {
   let updatePanel: UpdatePanel;
-  let mockRepository: MockRepository;
+  let panelRepository: PanelRepository;
 
   beforeEach(() => {
-    mockRepository = new MockRepository();
-    updatePanel = new UpdatePanel(mockRepository);
+    panelRepository = {
+      create: jest.fn(),
+      update: jest.fn(),
+      archive: jest.fn(),
+      delete: jest.fn(),
+      findBySlug: jest.fn(),
+    } as PanelRepository;
+
+    updatePanel = new UpdatePanel(panelRepository);
   });
 
   it("should update an existing panel", async () => {
     const panelSlug = "my-panel";
     const currentUpdatedAt = new Date("2021-01-01 00:00:00");
-    const existingPanelData: PanelData = {
+    const existingPanel = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
       updatedAt: currentUpdatedAt,
-    };
-    const updatedPanelData: UpdatePanelData = {
+    } as Partial<Panel> as Panel;
+
+    const updatedPanel = {
       title: "New Title",
       password: new PlainTextPassword("newPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockReturnValue(updatedPanelData);
+    const updatePanelData = {
+      title: "New Title",
+      password: new PlainTextPassword("newPassword"),
+    } as UpdatePanelData;
 
-    const result = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData: updatedPanelData });
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(existingPanel);
+    jest.spyOn(panelRepository, "update").mockReturnValue(updatedPanel);
 
-    expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
-    expect(mockRepository.update).toHaveBeenCalledWith({
+    const result = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData });
+
+    expect(panelRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
+    expect(panelRepository.update).toHaveBeenCalledWith({
       slug: panelSlug,
       panelData: expect.objectContaining({
-        title: updatedPanelData.title,
-        password: updatedPanelData.password,
-        owner: existingPanelData.owner,
+        title: updatedPanel.title,
+        password: updatedPanel.password,
+        owner: existingPanel.owner,
       }),
     });
     expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
-    expect(result.panel).toEqual(updatedPanelData);
+    expect(result.panel).toEqual(updatePanelData);
   });
 
   it("should return an error if title is missing", async () => {
     const panelSlug = "my-panel";
 
-    const existingPanelData: PanelData = {
+    const panel = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
     const invalidPanelData: UpdatePanelData = {
       title: "",
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
-    const response = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData: invalidPanelData });
+    const response = await updatePanel.handle({
+      panelSlug,
+      userId: "Old Owner",
+      updatePanelData: invalidPanelData,
+    });
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -76,21 +93,23 @@ describe("UpdatePanel", () => {
   it("should return an error if password is missing", async () => {
     const panelSlug = "my-panel";
 
-    const existingPanelData: PanelData = {
+    const panel = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
     const invalidPanelData: UpdatePanelData = {
-      title: "Panel title",
       password: new PlainTextPassword(""),
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
-    const response = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData: invalidPanelData });
+    const response = await updatePanel.handle({
+      panelSlug,
+      userId: "Old Owner",
+      updatePanelData: invalidPanelData,
+    });
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -102,21 +121,23 @@ describe("UpdatePanel", () => {
   it("should return an error if client password is missing", async () => {
     const panelSlug = "my-panel";
 
-    const existingPanelData: PanelData = {
+    const panel = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
     const invalidPanelData: UpdatePanelData = {
-      title: "Panel title",
       clientPassword: new PlainTextPassword(""),
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockReturnValue(invalidPanelData);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
-    const response = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData: invalidPanelData });
+    const response = await updatePanel.handle({
+      panelSlug,
+      userId: "Old Owner",
+      updatePanelData: invalidPanelData,
+    });
 
     expect(response.ok).toBe(false);
     expect(response.errors).toHaveLength(1);
@@ -133,11 +154,15 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(undefined);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(null);
 
-    const result = await updatePanel.handle({ panelSlug, userId: "New Owner", updatePanelData: updatedPanelData });
+    const result = await updatePanel.handle({
+      panelSlug,
+      userId: "New Owner",
+      updatePanelData: updatedPanelData,
+    });
 
-    expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
+    expect(panelRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors).toEqual([
       new BusinessError("PANEL_NOT_FOUND", "Could not found a panel with the provided ID."),
@@ -147,11 +172,11 @@ describe("UpdatePanel", () => {
   it("should return an error if the response from update do not succeeded", async () => {
     const panelSlug = "my-panel";
 
-    const existingPanelData: PanelData = {
+    const panel = {
       title: "Old Title",
       owner: "Old Owner",
       password: new PlainTextPassword("oldPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
     const updatedPanelData: PanelData = {
       title: "New Title",
@@ -159,16 +184,16 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockImplementation(() => null);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "update").mockReturnValue(null);
 
     const result = await updatePanel.handle({
       panelSlug,
-      userId: existingPanelData.owner,
+      userId: panel.owner,
       updatePanelData: updatedPanelData,
     });
 
-    expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
+    expect(panelRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("PANEL_NOT_UPDATED");
     expect(result.errors[0].message).toBe("Internal error");
@@ -177,11 +202,11 @@ describe("UpdatePanel", () => {
   it("should return an error if the user is not the panel's owner", async () => {
     const panelSlug = "my-panel";
 
-    const existingPanelData: PanelData = {
+    const panel = {
       title: "Old Title",
       owner: "Owner",
       password: new PlainTextPassword("oldPassword"),
-    };
+    } as Partial<Panel> as Panel;
 
     const updatedPanelData: PanelData = {
       title: "New Title",
@@ -189,12 +214,16 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(existingPanelData);
-    mockRepository.update = jest.fn().mockImplementation(() => null);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "update").mockReturnValue(null);
 
-    const result = await updatePanel.handle({ panelSlug, userId: "other-owner", updatePanelData: updatedPanelData });
+    const result = await updatePanel.handle({
+      panelSlug,
+      userId: "other-owner",
+      updatePanelData: updatedPanelData,
+    });
 
-    expect(mockRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
+    expect(panelRepository.findBySlug).toHaveBeenCalledWith(panelSlug);
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("NOT_AUTHORIZED");
     expect(result.errors[0].message).toBe("You can not edit a panel that is not yours.");

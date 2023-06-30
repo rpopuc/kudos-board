@@ -1,4 +1,3 @@
-import PanelEntity, { Status } from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import KudosEntity from "@/domain/Kudos/Entities/Kudos";
