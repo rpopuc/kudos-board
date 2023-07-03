@@ -1,7 +1,7 @@
 import Password from "@/domain/shared/valueObjects/Password";
 
 interface UpdatePanelData {
-  title: string;
+  title?: string;
   password?: Password;
   clientPassword?: Password;
 }

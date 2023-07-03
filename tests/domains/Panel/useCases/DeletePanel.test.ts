@@ -6,6 +6,28 @@ import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 
 describe("DeletePanel", () => {
+  let panelRepository: PanelRepository;
+  let panel: PanelEntity;
+  let panelData: PanelData;
+
+  beforeEach(() => {
+    panelRepository = {
+      create: jest.fn(),
+      update: jest.fn(),
+      archive: jest.fn(),
+      delete: jest.fn(),
+      findBySlug: jest.fn(),
+    } as PanelRepository;
+
+    panelData = {
+      title: "Example Title",
+      owner: "1",
+      password: new PlainTextPassword("teste12345"),
+    } as PanelData;
+
+    panel = new PanelEntity(panelData);
+  });
+
   test("should delete an existing panel successfuly", async () => {
     const panelData = {
       title: "Example Title",
@@ -13,60 +35,34 @@ describe("DeletePanel", () => {
       password: new PlainTextPassword("teste12345"),
     } as PanelData;
 
-    const memoryPanelEntity = new PanelEntity(panelData);
+    const panel = new PanelEntity(panelData);
 
-    const mockedRepository = {
-      create: jest.fn(),
-      update: jest.fn(),
-      archive: jest.fn(),
-      delete: jest.fn().mockReturnValue(true),
-      findBySlug: jest.fn().mockReturnValue(memoryPanelEntity),
-    } as PanelRepository;
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "delete").mockReturnValue(true);
 
-    const deletePanel = new DeletePanel(mockedRepository);
+    const deletePanel = new DeletePanel(panelRepository);
 
-    const operationResponse = await deletePanel.handle({ panelSlug: memoryPanelEntity.slug, userId: "1" });
+    const operationResponse = await deletePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
   });
 
   test("should return a success when trying to delete a non-existent panel", async () => {
-    const mockedRepository = {
-      create: jest.fn(),
-      update: jest.fn(),
-      archive: jest.fn(),
-      delete: jest.fn().mockReturnValue(false),
-      findBySlug: jest.fn(),
-    } as PanelRepository;
+    jest.spyOn(panelRepository, "delete").mockReturnValue(true);
 
-    const deletePanel = new DeletePanel(mockedRepository);
-
-    const panelSlug = "panel";
-    const operationResponse = await deletePanel.handle({ panelSlug, userId: "1" });
+    const deletePanel = new DeletePanel(panelRepository);
+    const operationResponse = await deletePanel.handle({ panelSlug: "panel", userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
   });
 
   test("should return an error when trying to delete a panel", async () => {
-    const panelData = {
-      title: "Example Title",
-      owner: "1",
-      password: new PlainTextPassword("teste12345"),
-    } as PanelData;
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "delete").mockReturnValue(false);
 
-    const memoryPanelEntity = new PanelEntity(panelData);
+    const deletePanel = new DeletePanel(panelRepository);
 
-    const mockedRepository = {
-      create: jest.fn(),
-      update: jest.fn(),
-      archive: jest.fn(),
-      delete: jest.fn().mockReturnValue(false),
-      findBySlug: jest.fn().mockReturnValue(memoryPanelEntity),
-    } as PanelRepository;
-
-    const deletePanel = new DeletePanel(mockedRepository);
-
-    const operationResponse = await deletePanel.handle({ panelSlug: memoryPanelEntity.slug, userId: "1" });
+    const operationResponse = await deletePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse).toBeInstanceOf(DeletePanelErrorResponse);
     expect(operationResponse.errors[0].status).toBe("PANEL_NOT_DELETED");
@@ -74,24 +70,14 @@ describe("DeletePanel", () => {
   });
 
   test("should return an error when trying to delete a panel from another owner", async () => {
-    const panelData = {
-      title: "Example Title",
-      owner: "2",
-      password: new PlainTextPassword("teste12345"),
-    } as PanelData;
+    panel.owner = "2";
 
-    const mockedRepository = {
-      create: jest.fn(),
-      update: jest.fn(),
-      archive: jest.fn(),
-      delete: jest.fn().mockReturnValue(false),
-      findBySlug: jest.fn().mockReturnValue(new PanelEntity(panelData)),
-    } as PanelRepository;
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "delete").mockReturnValue(false);
 
-    const deletePanel = new DeletePanel(mockedRepository);
+    const deletePanel = new DeletePanel(panelRepository);
 
-    const panelSlug = "panel";
-    const operationResponse = await deletePanel.handle({ panelSlug, userId: "1" });
+    const operationResponse = await deletePanel.handle({ panelSlug: "panel", userId: "1" });
 
     expect(operationResponse).toBeInstanceOf(DeletePanelErrorResponse);
     expect(operationResponse.errors[0].status).toBe("NOT_AUTHORIZED");

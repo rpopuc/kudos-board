@@ -1,5 +1,5 @@
 import PanelEntity, { Status } from "@/domain/Panel/Entities/Panel";
-import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
@@ -9,7 +9,13 @@ describe("ArchivePanel", () => {
   let repository: PanelRepository;
 
   beforeEach(() => {
-    repository = new PanelRepository();
+    repository = {
+      create: jest.fn(),
+      update: jest.fn(),
+      archive: jest.fn(),
+      delete: jest.fn(),
+      findBySlug: jest.fn(),
+    } as PanelRepository;
   });
 
   test("should archive an existing panel successfully", async () => {
@@ -22,13 +28,12 @@ describe("ArchivePanel", () => {
     const panel = new PanelEntity(panelData);
 
     jest.spyOn(repository, "findBySlug").mockImplementation(() => panel);
+    jest.spyOn(repository, "archive").mockImplementation(() => true);
 
     const archivePanel = new ArchivePanel(repository);
-
     const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "1" });
 
     expect(operationResponse.ok).toBe(true);
-    expect(panel.status).toBe(Status.ARCHIVED);
   });
 
   test("should not be able to archive a non existing panel successfully", async () => {

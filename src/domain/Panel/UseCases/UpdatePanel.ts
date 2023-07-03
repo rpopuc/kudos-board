@@ -47,12 +47,6 @@ class UpdatePanel {
       return new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not edit a panel that is not yours.")]);
     }
 
-    const validation = this.validate(updatePanelData);
-
-    if (!validation.ok) {
-      return new ErrorResponse(validation.errors);
-    }
-
     const updatedPanelData = {
       ...existingPanel,
       ...updatePanelData,
@@ -60,6 +54,12 @@ class UpdatePanel {
         updatedAt: new Date(),
       },
     } as PanelData;
+
+    const validation = this.validate(updatedPanelData);
+
+    if (!validation.ok) {
+      return new ErrorResponse(validation.errors);
+    }
 
     const updatedPanel = this.repository.update({ slug: panelSlug, panelData: updatedPanelData });
 

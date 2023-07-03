@@ -2,13 +2,15 @@ import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
 import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
+import Panel from "@/domain/Panel/Entities/Panel";
+import Password from "@/domain/shared/valueObjects/Password";
 
 describe("ShowPanel", () => {
   let showPanel: ShowPanel;
-  let mockRepository: PanelRepository;
+  let panelRepository: PanelRepository;
 
   beforeEach(() => {
-    mockRepository = {
+    panelRepository = {
       create: jest.fn(),
       update: jest.fn(),
       archive: jest.fn(),
@@ -16,7 +18,7 @@ describe("ShowPanel", () => {
       findBySlug: jest.fn(),
     } as PanelRepository;
 
-    showPanel = new ShowPanel(mockRepository);
+    showPanel = new ShowPanel(panelRepository);
   });
 
   test("should return a ShowPanelResponse for an existing panel without client password", async () => {
@@ -24,9 +26,9 @@ describe("ShowPanel", () => {
     const panel = {
       slug: panelSlug,
       clientPassword: undefined,
-    };
+    } as Partial<Panel> as Panel;
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
@@ -38,7 +40,7 @@ describe("ShowPanel", () => {
   test("should return a ShowPanelErrorResponse for a non-existing panel", async () => {
     const panelSlug = "non-existing-panel";
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(null);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(null);
 
     const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
@@ -54,10 +56,10 @@ describe("ShowPanel", () => {
       slug: panelSlug,
       clientPassword: {
         compare: () => true,
-      },
-    };
+      } as Partial<Password> as Password,
+    } as Partial<Panel> as Panel;
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword });
 
@@ -73,10 +75,10 @@ describe("ShowPanel", () => {
       slug: panelSlug,
       clientPassword: {
         compare: () => false,
-      },
-    };
+      } as Partial<Password> as Password,
+    } as Partial<Panel> as Panel;
 
-    mockRepository.findBySlug = jest.fn().mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword });
 

@@ -1,31 +1,24 @@
 import CreatePanel from "@/domain/Panel/UseCases/CreatePanel";
 import PanelEntity from "@/domain/Panel/Entities/Panel";
-import Repository from "@/domain/Panel/Repositories/PanelRepository";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("CreatePanel", () => {
   describe("handle", () => {
-    let repositoryMock: Repository;
+    let panelRepository: PanelRepository;
     let createPanel: CreatePanel;
 
     beforeEach(() => {
-      repositoryMock = {
-        create: jest.fn().mockImplementation((panelData: PanelData) => {
-          return Promise.resolve({
-            id: "123",
-            title: panelData.title,
-            owner: panelData.owner,
-            password: panelData.password,
-          });
-        }),
+      panelRepository = {
+        create: jest.fn(),
         update: jest.fn(),
         archive: jest.fn(),
         delete: jest.fn(),
         findBySlug: jest.fn(),
-      } as Repository;
+      } as PanelRepository;
 
-      createPanel = new CreatePanel(repositoryMock);
+      createPanel = new CreatePanel(panelRepository);
     });
 
     it("should return a new panel entity with the correct data", async () => {
@@ -37,13 +30,7 @@ describe("CreatePanel", () => {
 
       const memoryPanelEntity = new PanelEntity(panelData);
 
-      const panelRepository = {
-        create: jest.fn().mockReturnValue(memoryPanelEntity),
-        archive: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
-        findBySlug: jest.fn(),
-      } as Repository;
+      jest.spyOn(panelRepository, "create").mockImplementation(() => memoryPanelEntity);
 
       const createPanel = new CreatePanel(panelRepository);
       const response = await createPanel.handle(panelData);
@@ -67,6 +54,7 @@ describe("CreatePanel", () => {
       };
 
       const response = await createPanel.handle(invalidPanelData);
+
       expect(response.ok).toBe(false);
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have title");
