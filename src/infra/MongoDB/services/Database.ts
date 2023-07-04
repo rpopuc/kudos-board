@@ -1,18 +1,18 @@
-import * as mongoDB from "mongodb";
-import * as dotenv from "dotenv";
 import process from "process";
+import { config as dotEnvConfig } from "dotenv";
+import { MongoClient, Db } from "mongodb";
 import { Collection } from "./Collection";
 
 export class Database {
-  db: mongoDB.Db | null;
+  db: Db | null;
 
   constructor() {
     this.db = null;
   }
 
   async connect() {
-    dotenv.config();
-    const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING || "");
+    dotEnvConfig();
+    const client = new MongoClient(process.env.DB_CONN_STRING || "");
     await client.connect();
     this.db = client.db(process.env.DB_NAME);
   }
@@ -23,7 +23,7 @@ export class Database {
     }
 
     if (!this.db) {
-      throw new Error("A conexão com o banco de dados não foi estabelecida.");
+      throw new Error("The connection with the database was not established.");
     }
 
     return new Collection<T>(this.db.collection(collectionName));
