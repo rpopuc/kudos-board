@@ -17,5 +17,5 @@ http POST :80/panel
 ```
 
 ```bash
-http --json POST :80/panel <<< `cat docs/panel.json`
+http POST :8080/panel user-id:user-id --json <<< `cat docs/panel.json`
 ```

@@ -30,7 +30,7 @@ describe("CreatePanel", () => {
 
       const memoryPanelEntity = new PanelEntity(panelData);
 
-      jest.spyOn(panelRepository, "create").mockImplementation(() => memoryPanelEntity);
+      jest.spyOn(panelRepository, "create").mockImplementation(async () => memoryPanelEntity);
 
       const createPanel = new CreatePanel(panelRepository);
       const response = await createPanel.handle(panelData);

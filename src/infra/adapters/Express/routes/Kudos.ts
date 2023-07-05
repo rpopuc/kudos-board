@@ -5,7 +5,7 @@ class Kudos {
   static setup(app: express.Application) {
     const controller = new KudosController();
 
-    app.get("/Kudos", controller.index);
+    app.get("/kudos", controller.index);
   }
 }
 

@@ -45,6 +45,7 @@ class PanelController {
       const data = req.body;
       data.owner = req.headers["user-id"] as string;
       data.password = new PlainTextPassword(data.password);
+      data.clientPassword = data.clientPassword ? new PlainTextPassword(data.clientPassword) : null;
 
       const response = await this.createPanelUseCase.handle(data);
 

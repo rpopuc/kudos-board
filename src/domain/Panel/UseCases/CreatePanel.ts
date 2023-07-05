@@ -34,9 +34,12 @@ class CreatePanel {
       return new ErrorResponse(validation.errors);
     }
 
-    const newPanel = this.repository.create({
+    const now = new Date();
+
+    const newPanel = await this.repository.create({
       ...panelData,
-      createdAt: new Date(),
+      createdAt: now,
+      updatedAt: now,
     });
 
     return new SuccessfulResponse(newPanel);

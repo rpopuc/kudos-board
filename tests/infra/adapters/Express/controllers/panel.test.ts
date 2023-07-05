@@ -175,6 +175,48 @@ describe("Panel Controller", () => {
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Error creating panel"] });
     });
+
+    it("should create a panel with client password and return a success message", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Panel",
+          description: "This is a test panel",
+          password: "teste12345",
+          clientPassword: "client12345",
+        },
+        headers: {
+          "user-id": "user-1",
+        },
+      } as Partial<Request> as Request;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      const panelData = {
+        owner: "test",
+        slug: "test-panel",
+        title: "Test Panel",
+        password: "teste12345",
+        clientPassword: "client12345",
+      };
+      const panel = new Panel(panelData);
+      const presenterData = {
+        owner: "test",
+        title: "Test Panel",
+      } as PanelPresentation;
+
+      jest.spyOn(createPanelUseCase, "handle").mockResolvedValueOnce(new SuccessfulResponse(panel));
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
+
+      await panelController.store()(mockRequest, mockResponse, () => {});
+
+      expect(createPanelUseCase.handle).toHaveBeenCalledWith(mockRequest.body);
+      expect(presenter.single).toHaveBeenCalledWith(panel);
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
+    });
   });
 
   describe("@update", () => {
