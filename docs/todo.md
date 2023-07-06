@@ -1,9 +1,6 @@
 - MongoRepository
 
-- não está validando o formato de clientPassword
-- não está funcionando o clientPassword
-- a senha está em texto puro
-- usar slug como identificador único ao invés do _id?
+- adicionar testes para PanelRepository do Mongo
 
 - chore: Retirar any de Collection no Mongo
 - chore: Fazer testes para Mongo

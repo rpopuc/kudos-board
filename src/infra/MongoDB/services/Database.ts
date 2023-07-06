@@ -15,6 +15,7 @@ export class Database {
     const client = new MongoClient(process.env.DB_CONN_STRING || "");
     await client.connect();
     this.db = client.db(process.env.DB_NAME);
+    console.log("Connected successfully to database: " + process.env.DB_CONN_STRING);
   }
 
   async getCollection<T extends OptionalId<Document>>(collectionName: string): Promise<Collection<T>> {

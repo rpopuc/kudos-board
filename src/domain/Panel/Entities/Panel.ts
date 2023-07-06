@@ -7,7 +7,6 @@ export enum Status {
 }
 
 class Panel {
-  public id: string;
   public title: string;
   public slug: string;
   public owner: string;
@@ -18,7 +17,6 @@ class Panel {
   public status: string;
 
   constructor(data: any) {
-    this.id = data.id;
     this.slug = randomUUID();
     this.title = data.title;
     this.owner = data.owner;

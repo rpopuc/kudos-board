@@ -33,7 +33,10 @@ class PanelRepository implements PanelRepositoryInterface {
     await this.db.connect();
     const collection = await this.db.getCollection("panels");
     const panelDocument = await collection.insertOne(panelModel);
-    panel.id = panelDocument._id?.toString() || "";
+
+    if (!panelDocument._id) {
+      throw new Error("Error creating panel on database");
+    }
 
     return panel;
   }
