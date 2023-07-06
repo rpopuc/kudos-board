@@ -1,5 +1,10 @@
 - MongoRepository
 
+- adicionar testes para PanelRepository do Mongo
+
+- chore: Retirar any de Collection no Mongo
+- chore: Fazer testes para Mongo
+
 - Listagem de Kudos
 - Criacão de Kudos
 - Edicão de Kudos

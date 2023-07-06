@@ -5,6 +5,7 @@ import ValidationResponse from "@/domain/shared/ValidationResponse";
 import CreatePanelResponse from "@/domain/Panel/UseCases/Response/CreatePanelResponse";
 import SuccessfulResponse from "@/domain/Panel/UseCases/Response/SuccessfulResponse";
 import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import Password from "@/domain/shared/valueObjects/Password";
 
 class CreatePanel {
   constructor(private repository: Repository) {}
@@ -24,7 +25,15 @@ class CreatePanel {
       result.addError(new EmptyData("EMPTY_PASSWORD", "password"));
     }
 
+    if (!this.isClientPasswordValid(panelData.clientPassword)) {
+      result.addError(new EmptyData("EMPTY_PASSWORD", "clientPassword"));
+    }
+
     return result;
+  }
+
+  isClientPasswordValid(clientPassword: Password | undefined): boolean {
+    return clientPassword === undefined || clientPassword.getValue() === "" || clientPassword.isValid();
   }
 
   async handle(panelData: PanelData): Promise<CreatePanelResponse> {
@@ -34,9 +43,12 @@ class CreatePanel {
       return new ErrorResponse(validation.errors);
     }
 
-    const newPanel = this.repository.create({
+    const now = new Date();
+
+    const newPanel = await this.repository.create({
       ...panelData,
-      createdAt: new Date(),
+      createdAt: now,
+      updatedAt: now,
     });
 
     return new SuccessfulResponse(newPanel);

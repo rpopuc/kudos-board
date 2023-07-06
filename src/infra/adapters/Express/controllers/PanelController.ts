@@ -3,7 +3,8 @@ import asyncHandler from "express-async-handler";
 import { RequestHandler } from "express";
 import CreatePanel from "@/domain/Panel/UseCases/CreatePanel";
 import DeletePanel from "@/domain/Panel/UseCases/DeletePanel";
-import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
+// import Password from "@/infra/shared/ValueObjects/PlainTextPassword";
+import Password from "@/infra/shared/ValueObjects/BCryptPassword";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
@@ -44,7 +45,8 @@ class PanelController {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
       data.owner = req.headers["user-id"] as string;
-      data.password = new PlainTextPassword(data.password);
+      data.password = new Password(data.password);
+      data.clientPassword = data.clientPassword ? new Password(data.clientPassword) : undefined;
 
       const response = await this.createPanelUseCase.handle(data);
 
@@ -66,7 +68,7 @@ class PanelController {
       const userId = req.body.userId;
       const data = req.body;
 
-      data.password = new PlainTextPassword(data.password);
+      data.password = new Password(data.password);
 
       const response = await this.updatePanelUseCase.handle({ panelSlug, userId, updatePanelData: data });
 

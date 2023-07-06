@@ -5,7 +5,7 @@ import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("PanelRepository", () => {
   describe("create", () => {
-    it("should create a PanelEntity", () => {
+    it("should create a PanelEntity", async () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         owner: "123",
@@ -13,14 +13,14 @@ describe("PanelRepository", () => {
         password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
-      const panelEntity = panelRepository.create(panelData);
+      const panelEntity = await panelRepository.create(panelData);
 
       expect(panelEntity).toBeInstanceOf(Panel);
       expect(panelEntity.slug).not.toBeUndefined();
       expect(panelEntity.title).toBe(panelData.title);
     });
 
-    test("should update an existing panel correctly", () => {
+    test("should update an existing panel correctly", async () => {
       const panelData: PanelData = {
         owner: "123",
         title: "Test Panel",
@@ -35,13 +35,13 @@ describe("PanelRepository", () => {
 
       const Panel = new PanelRepository();
 
-      const createdPanel = Panel.create(panelData);
+      const createdPanel = await Panel.create(panelData);
       const updatedPanel = Panel.update({ slug: createdPanel.slug, panelData: updatedPanelData });
 
       expect(updatedPanel).toEqual(createdPanel);
     });
 
-    test("should delete an existing panel correctly", () => {
+    test("should delete an existing panel correctly", async () => {
       const panelData: PanelData = {
         owner: "123",
         title: "Test Panel",
@@ -50,13 +50,13 @@ describe("PanelRepository", () => {
 
       const panelRepository = new PanelRepository();
 
-      const createdPanel = panelRepository.create(panelData);
+      const createdPanel = await panelRepository.create(panelData);
       const response = panelRepository.delete(createdPanel.slug);
 
       expect(response).toBeTruthy();
     });
 
-    test("should delete an existing panel correctly", () => {
+    test("should delete an existing panel correctly", async () => {
       const panelData: PanelData = {
         owner: "123",
         title: "Test Panel",
@@ -65,7 +65,7 @@ describe("PanelRepository", () => {
 
       const panelRepository = new PanelRepository();
 
-      const createdPanel = panelRepository.create(panelData);
+      const createdPanel = await panelRepository.create(panelData);
       const response = panelRepository.archive(createdPanel.slug);
 
       expect(response).toBeTruthy();
@@ -80,7 +80,7 @@ describe("PanelRepository", () => {
       expect(response).toBeFalsy();
     });
 
-    it("should find a PanelEntity by slug", () => {
+    it("should find a PanelEntity by slug", async () => {
       const panelRepository = new PanelRepository();
       const panelData = {
         owner: "123",
@@ -88,14 +88,14 @@ describe("PanelRepository", () => {
         password: new PlainTextPassword("teste12345"),
       } as PanelData;
 
-      const panelEntity = panelRepository.create(panelData);
+      const panelEntity = await panelRepository.create(panelData);
       const foundPanel = panelRepository.findBySlug(panelEntity.slug);
 
       expect(foundPanel).not.toBeUndefined();
       expect(foundPanel?.title).toBe(panelData.title);
     });
 
-    it("should not find a invalid PanelEntity by slug", () => {
+    it("should not find a invalid PanelEntity by slug", async () => {
       const panelRepository = new PanelRepository();
       const foundPanel = panelRepository.findBySlug("invalid_slug");
 

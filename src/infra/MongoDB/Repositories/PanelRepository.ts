@@ -1,3 +1,4 @@
+import { Database } from "@/infra/MongoDB/services/Database";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
 
@@ -5,19 +6,37 @@ import PanelEntity, { Status } from "@/domain/Panel/Entities/Panel";
 import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import { UpdateData } from "@/domain/Panel/Repositories/PanelRepository";
+import { Panel as PanelModel } from "@/infra/MongoDB/models/Panel";
 
 @injectable()
 class PanelRepository implements PanelRepositoryInterface {
-  private panels: PanelEntity[];
+  db: Database;
 
   constructor() {
-    this.panels = [];
+    this.db = new Database();
   }
 
   async create(panelData: PanelData): Promise<PanelEntity> {
     const panel = new PanelEntity(panelData);
 
-    this.panels.push(panel);
+    const panelModel = new PanelModel(
+      panel.slug,
+      panel.title,
+      panel.owner,
+      panel.createdAt,
+      panel.updatedAt,
+      panel.password.getValue(),
+      panel.status,
+      panel.clientPassword?.getValue(),
+    );
+
+    await this.db.connect();
+    const collection = await this.db.getCollection("panels");
+    const panelDocument = await collection.insertOne(panelModel);
+
+    if (!panelDocument._id) {
+      throw new Error("Error creating panel on database");
+    }
 
     return panel;
   }
@@ -29,8 +48,6 @@ class PanelRepository implements PanelRepositoryInterface {
   }
 
   delete(slug: string): boolean {
-    this.panels = this.panels.filter(panel => panel.slug !== slug);
-
     return true;
   }
 
@@ -47,9 +64,7 @@ class PanelRepository implements PanelRepositoryInterface {
   }
 
   findBySlug(slug: string): PanelEntity | null {
-    const panel = this.panels.find(panel => panel.slug == slug);
-
-    return panel ? panel : null;
+    return null;
   }
 }
 

@@ -30,7 +30,7 @@ describe("CreatePanel", () => {
 
       const memoryPanelEntity = new PanelEntity(panelData);
 
-      jest.spyOn(panelRepository, "create").mockImplementation(() => memoryPanelEntity);
+      jest.spyOn(panelRepository, "create").mockImplementation(async () => memoryPanelEntity);
 
       const createPanel = new CreatePanel(panelRepository);
       const response = await createPanel.handle(panelData);
@@ -90,6 +90,47 @@ describe("CreatePanel", () => {
       expect(response.errors[0].message).toBe("Does not have password");
       expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
       expect(response.panel).toBe(null);
+    });
+
+    it("should return an error if clientPassword is invalid", async () => {
+      const invalidPanelData: PanelData = {
+        title: "Panel title",
+        owner: "Panel owner",
+        password: new PlainTextPassword("valid-password"),
+        clientPassword: new PlainTextPassword("invalid"),
+      };
+
+      const response = await createPanel.handle(invalidPanelData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have clientPassword");
+      expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
+      expect(response.panel).toBe(null);
+    });
+
+    it("should successfully create with empty client password", async () => {
+      const panelData: PanelData = {
+        title: "Panel title",
+        owner: "Panel owner",
+        password: new PlainTextPassword("valid-password"),
+        clientPassword: new PlainTextPassword(""),
+      };
+
+      const panel = new PanelEntity(panelData);
+      jest.spyOn(panelRepository, "create").mockImplementation(async () => panel);
+
+      const response = await createPanel.handle(panelData);
+
+      expect(panelRepository.create).toHaveBeenCalledTimes(1);
+      expect(panelRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: panelData.title,
+          owner: panelData.owner,
+          password: panelData.password,
+          clientPassword: panelData.clientPassword,
+        }),
+      );
+      expect(response.panel).toStrictEqual(panel);
     });
   });
 });

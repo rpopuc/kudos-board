@@ -7,7 +7,7 @@ export type UpdateData = {
 };
 
 interface PanelRepository {
-  create(panelData: PanelData): PanelEntity;
+  create(panelData: PanelData): Promise<PanelEntity>;
 
   update(data: UpdateData): PanelEntity | null;
 
