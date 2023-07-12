@@ -1,16 +1,19 @@
+import { injectable, inject } from "inversify";
 import process from "process";
 import { config as dotEnvConfig } from "dotenv";
 import { MongoClient, Db, OptionalId, Document } from "mongodb";
 import { Collection } from "./Collection";
+import { DatabaseInterface } from "./DatabaseInterface";
 
-export class Database {
+@injectable()
+export class Database implements DatabaseInterface {
   db: Db | null;
 
   constructor() {
     this.db = null;
   }
 
-  async connect() {
+  async connect(): Promise<void> {
     dotEnvConfig();
     const client = new MongoClient(process.env.DB_CONN_STRING || "");
     await client.connect();

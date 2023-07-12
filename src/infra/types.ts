@@ -1,6 +1,5 @@
-export { default as PanelRepository } from "@/infra/Memory/Panel/Repositories/PanelRepository";
-
 const TYPES = {
+  DatabaseInterface: Symbol.for("DatabaseInterface"),
   PanelRepository: Symbol.for("PanelRepository"),
 };
 

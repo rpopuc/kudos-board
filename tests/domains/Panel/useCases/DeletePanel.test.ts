@@ -37,8 +37,8 @@ describe("DeletePanel", () => {
 
     const panel = new PanelEntity(panelData);
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
-    jest.spyOn(panelRepository, "delete").mockReturnValue(true);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(panelRepository, "delete").mockImplementation(async () => true);
 
     const deletePanel = new DeletePanel(panelRepository);
 
@@ -48,7 +48,7 @@ describe("DeletePanel", () => {
   });
 
   test("should return a success when trying to delete a non-existent panel", async () => {
-    jest.spyOn(panelRepository, "delete").mockReturnValue(true);
+    jest.spyOn(panelRepository, "delete").mockImplementation(async () => true);
 
     const deletePanel = new DeletePanel(panelRepository);
     const operationResponse = await deletePanel.handle({ panelSlug: "panel", userId: "1" });
@@ -57,8 +57,8 @@ describe("DeletePanel", () => {
   });
 
   test("should return an error when trying to delete a panel", async () => {
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
-    jest.spyOn(panelRepository, "delete").mockReturnValue(false);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(panelRepository, "delete").mockImplementation(async () => false);
 
     const deletePanel = new DeletePanel(panelRepository);
 
@@ -72,8 +72,8 @@ describe("DeletePanel", () => {
   test("should return an error when trying to delete a panel from another owner", async () => {
     panel.owner = "2";
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
-    jest.spyOn(panelRepository, "delete").mockReturnValue(false);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(panelRepository, "delete").mockImplementation(async () => false);
 
     const deletePanel = new DeletePanel(panelRepository);
 

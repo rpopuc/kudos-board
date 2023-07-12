@@ -28,7 +28,7 @@ describe("ShowPanel", () => {
       clientPassword: undefined,
     } as Partial<Panel> as Panel;
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
@@ -40,7 +40,7 @@ describe("ShowPanel", () => {
   test("should return a ShowPanelErrorResponse for a non-existing panel", async () => {
     const panelSlug = "non-existing-panel";
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(null);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => null);
 
     const response = await showPanel.handle({ panelSlug, clientPassword: "" });
 
@@ -59,7 +59,7 @@ describe("ShowPanel", () => {
       } as Partial<Password> as Password,
     } as Partial<Panel> as Panel;
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword });
 
@@ -78,7 +78,7 @@ describe("ShowPanel", () => {
       } as Partial<Password> as Password,
     } as Partial<Panel> as Panel;
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await showPanel.handle({ panelSlug, clientPassword });
 

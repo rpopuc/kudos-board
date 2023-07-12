@@ -37,7 +37,7 @@ class UpdatePanel {
   }
 
   async handle({ panelSlug, userId, updatePanelData }: UpdatePanelRequest): Promise<UpdatePanelResponse> {
-    const existingPanel = this.repository.findBySlug(panelSlug);
+    const existingPanel = await this.repository.findBySlug(panelSlug);
 
     if (!existingPanel) {
       return new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not found a panel with the provided ID.")]);
@@ -61,7 +61,7 @@ class UpdatePanel {
       return new ErrorResponse(validation.errors);
     }
 
-    const updatedPanel = this.repository.update({ slug: panelSlug, panelData: updatedPanelData });
+    const updatedPanel = await this.repository.update({ slug: panelSlug, panelData: updatedPanelData });
 
     if (!updatedPanel) {
       return new ErrorResponse([new BusinessError("PANEL_NOT_UPDATED", "Internal error")]);

@@ -8,6 +8,7 @@ interface PanelData {
   updatedAt?: Date;
   password: Password;
   clientPassword?: Password;
+  status?: string;
 }
 
 export default PanelData;

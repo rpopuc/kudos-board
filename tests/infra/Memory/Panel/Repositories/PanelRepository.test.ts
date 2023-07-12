@@ -36,7 +36,7 @@ describe("PanelRepository", () => {
       const Panel = new PanelRepository();
 
       const createdPanel = await Panel.create(panelData);
-      const updatedPanel = Panel.update({ slug: createdPanel.slug, panelData: updatedPanelData });
+      const updatedPanel = await Panel.update({ slug: createdPanel.slug, panelData: updatedPanelData });
 
       expect(updatedPanel).toEqual(createdPanel);
     });
@@ -51,7 +51,7 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
 
       const createdPanel = await panelRepository.create(panelData);
-      const response = panelRepository.delete(createdPanel.slug);
+      const response = await panelRepository.delete(createdPanel.slug);
 
       expect(response).toBeTruthy();
     });
@@ -66,16 +66,16 @@ describe("PanelRepository", () => {
       const panelRepository = new PanelRepository();
 
       const createdPanel = await panelRepository.create(panelData);
-      const response = panelRepository.archive(createdPanel.slug);
+      const response = await panelRepository.archive(createdPanel.slug);
 
       expect(response).toBeTruthy();
       expect(createdPanel.status).toBe(Status.ARCHIVED);
     });
 
-    test("should delete an existing panel correctly", () => {
+    test("should delete an existing panel correctly", async () => {
       const panelRepository = new PanelRepository();
 
-      const response = panelRepository.archive("slug");
+      const response = await panelRepository.archive("slug");
 
       expect(response).toBeFalsy();
     });
@@ -89,7 +89,7 @@ describe("PanelRepository", () => {
       } as PanelData;
 
       const panelEntity = await panelRepository.create(panelData);
-      const foundPanel = panelRepository.findBySlug(panelEntity.slug);
+      const foundPanel = await panelRepository.findBySlug(panelEntity.slug);
 
       expect(foundPanel).not.toBeUndefined();
       expect(foundPanel?.title).toBe(panelData.title);
@@ -97,7 +97,7 @@ describe("PanelRepository", () => {
 
     it("should not find a invalid PanelEntity by slug", async () => {
       const panelRepository = new PanelRepository();
-      const foundPanel = panelRepository.findBySlug("invalid_slug");
+      const foundPanel = await panelRepository.findBySlug("invalid_slug");
 
       expect(foundPanel).toBeNull();
     });

@@ -9,13 +9,13 @@ export type UpdateData = {
 interface PanelRepository {
   create(panelData: PanelData): Promise<PanelEntity>;
 
-  update(data: UpdateData): PanelEntity | null;
+  update(data: UpdateData): Promise<PanelEntity | null>;
 
-  delete(slug: string): boolean;
+  delete(slug: string): Promise<boolean>;
 
-  archive(slug: string): boolean;
+  archive(slug: string): Promise<boolean>;
 
-  findBySlug(slug: string): PanelEntity | null;
+  findBySlug(slug: string): Promise<PanelEntity | null>;
 }
 
 export default PanelRepository;

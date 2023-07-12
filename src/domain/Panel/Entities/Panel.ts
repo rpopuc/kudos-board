@@ -17,7 +17,7 @@ class Panel {
   public status: string;
 
   constructor(data: any) {
-    this.slug = randomUUID();
+    this.slug = data.slug ?? randomUUID();
     this.title = data.title;
     this.owner = data.owner;
     this.createdAt = data.createdAt;

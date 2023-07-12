@@ -12,7 +12,7 @@ class DeletePanel {
   constructor(private repository: Repository) {}
 
   async handle({ panelSlug, userId }: DeletePanelData): Promise<DeletePanelResponse> {
-    const panel = this.repository.findBySlug(panelSlug);
+    const panel = await this.repository.findBySlug(panelSlug);
 
     if (!panel) {
       return new DeletePanelResponse(true);
@@ -24,7 +24,7 @@ class DeletePanel {
       ]);
     }
 
-    const operationResult = this.repository.delete(panelSlug);
+    const operationResult = await this.repository.delete(panelSlug);
 
     if (!operationResult) {
       return new DeletePanelErrorResponse([

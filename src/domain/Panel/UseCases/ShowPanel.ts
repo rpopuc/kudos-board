@@ -12,7 +12,7 @@ class ShowPanel {
   constructor(private repository: Repository) {}
 
   async handle({ panelSlug, clientPassword }: ShowPanelData): Promise<ShowPanelResponse> {
-    const panel = this.repository.findBySlug(panelSlug);
+    const panel = await this.repository.findBySlug(panelSlug);
 
     if (!panel) {
       return new ShowPanelErrorResponse([

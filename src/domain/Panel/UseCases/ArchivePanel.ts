@@ -14,7 +14,7 @@ class ArchivePanel {
   constructor(private repository: Repository) {}
 
   async handle({ panelSlug, userId }: ArchivePanelData): Promise<ArchivePanelResponse> {
-    const panel = this.repository.findBySlug(panelSlug);
+    const panel = await this.repository.findBySlug(panelSlug);
 
     if (!panel) {
       return new ArchivePanelErrorResponse([
@@ -28,7 +28,7 @@ class ArchivePanel {
       ]);
     }
 
-    const operationResult = this.repository.archive(panelSlug);
+    const operationResult = await this.repository.archive(panelSlug);
 
     if (!operationResult) {
       return new ArchivePanelErrorResponse([

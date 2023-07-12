@@ -44,8 +44,8 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     } as UpdatePanelData;
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(existingPanel);
-    jest.spyOn(panelRepository, "update").mockReturnValue(updatedPanel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => existingPanel);
+    jest.spyOn(panelRepository, "update").mockImplementation(async () => updatedPanel);
 
     const result = await updatePanel.handle({ panelSlug, userId: "Old Owner", updatePanelData });
 
@@ -75,7 +75,7 @@ describe("UpdatePanel", () => {
       title: "",
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await updatePanel.handle({
       panelSlug,
@@ -103,7 +103,7 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword(""),
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await updatePanel.handle({
       panelSlug,
@@ -131,7 +131,7 @@ describe("UpdatePanel", () => {
       clientPassword: new PlainTextPassword(""),
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
 
     const response = await updatePanel.handle({
       panelSlug,
@@ -154,7 +154,7 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(null);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => null);
 
     const result = await updatePanel.handle({
       panelSlug,
@@ -184,8 +184,8 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
-    jest.spyOn(panelRepository, "update").mockReturnValue(null);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(panelRepository, "update").mockImplementation(async () => null);
 
     const result = await updatePanel.handle({
       panelSlug,
@@ -214,8 +214,8 @@ describe("UpdatePanel", () => {
       password: new PlainTextPassword("newPassword"),
     };
 
-    jest.spyOn(panelRepository, "findBySlug").mockReturnValue(panel);
-    jest.spyOn(panelRepository, "update").mockReturnValue(null);
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(panelRepository, "update").mockImplementation(async () => null);
 
     const result = await updatePanel.handle({
       panelSlug,

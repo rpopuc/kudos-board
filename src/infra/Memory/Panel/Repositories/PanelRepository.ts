@@ -22,20 +22,20 @@ class PanelRepository implements PanelRepositoryInterface {
     return panel;
   }
 
-  update({ slug, panelData }: UpdateData): PanelEntity | null {
+  async update({ slug, panelData }: UpdateData): Promise<PanelEntity | null> {
     const panel = this.findBySlug(slug);
 
     return panel;
   }
 
-  delete(slug: string): boolean {
+  async delete(slug: string): Promise<boolean> {
     this.panels = this.panels.filter(panel => panel.slug !== slug);
 
     return true;
   }
 
-  archive(slug: string): boolean {
-    const panel = this.findBySlug(slug);
+  async archive(slug: string): Promise<boolean> {
+    const panel = await this.findBySlug(slug);
 
     if (!panel) {
       return false;
@@ -46,7 +46,7 @@ class PanelRepository implements PanelRepositoryInterface {
     return true;
   }
 
-  findBySlug(slug: string): PanelEntity | null {
+  async findBySlug(slug: string): Promise<PanelEntity | null> {
     const panel = this.panels.find(panel => panel.slug == slug);
 
     return panel ? panel : null;

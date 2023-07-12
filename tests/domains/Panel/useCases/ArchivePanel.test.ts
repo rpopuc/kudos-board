@@ -27,8 +27,8 @@ describe("ArchivePanel", () => {
 
     const panel = new PanelEntity(panelData);
 
-    jest.spyOn(repository, "findBySlug").mockImplementation(() => panel);
-    jest.spyOn(repository, "archive").mockImplementation(() => true);
+    jest.spyOn(repository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(repository, "archive").mockImplementation(async () => true);
 
     const archivePanel = new ArchivePanel(repository);
     const operationResponse = await archivePanel.handle({ panelSlug: panel.slug, userId: "1" });
@@ -45,7 +45,7 @@ describe("ArchivePanel", () => {
 
     const panel = new PanelEntity(panelData);
 
-    jest.spyOn(repository, "findBySlug").mockImplementation(() => null);
+    jest.spyOn(repository, "findBySlug").mockImplementation(async () => null);
 
     const archivePanel = new ArchivePanel(repository);
 
@@ -66,7 +66,7 @@ describe("ArchivePanel", () => {
 
     const panel = new PanelEntity(panelData);
 
-    jest.spyOn(repository, "findBySlug").mockImplementation(() => panel);
+    jest.spyOn(repository, "findBySlug").mockImplementation(async () => panel);
 
     const archivePanel = new ArchivePanel(repository);
 
@@ -87,8 +87,8 @@ describe("ArchivePanel", () => {
 
     const panel = new PanelEntity(panelData);
 
-    jest.spyOn(repository, "findBySlug").mockImplementation(() => panel);
-    jest.spyOn(repository, "archive").mockImplementation(() => false);
+    jest.spyOn(repository, "findBySlug").mockImplementation(async () => panel);
+    jest.spyOn(repository, "archive").mockImplementation(async () => false);
 
     const archivePanel = new ArchivePanel(repository);
 

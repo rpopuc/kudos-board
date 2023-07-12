@@ -1,20 +1,19 @@
-import { Database } from "@/infra/MongoDB/services/Database";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
+import { TYPES } from "@/infra/types";
 
 import PanelEntity, { Status } from "@/domain/Panel/Entities/Panel";
 import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import { UpdateData } from "@/domain/Panel/Repositories/PanelRepository";
 import { Panel as PanelModel } from "@/infra/MongoDB/models/Panel";
+import { DatabaseInterface } from "@/infra/MongoDB/services/DatabaseInterface";
+import BCryptPassword from "@/infra/shared/ValueObjects/BCryptPassword";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 @injectable()
 class PanelRepository implements PanelRepositoryInterface {
-  db: Database;
-
-  constructor() {
-    this.db = new Database();
-  }
+  constructor(@inject(TYPES.DatabaseInterface) private db: DatabaseInterface) {}
 
   async create(panelData: PanelData): Promise<PanelEntity> {
     const panel = new PanelEntity(panelData);
@@ -31,7 +30,7 @@ class PanelRepository implements PanelRepositoryInterface {
     );
 
     await this.db.connect();
-    const collection = await this.db.getCollection("panels");
+    const collection = await this.db.getCollection<PanelModel>("panels");
     const panelDocument = await collection.insertOne(panelModel);
 
     if (!panelDocument._id) {
@@ -41,30 +40,79 @@ class PanelRepository implements PanelRepositoryInterface {
     return panel;
   }
 
-  update({ slug, panelData }: UpdateData): PanelEntity | null {
-    const panel = this.findBySlug(slug);
+  async update({ slug, panelData }: UpdateData): Promise<PanelEntity | null> {
+    await this.db.connect();
+    const collection = await this.db.getCollection<PanelModel>("panels");
+    const panelDocument = await collection.findFirst({ slug });
 
-    return panel;
+    if (!panelDocument?._id) {
+      return null;
+    }
+
+    const status = panelData.status || panelDocument.status;
+    const panelModel = new PanelModel(
+      // Todo: slug should be immutable?
+      slug,
+      panelData.title,
+      panelData.owner,
+      panelDocument.createdAt,
+      new Date(),
+      panelData.password.getValue(),
+      status,
+      panelData.clientPassword?.getValue(),
+    );
+    await collection.update(panelDocument._id, panelModel);
+
+    return new PanelEntity(panelData);
   }
 
-  delete(slug: string): boolean {
-    return true;
+  async delete(slug: string): Promise<boolean> {
+    await this.db.connect();
+    const collection = await this.db.getCollection<PanelModel>("panels");
+    const panelDocument = await collection.findFirst({ slug });
+
+    if (!panelDocument?._id) {
+      return true;
+    }
+
+    return await collection.delete(panelDocument._id);
   }
 
-  archive(slug: string): boolean {
-    const panel = this.findBySlug(slug);
+  async archive(slug: string): Promise<boolean> {
+    await this.db.connect();
+    const collection = await this.db.getCollection<PanelModel>("panels");
+    const panelDocument = await collection.findFirst({ slug });
 
-    if (!panel) {
+    if (!panelDocument?._id) {
       return false;
     }
 
-    panel.status = Status.ARCHIVED;
+    await collection.update(panelDocument._id, {
+      status: Status.ARCHIVED,
+    } as PanelModel);
 
     return true;
   }
 
-  findBySlug(slug: string): PanelEntity | null {
-    return null;
+  async findBySlug(slug: string): Promise<PanelEntity | null> {
+    await this.db.connect();
+    const collection = await this.db.getCollection<PanelModel>("panels");
+    const panelDocument = await collection.findFirst({ slug });
+
+    if (!panelDocument) {
+      return null;
+    }
+
+    return new PanelEntity({
+      slug: panelDocument.slug,
+      title: panelDocument.title,
+      owner: panelDocument.owner,
+      createdAt: panelDocument.createdAt,
+      updatedAt: panelDocument.updatedAt,
+      password: new PlainTextPassword(panelDocument.password),
+      status: panelDocument.status,
+      clientPassword: panelDocument.clientPassword ? new PlainTextPassword(panelDocument.clientPassword) : null,
+    });
   }
 }
 
