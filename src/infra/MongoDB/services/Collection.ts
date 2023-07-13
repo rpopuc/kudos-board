@@ -3,11 +3,11 @@ import { Collection as MongoCollection, OptionalId, Document, ObjectId } from "m
 export class Collection<T extends OptionalId<Document>> {
   constructor(private collection: MongoCollection) {}
 
-  async find(filter: any): Promise<T[]> {
+  async find(filter: T): Promise<T[]> {
     return (await this.collection.find(filter).toArray()) as T[];
   }
 
-  async findFirst(filter: any): Promise<T | null> {
+  async findFirst(filter: T): Promise<T | null> {
     const documents = await this.find(filter);
     return documents[0];
   }
@@ -19,14 +19,7 @@ export class Collection<T extends OptionalId<Document>> {
   }
 
   async update(id: ObjectId, data: T): Promise<T> {
-    await this.collection.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $set: data,
-      },
-    );
+    await this.collection.updateOne({ _id: id }, { $set: data });
 
     return data;
   }

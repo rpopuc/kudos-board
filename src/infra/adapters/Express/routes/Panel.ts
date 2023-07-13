@@ -35,7 +35,7 @@ class Panel {
     app.put("/panel/archive/:slug", controller.archive());
     app.put("/panel/:slug", controller.update());
     app.delete("/panel/:slug", controller.delete());
-    app.get("/panel/:slug", controller.show());
+    app.post("/panel/:slug", controller.show());
   }
 }
 

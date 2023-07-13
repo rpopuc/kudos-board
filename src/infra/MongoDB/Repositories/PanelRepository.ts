@@ -43,7 +43,7 @@ class PanelRepository implements PanelRepositoryInterface {
   async update({ slug, panelData }: UpdateData): Promise<PanelEntity | null> {
     await this.db.connect();
     const collection = await this.db.getCollection<PanelModel>("panels");
-    const panelDocument = await collection.findFirst({ slug });
+    const panelDocument = await collection.findFirst({ slug } as PanelModel);
 
     if (!panelDocument?._id) {
       return null;
@@ -69,7 +69,7 @@ class PanelRepository implements PanelRepositoryInterface {
   async delete(slug: string): Promise<boolean> {
     await this.db.connect();
     const collection = await this.db.getCollection<PanelModel>("panels");
-    const panelDocument = await collection.findFirst({ slug });
+    const panelDocument = await collection.findFirst({ slug } as PanelModel);
 
     if (!panelDocument?._id) {
       return true;
@@ -81,7 +81,7 @@ class PanelRepository implements PanelRepositoryInterface {
   async archive(slug: string): Promise<boolean> {
     await this.db.connect();
     const collection = await this.db.getCollection<PanelModel>("panels");
-    const panelDocument = await collection.findFirst({ slug });
+    const panelDocument = await collection.findFirst({ slug } as PanelModel);
 
     if (!panelDocument?._id) {
       return false;
@@ -97,7 +97,7 @@ class PanelRepository implements PanelRepositoryInterface {
   async findBySlug(slug: string): Promise<PanelEntity | null> {
     await this.db.connect();
     const collection = await this.db.getCollection<PanelModel>("panels");
-    const panelDocument = await collection.findFirst({ slug });
+    const panelDocument = await collection.findFirst({ slug } as PanelModel);
 
     if (!panelDocument) {
       return null;
@@ -109,9 +109,11 @@ class PanelRepository implements PanelRepositoryInterface {
       owner: panelDocument.owner,
       createdAt: panelDocument.createdAt,
       updatedAt: panelDocument.updatedAt,
-      password: new PlainTextPassword(panelDocument.password),
+      password: BCryptPassword.fromHashedValue(panelDocument.password),
       status: panelDocument.status,
-      clientPassword: panelDocument.clientPassword ? new PlainTextPassword(panelDocument.clientPassword) : null,
+      clientPassword: panelDocument.clientPassword
+        ? BCryptPassword.fromHashedValue(panelDocument.clientPassword)
+        : null,
     });
   }
 }
