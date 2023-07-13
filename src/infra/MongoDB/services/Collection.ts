@@ -19,14 +19,7 @@ export class Collection<T extends OptionalId<Document>> {
   }
 
   async update(id: ObjectId, data: T): Promise<T> {
-    await this.collection.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $set: data,
-      },
-    );
+    await this.collection.updateOne({ _id: id }, { $set: data });
 
     return data;
   }
