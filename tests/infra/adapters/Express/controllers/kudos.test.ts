@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
 import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
 import SuccessfulResponse from "@/domain/Kudos/UseCases/Responses/SuccessfulResponse";
-// import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
+import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
 import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
 import Kudos from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
-// import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
+import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 // import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 // import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
@@ -23,7 +23,7 @@ describe("Kudos Controller", () => {
   let kudosRepository: KudosRepository;
   let createKudosUseCase: CreateKudos;
   let deleteKudosUseCase: DeleteKudos;
-  // let updateKudosUseCase: UpdateKudos;
+  let updateKudosUseCase: UpdateKudos;
   // let showKudosUseCase: ShowKudos;
   // let archiveKudosUseCase: ArchiveKudos;
   let presenter: KudosPresenter;
@@ -38,7 +38,7 @@ describe("Kudos Controller", () => {
     } as KudosRepository;
     createKudosUseCase = new CreateKudos(kudosRepository);
     deleteKudosUseCase = new DeleteKudos(kudosRepository);
-    // updateKudosUseCase = new UpdateKudos(kudosRepository);
+    updateKudosUseCase = new UpdateKudos(kudosRepository);
     // showKudosUseCase = new ShowKudos(kudosRepository);
     // archiveKudosUseCase = new ArchiveKudos(kudosRepository);
     presenter = new KudosPresenter();
@@ -46,7 +46,7 @@ describe("Kudos Controller", () => {
     kudosController = new KudosController(
       createKudosUseCase,
       deleteKudosUseCase,
-      // updateKudosUseCase,
+      updateKudosUseCase,
       // showKudosUseCase,
       // archiveKudosUseCase,
       presenter,
@@ -186,6 +186,113 @@ describe("Kudos Controller", () => {
       expect(presenter.single).not.toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ message: "You can not delete a kudos that is not yours." });
+    });
+  });
+
+  describe("@update", () => {
+    it("should update a kudos and return a success message", async () => {
+      const mockRequest = {
+        body: {
+          userId: "user-1",
+          owner: "test",
+          title: "Test Kudos",
+          description: "This is a test kudos",
+        },
+        params: { slug: "1" },
+      } as Request<{ slug: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      const kudosData = {
+        from: { id: "test", name: "Test Name" },
+        to: "to name",
+        panelSlug: "panel-slug",
+        title: "Test Kudos",
+        description: "Test Kudos Description",
+      };
+      const kudos = new Kudos(kudosData);
+      const presenterData = {
+        from: "test",
+        to: "to name",
+        title: "Test Kudos",
+        description: "Test Kudos Description",
+        slug: "test-kudos",
+        createdAt: new Date(),
+      } as KudosPresentation;
+
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
+      jest.spyOn(updateKudosUseCase, "handle").mockResolvedValueOnce(new UpdateSuccessfulResponse(kudos));
+
+      await kudosController.update()(mockRequest, mockResponse, () => {});
+
+      expect(updateKudosUseCase.handle).toHaveBeenCalledWith({
+        kudosSlug: "1",
+        userId: "user-1",
+        updateKudosData: mockRequest.body,
+      });
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
+    });
+
+    it("should validate data when updating a kudos", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Kudos",
+          description: "This is a test kudos",
+          password: "teste12345",
+        },
+        params: {
+          id: "1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(updateKudosUseCase, "handle")
+        .mockResolvedValueOnce(new ErrorResponse([new BusinessError("ERROR", "Error updating kudos")]));
+
+      await kudosController.update()(mockRequest, mockResponse, () => {});
+
+      expect(updateKudosUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Error updating kudos"] });
+    });
+
+    it("should validate when kudos does not exist", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Kudos",
+          description: "This is a test kudos",
+        },
+        params: {
+          id: "1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(updateKudosUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not found a kudos with the provided ID.")]),
+        );
+
+      await kudosController.update()(mockRequest, mockResponse, () => {});
+
+      expect(updateKudosUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not found a kudos with the provided ID."] });
     });
   });
 });

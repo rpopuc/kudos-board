@@ -4,11 +4,13 @@ import asyncHandler from "express-async-handler";
 import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
+import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 
 class KudosController {
   constructor(
     private createKudosUseCase: CreateKudos,
     private deleteKudosUseCase: DeleteKudos,
+    private updateKudosUseCase: UpdateKudos,
     private presenter: KudosPresenter,
   ) {}
 
@@ -42,6 +44,26 @@ class KudosController {
         res.status(200).json({ message: "Kudos deleted successfully" });
       } else {
         res.status(400).json({ message: deleteResponse.errors.map(error => error.message).join("\n") });
+      }
+    });
+  }
+
+  update(): RequestHandler {
+    return asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const kudosSlug = req.params.slug;
+      const userId = req.body.userId;
+      const data = req.body;
+
+      const response = await this.updateKudosUseCase.handle({ kudosSlug, userId, updateKudosData: data });
+
+      if (response.ok && response.kudos !== null) {
+        res.json(this.presenter.single(response.kudos));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
       }
     });
   }

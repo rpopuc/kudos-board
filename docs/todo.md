@@ -1,3 +1,5 @@
+- atualizar controllers Delete e Update para passar user id via header
+
 - MongoRepository
 
 - chore: Fazer testes para Mongo
