@@ -36,7 +36,7 @@ class UpdateKudos {
   }
 
   async handle({ kudosSlug, userId, updateKudosData }: UpdateKudosRequest): Promise<UpdateKudosResponse> {
-    const existingKudos = this.repository.findBySlug(kudosSlug);
+    const existingKudos = await this.repository.findBySlug(kudosSlug);
 
     if (!existingKudos) {
       return new ErrorResponse([new BusinessError("KUDOS_NOT_FOUND", "Could not found a kudos with the provided ID.")]);
@@ -60,7 +60,7 @@ class UpdateKudos {
       return new ErrorResponse(validation.errors);
     }
 
-    const updatedKudos = this.repository.update({ slug: kudosSlug, kudosData: updatedKudosData });
+    const updatedKudos = await this.repository.update({ slug: kudosSlug, kudosData: updatedKudosData });
 
     if (!updatedKudos) {
       return new ErrorResponse([new BusinessError("KUDOS_NOT_UPDATED", "Internal error")]);

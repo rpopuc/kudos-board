@@ -7,15 +7,15 @@ export type UpdateData = {
 };
 
 interface KudosRepository {
-  create(kudosData: KudosData): KudosEntity;
+  create(kudosData: KudosData): Promise<KudosEntity>;
 
-  update(data: UpdateData): KudosEntity | null;
+  update(data: UpdateData): Promise<KudosEntity | null>;
 
-  delete(slug: string): boolean;
+  delete(slug: string): Promise<boolean>;
 
-  archive(slug: string): boolean;
+  archive(slug: string): Promise<boolean>;
 
-  findBySlug(slug: string): KudosEntity | null;
+  findBySlug(slug: string): Promise<KudosEntity | null>;
 }
 
 export default KudosRepository;

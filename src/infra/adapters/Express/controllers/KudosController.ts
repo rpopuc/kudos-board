@@ -2,26 +2,28 @@ import { Request, Response } from "express";
 import { RequestHandler } from "express";
 import asyncHandler from "express-async-handler";
 import { Database } from "@/infra/MongoDB/services/Database";
+import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
+import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 
 class KudosController {
-  index(req: Request, res: Response) {
-    res.send("KudosController::index");
-  }
+  constructor(private createKudosUseCase: CreateKudos, private presenter: KudosPresenter) {}
 
-  db(): RequestHandler {
+  store(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      // const db = new Database();
-      // const gamesCollection = await db.getCollection<Game>("games");
-      // Inserção
-      // const newGame = {
-      //   name: "Final",
-      //   price: 19.96,
-      //   category: "JRPG",
-      // } as Game;
-      // await gamesCollection.insertOne(newGame);
-      // Consulta
-      // const games = await gamesCollection.find({});
-      // res.send(JSON.stringify(games));
+      const data = req.body;
+      data.owner = req.headers["user-id"] as string;
+
+      const response = await this.createKudosUseCase.handle(data);
+
+      if (response.ok && response.kudos !== null) {
+        res.json(this.presenter.single(response.kudos));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
+      }
     });
   }
 }

@@ -12,4 +12,8 @@ import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import MongoDbPanelRepository from "@/infra/MongoDB/Repositories/PanelRepository";
 Container.bind<PanelRepository>(TYPES.PanelRepository).to(MongoDbPanelRepository);
 
+import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
+import MongoDbKudosRepository from "@/infra/MongoDB/Repositories/KudosRepository";
+Container.bind<KudosRepository>(TYPES.KudosRepository).to(MongoDbKudosRepository);
+
 export { Container };

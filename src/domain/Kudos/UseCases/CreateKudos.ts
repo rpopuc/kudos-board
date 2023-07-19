@@ -42,7 +42,7 @@ class CreateKudos {
       return new ErrorResponse(validation.errors);
     }
 
-    const newKudos = this.repository.create({
+    const newKudos = await this.repository.create({
       ...kudosData,
       createdAt: new Date(),
     });

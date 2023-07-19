@@ -12,7 +12,7 @@ class DeleteKudos {
   constructor(private repository: Repository) {}
 
   async handle({ slug, userId }: DeleteKudosData): Promise<DeleteKudosResponse> {
-    const kudos = this.repository.findBySlug(slug);
+    const kudos = await this.repository.findBySlug(slug);
 
     if (!kudos) {
       return new DeleteKudosResponse(true);
@@ -24,7 +24,7 @@ class DeleteKudos {
       ]);
     }
 
-    const operationResult = this.repository.delete(slug);
+    const operationResult = await this.repository.delete(slug);
 
     if (!operationResult) {
       return new DeleteKudosErrorResponse([

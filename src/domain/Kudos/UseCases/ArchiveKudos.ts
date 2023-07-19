@@ -12,7 +12,7 @@ class ArchiveKudos {
   constructor(private repository: Repository) {}
 
   async handle({ slug, userId }: ArchiveKudosData): Promise<ArchiveKudosResponse> {
-    const kudos = this.repository.findBySlug(slug);
+    const kudos = await this.repository.findBySlug(slug);
 
     if (!kudos) {
       return new ArchiveKudosErrorResponse([
@@ -26,7 +26,7 @@ class ArchiveKudos {
       ]);
     }
 
-    const operationResult = this.repository.archive(slug);
+    const operationResult = await this.repository.archive(slug);
 
     if (!operationResult) {
       return new ArchiveKudosErrorResponse([
