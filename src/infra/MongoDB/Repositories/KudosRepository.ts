@@ -30,9 +30,9 @@ class KudosRepository implements KudosRepositoryInterface {
 
     await this.db.connect();
     const collection = await this.db.getCollection<KudosModel>("kudos");
-    const panelDocument = await collection.insertOne(kudosModel);
+    const kudosDocument = await collection.insertOne(kudosModel);
 
-    if (!panelDocument._id) {
+    if (!kudosDocument._id) {
       throw new Error("Error creating panel on database");
     }
 

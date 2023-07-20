@@ -1,6 +1,6 @@
 import Kudos, { From } from "@/domain/Kudos/Entities/Kudos";
 import KudosPresenter, { KudosPresentation } from "@/domain/Kudos/Presenters/KudosPresenter";
-import { Status } from "@/domain/Panel/Entities/Panel";
+import { Status } from "@/domain/Kudos/Entities/Kudos";
 
 describe("KudosPresenter", () => {
   let presenter: KudosPresenter;
