@@ -1,0 +1,10 @@
+{
+  "panelSlug": "65c967fd-3e08-41cc-b65a-c245428b18e9",
+  "title": "O teste do kudos",
+  "description": "O teste do kudos",
+  "to": "O teste do kudos",
+  "from": {
+    "id": "from_id",
+    "name": "Nome"
+  }
+}

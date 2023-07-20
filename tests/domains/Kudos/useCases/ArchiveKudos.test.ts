@@ -30,8 +30,8 @@ describe("ArchiveKudos", () => {
   });
 
   test("should archive an existing kudos successfully", async () => {
-    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(() => kudos);
-    jest.spyOn(mockedRepository, "archive").mockImplementation(() => true);
+    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(async () => kudos);
+    jest.spyOn(mockedRepository, "archive").mockImplementation(async () => true);
 
     const archivePanel = new ArchiveKudos(mockedRepository);
 
@@ -41,7 +41,7 @@ describe("ArchiveKudos", () => {
   });
 
   test("should not be able to archive a non existing kudos", async () => {
-    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(() => null);
+    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(async () => null);
     const archive = jest.spyOn(mockedRepository, "archive");
 
     const archivePanel = new ArchiveKudos(mockedRepository);
@@ -55,7 +55,7 @@ describe("ArchiveKudos", () => {
   });
 
   it("should return an error if the user is not the kudos's owner", async () => {
-    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(() => kudos);
+    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(async () => kudos);
     const archive = jest.spyOn(mockedRepository, "archive");
 
     const archivePanel = new ArchiveKudos(mockedRepository);
@@ -70,8 +70,8 @@ describe("ArchiveKudos", () => {
   });
 
   it("should return an error if the archive action failed", async () => {
-    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(() => kudos);
-    jest.spyOn(mockedRepository, "archive").mockImplementation(() => false);
+    jest.spyOn(mockedRepository, "findBySlug").mockImplementation(async () => kudos);
+    jest.spyOn(mockedRepository, "archive").mockImplementation(async () => false);
 
     const archivePanel = new ArchiveKudos(mockedRepository);
 

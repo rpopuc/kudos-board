@@ -11,7 +11,7 @@ class ShowKudos {
   constructor(private repository: Repository) {}
 
   async handle({ slug }: ShowKudosData): Promise<ShowKudosResponse> {
-    const kudos = this.repository.findBySlug(slug);
+    const kudos = await this.repository.findBySlug(slug);
 
     if (!kudos) {
       return new ShowKudosErrorResponse([
