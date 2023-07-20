@@ -9,11 +9,11 @@ import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
-// import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
-// import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
+import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
+import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import type { KudosPresentation } from "@/domain/Kudos/Presenters/KudosPresenter";
-// import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
+import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
 // import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
 // import ArchiveKudosResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosResponse";
 import KudosController from "@/infra/adapters/Express/controllers/KudosController";
@@ -24,7 +24,7 @@ describe("Kudos Controller", () => {
   let createKudosUseCase: CreateKudos;
   let deleteKudosUseCase: DeleteKudos;
   let updateKudosUseCase: UpdateKudos;
-  // let showKudosUseCase: ShowKudos;
+  let showKudosUseCase: ShowKudos;
   // let archiveKudosUseCase: ArchiveKudos;
   let presenter: KudosPresenter;
 
@@ -39,7 +39,7 @@ describe("Kudos Controller", () => {
     createKudosUseCase = new CreateKudos(kudosRepository);
     deleteKudosUseCase = new DeleteKudos(kudosRepository);
     updateKudosUseCase = new UpdateKudos(kudosRepository);
-    // showKudosUseCase = new ShowKudos(kudosRepository);
+    showKudosUseCase = new ShowKudos(kudosRepository);
     // archiveKudosUseCase = new ArchiveKudos(kudosRepository);
     presenter = new KudosPresenter();
 
@@ -47,7 +47,7 @@ describe("Kudos Controller", () => {
       createKudosUseCase,
       deleteKudosUseCase,
       updateKudosUseCase,
-      // showKudosUseCase,
+      showKudosUseCase,
       // archiveKudosUseCase,
       presenter,
     );
@@ -293,6 +293,77 @@ describe("Kudos Controller", () => {
       expect(updateKudosUseCase.handle).toHaveBeenCalledTimes(1);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not found a kudos with the provided ID."] });
+    });
+  });
+
+  describe("@show", () => {
+    it("should show a stored kudos", async () => {
+      const mockRequest = {
+        params: {
+          slug: "test-kudos",
+        },
+      } as Request<{ slug: string }>;
+
+      const mockResponse = {
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      const kudosData = {
+        from: { id: "test", name: "Test Name" },
+        to: "to name",
+        panelSlug: "panel-slug",
+        title: "Test Kudos",
+        description: "Test Kudos Description",
+      };
+      const kudos = new Kudos(kudosData);
+      const presenterData = {
+        from: "test",
+        to: "to name",
+        title: "Test Kudos",
+        description: "Test Kudos Description",
+        slug: "test-kudos",
+        createdAt: new Date(),
+      } as KudosPresentation;
+
+      jest.spyOn(showKudosUseCase, "handle").mockResolvedValueOnce(new ShowKudosResponse(true, kudos));
+      jest.spyOn(presenter, "single").mockReturnValue(presenterData);
+
+      await kudosController.show()(mockRequest, mockResponse, () => {});
+
+      expect(showKudosUseCase.handle).toHaveBeenCalledWith({ slug: "test-kudos" });
+      expect(presenter.single).toHaveBeenCalledWith(kudos);
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
+    });
+
+    it("should return an error message when kudos not found", async () => {
+      const mockRequest = {
+        params: {
+          slug: "test-kudos",
+        },
+        body: {
+          clientPassword: "teste12345",
+        },
+      } as Request<{ slug: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(showKudosUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ShowKudosErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find kudos.")]),
+        );
+
+      jest.spyOn(presenter, "single");
+
+      await kudosController.show()(mockRequest, mockResponse, () => {});
+
+      expect(presenter.single).not.toHaveBeenCalled();
+      expect(showKudosUseCase.handle).toHaveBeenCalledWith({ slug: "test-kudos" });
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find kudos."] });
     });
   });
 });

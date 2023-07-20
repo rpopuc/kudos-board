@@ -5,12 +5,14 @@ import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
+import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 
 class KudosController {
   constructor(
     private createKudosUseCase: CreateKudos,
     private deleteKudosUseCase: DeleteKudos,
     private updateKudosUseCase: UpdateKudos,
+    private showKudosUseCase: ShowKudos,
     private presenter: KudosPresenter,
   ) {}
 
@@ -55,6 +57,24 @@ class KudosController {
       const data = req.body;
 
       const response = await this.updateKudosUseCase.handle({ kudosSlug, userId, updateKudosData: data });
+
+      if (response.ok && response.kudos !== null) {
+        res.json(this.presenter.single(response.kudos));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
+      }
+    });
+  }
+
+  show(): RequestHandler {
+    return asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const response = await this.showKudosUseCase.handle({
+        slug: req.params.slug,
+      });
 
       if (response.ok && response.kudos !== null) {
         res.json(this.presenter.single(response.kudos));
