@@ -14,8 +14,8 @@ import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosRespon
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import type { KudosPresentation } from "@/domain/Kudos/Presenters/KudosPresenter";
 import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
-// import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
-// import ArchiveKudosResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosResponse";
+import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
+import ArchiveKudosResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosResponse";
 import KudosController from "@/infra/adapters/Express/controllers/KudosController";
 
 describe("Kudos Controller", () => {
@@ -25,7 +25,7 @@ describe("Kudos Controller", () => {
   let deleteKudosUseCase: DeleteKudos;
   let updateKudosUseCase: UpdateKudos;
   let showKudosUseCase: ShowKudos;
-  // let archiveKudosUseCase: ArchiveKudos;
+  let archiveKudosUseCase: ArchiveKudos;
   let presenter: KudosPresenter;
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe("Kudos Controller", () => {
     deleteKudosUseCase = new DeleteKudos(kudosRepository);
     updateKudosUseCase = new UpdateKudos(kudosRepository);
     showKudosUseCase = new ShowKudos(kudosRepository);
-    // archiveKudosUseCase = new ArchiveKudos(kudosRepository);
+    archiveKudosUseCase = new ArchiveKudos(kudosRepository);
     presenter = new KudosPresenter();
 
     kudosController = new KudosController(
@@ -48,7 +48,7 @@ describe("Kudos Controller", () => {
       deleteKudosUseCase,
       updateKudosUseCase,
       showKudosUseCase,
-      // archiveKudosUseCase,
+      archiveKudosUseCase,
       presenter,
     );
   });
@@ -364,6 +364,93 @@ describe("Kudos Controller", () => {
       expect(showKudosUseCase.handle).toHaveBeenCalledWith({ slug: "test-kudos" });
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find kudos."] });
+    });
+  });
+
+  describe("@archive", () => {
+    it("should arhcive a kudos and return a success message", async () => {
+      const mockRequest = {
+        body: {
+          userId: "user-1",
+        },
+        params: { id: "kudos-1" },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      jest.spyOn(archiveKudosUseCase, "handle").mockResolvedValueOnce(new ArchiveKudosResponse(true));
+
+      await kudosController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archiveKudosUseCase.handle).toHaveBeenCalledWith({
+        slug: "kudos-1",
+        userId: "user-1",
+      });
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "Kudos archived successfully" }),
+      );
+    });
+
+    it("should validate data when archiving a kudos", async () => {
+      const mockRequest = {
+        body: {
+          userId: "user-1",
+        },
+        params: {
+          id: "kudos-1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(archiveKudosUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not archive a kudos that is not yours.")]),
+        );
+
+      await kudosController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archiveKudosUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["You can not archive a kudos that is not yours."] });
+    });
+
+    it("should validate when kudos does not exist", async () => {
+      const mockRequest = {
+        body: {
+          owner: "test",
+          title: "Test Kudos",
+          description: "This is a test kudos",
+          password: "teste12345",
+        },
+        params: {
+          id: "1",
+        },
+      } as Request<{ id: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(archiveKudosUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ErrorResponse([new BusinessError("KUDOS_NOT_FOUND", "You can not archive a kudos that does not exist.")]),
+        );
+
+      await kudosController.archive()(mockRequest, mockResponse, () => {});
+
+      expect(archiveKudosUseCase.handle).toHaveBeenCalledTimes(1);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["You can not archive a kudos that does not exist."] });
     });
   });
 });
