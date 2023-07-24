@@ -176,4 +176,40 @@ describe("KudosRepository", () => {
       expect(updatedKudos).toBeNull();
     });
   });
+
+  describe("delete", () => {
+    it("should delete an existing kudos correctly", async () => {
+      jest
+        .spyOn(kudosCollection, "findFirst")
+        .mockImplementationOnce(
+          async () =>
+            new KudosModel(
+              "kudos-slug",
+              "panel-slug",
+              "Test Panel",
+              "Description Panel",
+              { id: "user-id", name: "Person Name" },
+              "Other Person Name",
+              new Date(),
+              new Date(),
+              Status.ACTIVE,
+              new ObjectId(),
+            ),
+        );
+
+      jest.spyOn(kudosCollection, "delete").mockImplementationOnce(async () => true);
+
+      const operationResult = await kudosRepository.delete("kudos-slug");
+
+      expect(operationResult).toBeTruthy();
+    });
+
+    it("should return true when trying to delete an non existing kudos", async () => {
+      jest.spyOn(kudosCollection, "findFirst").mockImplementationOnce(async () => null);
+
+      const operationResult = await kudosRepository.delete("kudos-slug");
+
+      expect(operationResult).toBeTruthy();
+    });
+  });
 });

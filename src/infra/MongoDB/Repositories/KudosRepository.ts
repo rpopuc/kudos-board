@@ -69,7 +69,15 @@ class KudosRepository implements KudosRepositoryInterface {
   }
 
   async delete(slug: string): Promise<boolean> {
-    return false;
+    await this.db.connect();
+    const collection = await this.db.getCollection<KudosModel>("kudos");
+    const kudosDocument = await collection.findFirst({ slug } as KudosModel);
+
+    if (!kudosDocument?._id) {
+      return true;
+    }
+
+    return await collection.delete(kudosDocument._id);
   }
 
   async archive(slug: string): Promise<boolean> {
