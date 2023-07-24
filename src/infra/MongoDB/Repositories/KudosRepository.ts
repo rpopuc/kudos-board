@@ -33,14 +33,39 @@ class KudosRepository implements KudosRepositoryInterface {
     const kudosDocument = await collection.insertOne(kudosModel);
 
     if (!kudosDocument._id) {
-      throw new Error("Error creating panel on database");
+      throw new Error("Error creating kudos on database");
     }
 
     return kudos;
   }
 
   async update({ slug, kudosData }: UpdateData): Promise<KudosEntity | null> {
-    return null;
+    await this.db.connect();
+    const collection = await this.db.getCollection<KudosModel>("kudos");
+    const kudosDocument = await collection.findFirst({ slug } as KudosModel);
+
+    if (!kudosDocument?._id) {
+      return null;
+    }
+
+    const status = kudosData.status || kudosDocument.status;
+
+    const kudosModel = new KudosModel(
+      // Todo: slug should be immutable?
+      slug,
+      kudosData.panelSlug,
+      kudosData.title,
+      kudosData.description,
+      kudosData.from,
+      kudosData.to,
+      kudosDocument.createdAt,
+      new Date(),
+      status,
+    );
+
+    await collection.update(kudosDocument._id, kudosModel);
+
+    return new KudosEntity(kudosData);
   }
 
   async delete(slug: string): Promise<boolean> {

@@ -21,7 +21,7 @@ class Kudos {
   public status: string;
 
   constructor(data: any) {
-    this.slug = randomUUID();
+    this.slug = data.slug ?? randomUUID();
     this.panelSlug = data.panelSlug;
     this.title = data.title;
     this.description = data.description;

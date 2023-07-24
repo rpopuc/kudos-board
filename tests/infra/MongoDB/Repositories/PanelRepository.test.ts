@@ -286,13 +286,6 @@ describe("PanelRepository", () => {
     });
 
     it("should return null when trying to update an non existing panel", async () => {
-      const panelData: PanelData = {
-        slug: "test-panel",
-        owner: "123",
-        title: "Test Panel",
-        password: new PlainTextPassword("teste12345"),
-      } as PanelData;
-
       const updatedPanelData: PanelData = {
         owner: "123",
         title: "Test Panel Updated",
