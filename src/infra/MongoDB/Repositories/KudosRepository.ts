@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import "reflect-metadata";
 import { TYPES } from "@/infra/types";
 
-import KudosEntity from "@/domain/Kudos/Entities/Kudos";
+import KudosEntity, { Status } from "@/domain/Kudos/Entities/Kudos";
 import KudosRepositoryInterface from "@/domain/Kudos/Repositories/KudosRepository";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import { Kudos as KudosModel } from "@/infra/MongoDB/models/Kudos";
@@ -81,7 +81,19 @@ class KudosRepository implements KudosRepositoryInterface {
   }
 
   async archive(slug: string): Promise<boolean> {
-    return false;
+    await this.db.connect();
+    const collection = await this.db.getCollection<KudosModel>("kudos");
+    const kudosDocument = await collection.findFirst({ slug } as KudosModel);
+
+    if (!kudosDocument?._id) {
+      return false;
+    }
+
+    await collection.update(kudosDocument._id, {
+      status: Status.ARCHIVED,
+    } as KudosModel);
+
+    return true;
   }
 
   async findBySlug(slug: string): Promise<KudosEntity | null> {

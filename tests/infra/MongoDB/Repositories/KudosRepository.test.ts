@@ -212,4 +212,37 @@ describe("KudosRepository", () => {
       expect(operationResult).toBeTruthy();
     });
   });
+
+  describe("archive", () => {
+    it("should archive an existing kudos correctly", async () => {
+      const kudosModel = new KudosModel(
+        "kudos-slug",
+        "panel-slug",
+        "Test Panel",
+        "Description Panel",
+        { id: "user-id", name: "From Name" },
+        "To Name",
+        new Date(),
+        new Date(),
+        Status.ACTIVE,
+        new ObjectId(),
+      );
+
+      jest.spyOn(kudosCollection, "findFirst").mockImplementationOnce(async () => kudosModel);
+
+      await kudosRepository.archive("kudos-slug");
+
+      expect(kudosCollection.update).toHaveBeenCalledWith(kudosModel._id, {
+        status: Status.ARCHIVED,
+      });
+    });
+
+    it("should return false when trying to archive an non existing kudos", async () => {
+      jest.spyOn(kudosCollection, "findFirst").mockImplementationOnce(async () => null);
+
+      const operationResult = await kudosRepository.archive("kudos-slug");
+
+      expect(operationResult).toBeFalsy();
+    });
+  });
 });
