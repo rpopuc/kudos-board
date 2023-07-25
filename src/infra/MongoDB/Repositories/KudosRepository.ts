@@ -97,7 +97,25 @@ class KudosRepository implements KudosRepositoryInterface {
   }
 
   async findBySlug(slug: string): Promise<KudosEntity | null> {
-    return null;
+    await this.db.connect();
+    const collection = await this.db.getCollection<KudosModel>("kudos");
+    const kudosDocument = await collection.findFirst({ slug } as KudosModel);
+
+    if (!kudosDocument) {
+      return null;
+    }
+
+    return new KudosEntity({
+      slug: kudosDocument.slug,
+      panelSlug: kudosDocument.panelSlug,
+      title: kudosDocument.title,
+      description: kudosDocument.description,
+      from: kudosDocument.from,
+      to: kudosDocument.to,
+      createdAt: kudosDocument.createdAt,
+      updatedAt: kudosDocument.updatedAt,
+      status: kudosDocument.status,
+    });
   }
 }
 

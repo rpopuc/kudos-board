@@ -17,6 +17,7 @@ describe("KudosPresenter", () => {
     const panelSlug = "panel-slug";
     const slug = "kudos-slug";
     const createdAt = new Date();
+    const updatedAt = new Date();
     const status = Status.ACTIVE;
 
     const kudos: Kudos = {
@@ -27,6 +28,7 @@ describe("KudosPresenter", () => {
       panelSlug,
       slug,
       createdAt,
+      updatedAt,
       status,
     };
 

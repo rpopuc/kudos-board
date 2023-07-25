@@ -186,8 +186,8 @@ describe("KudosRepository", () => {
             new KudosModel(
               "kudos-slug",
               "panel-slug",
-              "Test Panel",
-              "Description Panel",
+              "Test Kudos",
+              "Description Kudos",
               { id: "user-id", name: "Person Name" },
               "Other Person Name",
               new Date(),
@@ -218,8 +218,8 @@ describe("KudosRepository", () => {
       const kudosModel = new KudosModel(
         "kudos-slug",
         "panel-slug",
-        "Test Panel",
-        "Description Panel",
+        "Test Kudos",
+        "Description Kudos",
         { id: "user-id", name: "From Name" },
         "To Name",
         new Date(),
@@ -243,6 +243,56 @@ describe("KudosRepository", () => {
       const operationResult = await kudosRepository.archive("kudos-slug");
 
       expect(operationResult).toBeFalsy();
+    });
+  });
+
+  describe("findBySlug", () => {
+    it("should return a kudos if it exists", async () => {
+      const now = new Date();
+
+      const kudosData: KudosData = {
+        slug: "test-kudos",
+        panelSlug: "panel-slug",
+        title: "Test Kudos",
+        description: "Description Kudos",
+        from: { id: "user-id", name: "John Doe" },
+        to: "To Name",
+        createdAt: now,
+        updatedAt: now,
+        status: Status.ACTIVE,
+      } as KudosData;
+
+      jest
+        .spyOn(kudosCollection, "findFirst")
+        .mockImplementationOnce(
+          async () =>
+            new KudosModel(
+              kudosData.slug ?? "",
+              kudosData.panelSlug ?? "",
+              kudosData.title,
+              kudosData.description,
+              kudosData.from,
+              kudosData.to,
+              now,
+              now,
+              Status.ACTIVE,
+              new ObjectId(),
+            ),
+        );
+
+      const kudos = await kudosRepository.findBySlug("test-kudos");
+
+      expect(kudos).toBeInstanceOf(KudosEntity);
+      expect(kudos?.slug).toBe(kudosData.slug);
+      expect(kudos?.title).toBe(kudosData.title);
+    });
+
+    it("should return null if kudos does not exist", async () => {
+      jest.spyOn(kudosCollection, "findFirst").mockImplementationOnce(async () => null);
+
+      const kudos = await kudosRepository.findBySlug("test-kudos");
+
+      expect(kudos).toBeNull();
     });
   });
 });
