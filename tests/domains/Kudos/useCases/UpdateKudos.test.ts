@@ -5,6 +5,7 @@ import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSu
 import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
+import { Status } from "@/domain/Kudos/Entities/Kudos";
 
 describe("UpdateKudos", () => {
   let updateKudos: UpdateKudos;
@@ -32,6 +33,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
     const updatedKudosData: UpdateKudosData = {
       title: "New Title",
@@ -67,6 +69,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const invalidKudosData: UpdateKudosData = {
@@ -95,6 +98,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const invalidKudosData: UpdateKudosData = {
@@ -123,6 +127,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const invalidKudosData: UpdateKudosData = {
@@ -171,6 +176,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const updateKudosData: UpdateKudosData = {
@@ -199,6 +205,7 @@ describe("UpdateKudos", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const updateKudosData: UpdateKudosData = {

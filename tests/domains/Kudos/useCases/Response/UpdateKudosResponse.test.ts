@@ -1,6 +1,6 @@
 import UpdateKudosResponse from "@/domain/Kudos/UseCases/Responses/UpdateKudosResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
-import KudosEntity from "@/domain/Kudos/Entities/Kudos";
+import KudosEntity, { Status } from "@/domain/Kudos/Entities/Kudos";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 
 describe("UpdateKudosResponse", () => {
@@ -35,6 +35,7 @@ describe("UpdateKudosResponse", () => {
       description: "Old Description",
       to: "Old Recipient",
       updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
     };
 
     const kudos = new KudosEntity(kudosData);
