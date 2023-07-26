@@ -63,7 +63,7 @@ describe("CreateKudos", () => {
           panelSlug: kudosData.panelSlug,
         }),
       );
-      expect(response.kudos).toStrictEqual(kudosEntity);
+      expect(response.data).toStrictEqual(kudosEntity);
     });
 
     it("should return an error if title is missing", async () => {
@@ -82,7 +82,7 @@ describe("CreateKudos", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have title");
       expect(response.errors[0].status).toBe("EMPTY_TITLE");
-      expect(response.kudos).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if owner is missing", async () => {
@@ -99,7 +99,7 @@ describe("CreateKudos", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have owner");
       expect(response.errors[0].status).toBe("EMPTY_OWNER");
-      expect(response.kudos).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if description is missing", async () => {
@@ -118,7 +118,7 @@ describe("CreateKudos", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have description");
       expect(response.errors[0].status).toBe("EMPTY_DESCRIPTION");
-      expect(response.kudos).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if recipient is missing", async () => {
@@ -137,7 +137,7 @@ describe("CreateKudos", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have recipient");
       expect(response.errors[0].status).toBe("EMPTY_RECIPIENT");
-      expect(response.kudos).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if panel slug is missing", async () => {
@@ -156,7 +156,7 @@ describe("CreateKudos", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have panel slug");
       expect(response.errors[0].status).toBe("EMPTY_PANEL_SLUG");
-      expect(response.kudos).toBe(null);
+      expect(response.data).toBe(null);
     });
   });
 });

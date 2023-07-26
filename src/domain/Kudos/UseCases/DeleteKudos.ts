@@ -1,6 +1,6 @@
 import Repository from "@/domain/Kudos/Repositories/KudosRepository";
 import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
-import DeleteKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosErrorResponse";
+import DeleteKudosErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
 export type DeleteKudosData = {

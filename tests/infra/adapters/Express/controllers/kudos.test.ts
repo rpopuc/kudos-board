@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
-import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
-import SuccessfulResponse from "@/domain/Kudos/UseCases/Responses/SuccessfulResponse";
-import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
+import SuccessfulResponse from "@/domain/shared/Responses/SuccessfulResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
 import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
 import Kudos from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
@@ -10,12 +10,12 @@ import BusinessError from "@/domain/shared/errors/BusinessError";
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
-import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
+import ShowKudosResponse from "@/domain/shared/Responses/ShowDataResponse";
 import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import type { KudosPresentation } from "@/domain/Kudos/Presenters/KudosPresenter";
-import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
+import ShowKudosErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
-import ArchiveKudosResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosResponse";
+import ArchiveKudosResponse from "@/domain/shared/Responses/ArchiveDataResponse";
 import KudosController from "@/infra/adapters/Express/controllers/KudosController";
 
 describe("Kudos Controller", () => {
@@ -119,7 +119,7 @@ describe("Kudos Controller", () => {
 
       jest
         .spyOn(createKudosUseCase, "handle")
-        .mockResolvedValueOnce(new ErrorResponse([new BusinessError("ERROR", "Error creating kudos")]));
+        .mockResolvedValueOnce(new ErrorResponse<Kudos>([new BusinessError("ERROR", "Error creating kudos")]));
 
       await kudosController.store()(mockRequest, mockResponse, () => {});
 
@@ -285,7 +285,9 @@ describe("Kudos Controller", () => {
       jest
         .spyOn(updateKudosUseCase, "handle")
         .mockResolvedValueOnce(
-          new ErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not found a kudos with the provided ID.")]),
+          new ErrorResponse<Kudos>([
+            new BusinessError("PANEL_NOT_FOUND", "Could not found a kudos with the provided ID."),
+          ]),
         );
 
       await kudosController.update()(mockRequest, mockResponse, () => {});
@@ -325,7 +327,7 @@ describe("Kudos Controller", () => {
         createdAt: new Date(),
       } as KudosPresentation;
 
-      jest.spyOn(showKudosUseCase, "handle").mockResolvedValueOnce(new ShowKudosResponse(true, kudos));
+      jest.spyOn(showKudosUseCase, "handle").mockResolvedValueOnce(new ShowKudosResponse<Kudos>(true, kudos));
       jest.spyOn(presenter, "single").mockReturnValue(presenterData);
 
       await kudosController.show()(mockRequest, mockResponse, () => {});
@@ -353,7 +355,7 @@ describe("Kudos Controller", () => {
       jest
         .spyOn(showKudosUseCase, "handle")
         .mockResolvedValueOnce(
-          new ShowKudosErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find kudos.")]),
+          new ShowKudosErrorResponse<Kudos>([new BusinessError("PANEL_NOT_FOUND", "Could not find kudos.")]),
         );
 
       jest.spyOn(presenter, "single");

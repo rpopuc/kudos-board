@@ -2,9 +2,10 @@ import Repository from "@/domain/Kudos/Repositories/KudosRepository";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import EmptyData from "@/domain/shared/errors/EmptyData";
 import ValidationResponse from "@/domain/shared/ValidationResponse";
-import CreateKudosResponse from "@/domain/Kudos/UseCases/Responses/CreateKudosResponse";
-import SuccessfulResponse from "@/domain/Kudos/UseCases/Responses/SuccessfulResponse";
-import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
+import CreateKudosResponse from "@/domain/shared/Responses/CreateDataResponse";
+import SuccessfulResponse from "@/domain/shared/Responses/SuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
+import Kudos from "../Entities/Kudos";
 
 class CreateKudos {
   constructor(private repository: Repository) {}
@@ -35,7 +36,7 @@ class CreateKudos {
     return result;
   }
 
-  async handle(kudosData: KudosData): Promise<CreateKudosResponse> {
+  async handle(kudosData: KudosData): Promise<CreateKudosResponse<Kudos>> {
     const validation = this.validate(kudosData);
 
     if (!validation.ok) {

@@ -2,7 +2,7 @@ import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import KudosEntity from "@/domain/Kudos/Entities/Kudos";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
-import ArchiveKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosErrorResponse";
+import ArchiveKudosErrorResponse from "@/domain/shared/Responses/ArchiveErrorResponse";
 
 describe("ArchiveKudos", () => {
   let mockedRepository: KudosRepository;

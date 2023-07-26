@@ -1,7 +1,7 @@
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
 import KudosEntity from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
-import DeleteKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosErrorResponse";
+import DeleteKudosErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
 

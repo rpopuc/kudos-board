@@ -1,7 +1,7 @@
 import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
-import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
-import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
+import ShowKudosResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ShowKudosErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
 
 describe("ShowKudos", () => {
   let showKudos: ShowKudos;
@@ -43,6 +43,6 @@ describe("ShowKudos", () => {
 
     expect(response instanceof ShowKudosResponse).toBe(true);
     expect(response.ok).toBe(true);
-    expect(response.kudos).toEqual(kudos);
+    expect(response.data).toEqual(kudos);
   });
 });

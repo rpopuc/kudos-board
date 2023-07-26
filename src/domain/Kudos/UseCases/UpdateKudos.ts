@@ -3,12 +3,12 @@ import UpdateKudosData from "@/domain/Kudos/DTO/UpdateKudosData";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import EmptyData from "@/domain/shared/errors/EmptyData";
 import ValidationResponse from "@/domain/shared/ValidationResponse";
-import UpdateKudosResponse from "@/domain/Kudos/UseCases/Responses/UpdateKudosResponse";
-import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
-import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
-import { Status } from "../Entities/Kudos";
+import Kudos, { Status } from "../Entities/Kudos";
 import InvalidStatus from "@/domain/shared/errors/InvalidStatus";
+import UpdateDataResponse from "@/domain/shared/Responses/UpdateDataResponse";
 
 export type UpdateKudosRequest = {
   kudosSlug: string;
@@ -41,7 +41,7 @@ class UpdateKudos {
     return result;
   }
 
-  async handle({ kudosSlug, userId, updateKudosData }: UpdateKudosRequest): Promise<UpdateKudosResponse> {
+  async handle({ kudosSlug, userId, updateKudosData }: UpdateKudosRequest): Promise<UpdateDataResponse<Kudos>> {
     const existingKudos = await this.repository.findBySlug(kudosSlug);
 
     if (!existingKudos) {
