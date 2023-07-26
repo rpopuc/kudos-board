@@ -6,7 +6,7 @@ import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
-import Panel from "@/domain/Panel/Entities/Panel";
+import Panel, { Status } from "@/domain/Panel/Entities/Panel";
 
 describe("UpdatePanel", () => {
   let updatePanel: UpdatePanel;
@@ -227,5 +227,36 @@ describe("UpdatePanel", () => {
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("NOT_AUTHORIZED");
     expect(result.errors[0].message).toBe("You can not edit a panel that is not yours.");
+  });
+
+  it("should return an error if panel is archived", async () => {
+    const panelSlug = "my-panel";
+    const currentUpdatedAt = new Date("2021-01-01 00:00:00");
+    const existingPanel = {
+      title: "Old Title",
+      owner: "Old Owner",
+      password: new PlainTextPassword("oldPassword"),
+      updatedAt: currentUpdatedAt,
+      status: Status.ARCHIVED,
+    } as Partial<Panel> as Panel;
+
+    const updatePanelData = {
+      title: "New Title",
+      password: new PlainTextPassword("newPassword"),
+    } as UpdatePanelData;
+
+    jest.spyOn(panelRepository, "findBySlug").mockImplementation(async () => existingPanel);
+
+    const response = await updatePanel.handle({
+      panelSlug,
+      userId: "Old Owner",
+      updatePanelData: updatePanelData,
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.errors).toHaveLength(1);
+    expect(response.errors[0].message).toBe("Its not possible to edit an archived panel.");
+    expect(response.errors[0].status).toBe("INVALID_STATUS");
+    expect(response.panel).toBe(null);
   });
 });

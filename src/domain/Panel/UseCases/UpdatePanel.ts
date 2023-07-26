@@ -8,6 +8,8 @@ import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuc
 import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import InvalidPassword from "@/domain/shared/errors/InvalidPassword";
+import { Status } from "../Entities/Panel";
+import InvalidStatus from "@/domain/shared/errors/InvalidStatus";
 
 export type UpdatePanelRequest = {
   panelSlug: string;
@@ -18,7 +20,7 @@ export type UpdatePanelRequest = {
 class UpdatePanel {
   constructor(private repository: Repository) {}
 
-  validate(updatePanelData: UpdatePanelData): ValidationResponse {
+  validate(updatePanelData: PanelData): ValidationResponse {
     const result = new ValidationResponse(true);
 
     if (!updatePanelData.title) {
@@ -31,6 +33,10 @@ class UpdatePanel {
 
     if (updatePanelData.clientPassword && !updatePanelData.clientPassword.isValid()) {
       result.addError(new InvalidPassword("clientPassword", "Invalid client password", "INVALID_CLIENT_PASSWORD"));
+    }
+
+    if (updatePanelData.status === Status.ARCHIVED) {
+      result.addError(new InvalidStatus("Its not possible to edit an archived panel."));
     }
 
     return result;

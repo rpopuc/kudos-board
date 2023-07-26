@@ -3,7 +3,6 @@ import asyncHandler from "express-async-handler";
 import { RequestHandler } from "express";
 import CreatePanel from "@/domain/Panel/UseCases/CreatePanel";
 import DeletePanel from "@/domain/Panel/UseCases/DeletePanel";
-// import Password from "@/infra/shared/ValueObjects/PlainTextPassword";
 import Password from "@/infra/shared/ValueObjects/BCryptPassword";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
