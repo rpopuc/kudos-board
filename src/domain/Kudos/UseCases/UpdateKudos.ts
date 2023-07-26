@@ -7,6 +7,8 @@ import UpdateKudosResponse from "@/domain/Kudos/UseCases/Responses/UpdateKudosRe
 import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
 import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
+import { Status } from "../Entities/Kudos";
+import InvalidStatus from "@/domain/shared/errors/InvalidStatus";
 
 export type UpdateKudosRequest = {
   kudosSlug: string;
@@ -17,7 +19,7 @@ export type UpdateKudosRequest = {
 class UpdateKudos {
   constructor(private repository: Repository) {}
 
-  validate(updateKudosData: UpdateKudosData): ValidationResponse {
+  validate(updateKudosData: KudosData): ValidationResponse {
     const result = new ValidationResponse(true);
 
     if (!updateKudosData.title) {
@@ -30,6 +32,10 @@ class UpdateKudos {
 
     if (!updateKudosData.to) {
       result.addError(new EmptyData("EMPTY_RECIPIENT", "recipient"));
+    }
+
+    if (updateKudosData.status === Status.ARCHIVED) {
+      result.addError(new InvalidStatus("Its not possible to edit an archived kudos."));
     }
 
     return result;

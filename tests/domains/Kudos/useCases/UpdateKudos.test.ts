@@ -5,7 +5,7 @@ import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSu
 import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
-import { Status } from "@/domain/Kudos/Entities/Kudos";
+import Kudos, { Status } from "@/domain/Kudos/Entities/Kudos";
 
 describe("UpdateKudos", () => {
   let updateKudos: UpdateKudos;
@@ -225,5 +225,36 @@ describe("UpdateKudos", () => {
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("KUDOS_NOT_UPDATED");
     expect(result.errors[0].message).toBe("Internal error");
+  });
+
+  it("should return an error if kudos is archived", async () => {
+    const slug = "my-kudos";
+    const currentUpdatedAt = new Date("2021-01-01 00:00:00");
+    const existingKudos = {
+      title: "Old Title",
+      from: { name: "Owner", id: "owner-id" },
+      to: "Old Recipient",
+      description: "Old Description",
+      updatedAt: currentUpdatedAt,
+      status: Status.ARCHIVED,
+    } as Partial<Kudos> as Kudos;
+
+    const updateKudosData = {
+      title: "New Title",
+    } as UpdateKudosData;
+
+    jest.spyOn(mockRepository, "findBySlug").mockImplementation(async () => existingKudos);
+
+    const response = await updateKudos.handle({
+      kudosSlug: slug,
+      userId: "owner-id",
+      updateKudosData: updateKudosData,
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.errors).toHaveLength(1);
+    expect(response.errors[0].message).toBe("Its not possible to edit an archived kudos.");
+    expect(response.errors[0].status).toBe("INVALID_STATUS");
+    expect(response.kudos).toBe(null);
   });
 });
