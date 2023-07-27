@@ -1,8 +1,8 @@
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import UpdatePanelData from "@/domain/Panel/DTO/UpdatePanelData";
-import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuccessfulResponse";
-import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
@@ -59,7 +59,7 @@ describe("UpdatePanel", () => {
       }),
     });
     expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
-    expect(result.panel).toEqual(updatePanelData);
+    expect(result.data).toEqual(updatePanelData);
   });
 
   it("should return an error if title is missing", async () => {
@@ -87,7 +87,7 @@ describe("UpdatePanel", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Does not have title");
     expect(response.errors[0].status).toBe("EMPTY_TITLE");
-    expect(response.panel).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if password is missing", async () => {
@@ -115,7 +115,7 @@ describe("UpdatePanel", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Invalid password");
     expect(response.errors[0].status).toBe("INVALID_PASSWORD");
-    expect(response.panel).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if client password is missing", async () => {
@@ -143,7 +143,7 @@ describe("UpdatePanel", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Invalid client password");
     expect(response.errors[0].status).toBe("INVALID_CLIENT_PASSWORD");
-    expect(response.panel).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if the panel does not exist", async () => {
@@ -257,6 +257,6 @@ describe("UpdatePanel", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Its not possible to edit an archived panel.");
     expect(response.errors[0].status).toBe("INVALID_STATUS");
-    expect(response.panel).toBe(null);
+    expect(response.data).toBe(null);
   });
 });

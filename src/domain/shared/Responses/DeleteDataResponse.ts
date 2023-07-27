@@ -1,6 +1,6 @@
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
-class DeleteKudosResponse {
+class DeleteDataResponse {
   constructor(public ok: boolean, public errors: BusinessError[] = []) {}
 
   addError(error: BusinessError) {
@@ -9,4 +9,4 @@ class DeleteKudosResponse {
   }
 }
 
-export default DeleteKudosResponse;
+export default DeleteDataResponse;

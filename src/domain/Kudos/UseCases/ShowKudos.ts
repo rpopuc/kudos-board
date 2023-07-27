@@ -1,7 +1,8 @@
 import Repository from "@/domain/Kudos/Repositories/KudosRepository";
-import ShowKudosResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosResponse";
-import ShowKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ShowKudosErrorResponse";
+import ShowKudosResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ShowKudosErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
+import Kudos from "@/domain/Kudos/Entities/Kudos";
 
 export type ShowKudosData = {
   slug: string;
@@ -10,7 +11,7 @@ export type ShowKudosData = {
 class ShowKudos {
   constructor(private repository: Repository) {}
 
-  async handle({ slug }: ShowKudosData): Promise<ShowKudosResponse> {
+  async handle({ slug }: ShowKudosData): Promise<ShowKudosResponse<Kudos>> {
     const kudos = await this.repository.findBySlug(slug);
 
     if (!kudos) {

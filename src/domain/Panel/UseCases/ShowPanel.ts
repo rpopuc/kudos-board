@@ -1,7 +1,8 @@
 import Repository from "@/domain/Panel/Repositories/PanelRepository";
-import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
-import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
+import ShowPanelResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ShowPanelErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
+import Panel from "@/domain/Panel/Entities/Panel";
 
 export type ShowPanelData = {
   panelSlug: string;
@@ -11,7 +12,7 @@ export type ShowPanelData = {
 class ShowPanel {
   constructor(private repository: Repository) {}
 
-  async handle({ panelSlug, clientPassword }: ShowPanelData): Promise<ShowPanelResponse> {
+  async handle({ panelSlug, clientPassword }: ShowPanelData): Promise<ShowPanelResponse<Panel>> {
     const panel = await this.repository.findBySlug(panelSlug);
 
     if (!panel) {

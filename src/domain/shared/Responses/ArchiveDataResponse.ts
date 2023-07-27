@@ -1,6 +1,6 @@
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
-class ArchivePanelResponse {
+class ArchiveDataResponse {
   constructor(public ok: boolean, public errors: BusinessError[] = []) {}
 
   addError(error: BusinessError) {
@@ -9,4 +9,4 @@ class ArchivePanelResponse {
   }
 }
 
-export default ArchivePanelResponse;
+export default ArchiveDataResponse;

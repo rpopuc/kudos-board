@@ -1,8 +1,8 @@
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import UpdateKudosData from "@/domain/Kudos/DTO/UpdateKudosData";
-import UpdateSuccessfulResponse from "@/domain/Kudos/UseCases/Responses/UpdateSuccessfulResponse";
-import ErrorResponse from "@/domain/Kudos/UseCases/Responses/ErrorResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import Kudos, { Status } from "@/domain/Kudos/Entities/Kudos";
@@ -56,7 +56,7 @@ describe("UpdateKudos", () => {
       }),
     });
     expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
-    expect(result.kudos).toEqual(updatedKudosData);
+    expect(result.data).toEqual(updatedKudosData);
   });
 
   it("should return an error if title is missing", async () => {
@@ -85,7 +85,7 @@ describe("UpdateKudos", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Does not have title");
     expect(response.errors[0].status).toBe("EMPTY_TITLE");
-    expect(response.kudos).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if description is missing", async () => {
@@ -114,7 +114,7 @@ describe("UpdateKudos", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Does not have description");
     expect(response.errors[0].status).toBe("EMPTY_DESCRIPTION");
-    expect(response.kudos).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if to is missing", async () => {
@@ -143,7 +143,7 @@ describe("UpdateKudos", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Does not have recipient");
     expect(response.errors[0].status).toBe("EMPTY_RECIPIENT");
-    expect(response.kudos).toBe(null);
+    expect(response.data).toBe(null);
   });
 
   it("should return an error if the kudos does not exist", async () => {
@@ -255,6 +255,6 @@ describe("UpdateKudos", () => {
     expect(response.errors).toHaveLength(1);
     expect(response.errors[0].message).toBe("Its not possible to edit an archived kudos.");
     expect(response.errors[0].status).toBe("INVALID_STATUS");
-    expect(response.kudos).toBe(null);
+    expect(response.data).toBe(null);
   });
 });

@@ -43,7 +43,7 @@ describe("CreatePanel", () => {
           password: panelData.password,
         }),
       );
-      expect(response.panel).toStrictEqual(memoryPanelEntity);
+      expect(response.data).toStrictEqual(memoryPanelEntity);
     });
 
     it("should return an error if title is missing", async () => {
@@ -59,7 +59,7 @@ describe("CreatePanel", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have title");
       expect(response.errors[0].status).toBe("EMPTY_TITLE");
-      expect(response.panel).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if owner is missing", async () => {
@@ -74,7 +74,7 @@ describe("CreatePanel", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have owner");
       expect(response.errors[0].status).toBe("EMPTY_OWNER");
-      expect(response.panel).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if password is missing", async () => {
@@ -89,7 +89,7 @@ describe("CreatePanel", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have password");
       expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
-      expect(response.panel).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should return an error if clientPassword is invalid", async () => {
@@ -105,7 +105,7 @@ describe("CreatePanel", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have clientPassword");
       expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
-      expect(response.panel).toBe(null);
+      expect(response.data).toBe(null);
     });
 
     it("should successfully create with empty client password", async () => {
@@ -130,7 +130,7 @@ describe("CreatePanel", () => {
           clientPassword: panelData.clientPassword,
         }),
       );
-      expect(response.panel).toStrictEqual(panel);
+      expect(response.data).toStrictEqual(panel);
     });
   });
 });

@@ -1,16 +1,18 @@
-import CreatePanelResponse from "@/domain/Panel/UseCases/Response/CreatePanelResponse";
+import CreateDataResponse from "@/domain/shared/Responses/CreateDataResponse";
 import Error from "@/domain/shared/errors/BusinessError";
 
-describe("CreatePanelResponse", () => {
-  let response: CreatePanelResponse;
+type TestData = {};
+
+describe("CreateDataResponse", () => {
+  let response: CreateDataResponse<TestData>;
 
   beforeEach(() => {
-    response = new CreatePanelResponse(true);
+    response = new CreateDataResponse(true);
   });
 
   it("should initialize with default values", () => {
     expect(response.ok).toBe(true);
-    expect(response.panel).toBeNull();
+    expect(response.data).toBeNull();
     expect(response.errors).toHaveLength(0);
   });
 

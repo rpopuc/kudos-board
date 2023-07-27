@@ -1,6 +1,6 @@
 import Repository from "@/domain/Kudos/Repositories/KudosRepository";
-import ArchiveKudosResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosResponse";
-import ArchiveKudosErrorResponse from "@/domain/Kudos/UseCases/Responses/ArchiveKudosErrorResponse";
+import ArchiveKudosResponse from "@/domain/shared/Responses/ArchiveDataResponse";
+import ArchiveKudosErrorResponse from "@/domain/shared/Responses/ArchiveErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
 export type ArchiveKudosData = {

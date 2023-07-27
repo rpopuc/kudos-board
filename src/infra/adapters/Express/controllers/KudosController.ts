@@ -25,8 +25,8 @@ class KudosController {
 
       const response = await this.createKudosUseCase.handle(data);
 
-      if (response.ok && response.kudos !== null) {
-        res.json(this.presenter.single(response.kudos));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({
@@ -60,8 +60,8 @@ class KudosController {
 
       const response = await this.updateKudosUseCase.handle({ kudosSlug, userId, updateKudosData: data });
 
-      if (response.ok && response.kudos !== null) {
-        res.json(this.presenter.single(response.kudos));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({
@@ -78,8 +78,8 @@ class KudosController {
         slug: req.params.slug,
       });
 
-      if (response.ok && response.kudos !== null) {
-        res.json(this.presenter.single(response.kudos));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({

@@ -2,10 +2,11 @@ import Repository from "@/domain/Panel/Repositories/PanelRepository";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import EmptyData from "@/domain/shared/errors/EmptyData";
 import ValidationResponse from "@/domain/shared/ValidationResponse";
-import CreatePanelResponse from "@/domain/Panel/UseCases/Response/CreatePanelResponse";
-import SuccessfulResponse from "@/domain/Panel/UseCases/Response/SuccessfulResponse";
-import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import CreatePanelResponse from "@/domain/shared/Responses/CreateDataResponse";
+import SuccessfulResponse from "@/domain/shared/Responses/SuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import Password from "@/domain/shared/valueObjects/Password";
+import Panel from "../Entities/Panel";
 
 class CreatePanel {
   constructor(private repository: Repository) {}
@@ -36,7 +37,7 @@ class CreatePanel {
     return clientPassword === undefined || clientPassword.getValue() === "" || clientPassword.isValid();
   }
 
-  async handle(panelData: PanelData): Promise<CreatePanelResponse> {
+  async handle(panelData: PanelData): Promise<CreatePanelResponse<Panel>> {
     const validation = this.validate(panelData);
 
     if (!validation.ok) {

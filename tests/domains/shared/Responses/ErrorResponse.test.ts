@@ -1,5 +1,7 @@
-import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import Error from "@/domain/shared/errors/BusinessError";
+
+type TestData = {};
 
 describe("ErrorResponse", () => {
   it("should initialize with errors and set ok to false", () => {
@@ -8,10 +10,10 @@ describe("ErrorResponse", () => {
       new Error("ERROR_2", "Error 2"),
       new Error("ERROR_3", "Error 3"),
     ];
-    const response = new ErrorResponse(errors);
+    const response = new ErrorResponse<TestData>(errors);
 
     expect(response.ok).toBe(false);
-    expect(response.panel).toBeNull();
+    expect(response.data).toBeNull();
     expect(response.errors).toHaveLength(3);
     expect(response.errors).toEqual(errors);
   });
