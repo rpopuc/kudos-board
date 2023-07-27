@@ -3,7 +3,7 @@ import CreateKudos from "@/domain/Kudos/UseCases/CreateKudos";
 import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import SuccessfulResponse from "@/domain/shared/Responses/SuccessfulResponse";
 import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
-import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
+import DeleteKudosResponse from "@/domain/shared/Responses/DeleteDataResponse";
 import Kudos from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import BusinessError from "@/domain/shared/errors/BusinessError";

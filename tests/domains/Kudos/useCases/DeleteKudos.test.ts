@@ -3,7 +3,7 @@ import KudosEntity from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import DeleteKudosErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
-import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
+import DeleteKudosResponse from "@/domain/shared/Responses/DeleteDataResponse";
 
 describe("DeleteKudos", () => {
   let mockedRepository: KudosRepository;

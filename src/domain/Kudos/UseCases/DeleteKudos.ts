@@ -1,5 +1,5 @@
 import Repository from "@/domain/Kudos/Repositories/KudosRepository";
-import DeleteKudosResponse from "@/domain/Kudos/UseCases/Responses/DeleteKudosResponse";
+import DeleteKudosResponse from "@/domain/shared/Responses/DeleteDataResponse";
 import DeleteKudosErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
