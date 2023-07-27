@@ -3,7 +3,7 @@ import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
-import ArchivePanelErrorResponse from "@/domain/Panel/UseCases/Response/ArchivePanelErrorResponse";
+import ArchivePanelErrorResponse from "@/domain/shared/Responses/ArchiveErrorResponse";
 
 describe("ArchivePanel", () => {
   let repository: PanelRepository;

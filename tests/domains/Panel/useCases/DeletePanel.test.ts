@@ -1,7 +1,7 @@
 import DeletePanel from "@/domain/Panel/UseCases/DeletePanel";
 import PanelEntity from "@/domain/Panel/Entities/Panel";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
-import DeletePanelErrorResponse from "@/domain/Panel/UseCases/Response/DeletePanelErrorResponse";
+import DeletePanelErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 

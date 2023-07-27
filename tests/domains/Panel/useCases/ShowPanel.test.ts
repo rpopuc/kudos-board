@@ -1,7 +1,7 @@
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
-import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
-import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
+import ShowPanelResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ShowPanelErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
 import Panel from "@/domain/Panel/Entities/Panel";
 import Password from "@/domain/shared/valueObjects/Password";
 
@@ -34,7 +34,7 @@ describe("ShowPanel", () => {
 
     expect(response instanceof ShowPanelResponse).toBe(true);
     expect(response.ok).toBe(true);
-    expect(response.panel).toEqual(panel);
+    expect(response.data).toEqual(panel);
   });
 
   test("should return a ShowPanelErrorResponse for a non-existing panel", async () => {
@@ -65,7 +65,7 @@ describe("ShowPanel", () => {
 
     expect(response instanceof ShowPanelResponse).toBe(true);
     expect(response.ok).toBe(true);
-    expect(response.panel).toEqual(panel);
+    expect(response.data).toEqual(panel);
   });
 
   test("should return a ShowPanelErrorResponse for an existing panel with incorrect client password", async () => {

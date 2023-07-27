@@ -28,8 +28,8 @@ class PanelController {
         clientPassword: data.clientPassword,
       });
 
-      if (response.ok && response.panel !== null) {
-        res.json(this.presenter.single(response.panel));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({
@@ -49,8 +49,8 @@ class PanelController {
 
       const response = await this.createPanelUseCase.handle(data);
 
-      if (response.ok && response.panel !== null) {
-        res.json(this.presenter.single(response.panel));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({
@@ -71,8 +71,8 @@ class PanelController {
 
       const response = await this.updatePanelUseCase.handle({ panelSlug, userId, updatePanelData: data });
 
-      if (response.ok && response.panel !== null) {
-        res.json(this.presenter.single(response.panel));
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.single(response.data));
       } else {
         res
           .json({

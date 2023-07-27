@@ -1,8 +1,6 @@
 import Repository from "@/domain/Panel/Repositories/PanelRepository";
-
-import ArchivePanelResponse from "@/domain/Panel/UseCases/Response/ArchivePanelResponse";
-import ArchivePanelErrorResponse from "@/domain/Panel/UseCases/Response/ArchivePanelErrorResponse";
-
+import ArchivePanelResponse from "@/domain/shared/Responses/ArchiveDataResponse";
+import ArchivePanelErrorResponse from "@/domain/shared/Responses/ArchiveErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
 export type ArchivePanelData = {

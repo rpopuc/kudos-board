@@ -3,12 +3,12 @@ import UpdatePanelData from "@/domain/Panel/DTO/UpdatePanelData";
 import PanelData from "@/domain/Panel/DTO/PanelData";
 import EmptyData from "@/domain/shared/errors/EmptyData";
 import ValidationResponse from "@/domain/shared/ValidationResponse";
-import UpdatePanelResponse from "@/domain/Panel/UseCases/Response/UpdatePanelResponse";
-import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuccessfulResponse";
-import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
+import UpdatePanelResponse from "@/domain/shared/Responses/UpdateDataResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import InvalidPassword from "@/domain/shared/errors/InvalidPassword";
-import { Status } from "../Entities/Panel";
+import Panel, { Status } from "@/domain/Panel/Entities/Panel";
 import InvalidStatus from "@/domain/shared/errors/InvalidStatus";
 
 export type UpdatePanelRequest = {
@@ -42,7 +42,7 @@ class UpdatePanel {
     return result;
   }
 
-  async handle({ panelSlug, userId, updatePanelData }: UpdatePanelRequest): Promise<UpdatePanelResponse> {
+  async handle({ panelSlug, userId, updatePanelData }: UpdatePanelRequest): Promise<UpdatePanelResponse<Panel>> {
     const existingPanel = await this.repository.findBySlug(panelSlug);
 
     if (!existingPanel) {

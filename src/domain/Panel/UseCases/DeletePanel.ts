@@ -1,6 +1,6 @@
 import Repository from "@/domain/Panel/Repositories/PanelRepository";
-import DeletePanelResponse from "@/domain/Panel/UseCases/Response/DeletePanelResponse";
-import DeletePanelErrorResponse from "@/domain/Panel/UseCases/Response/DeletePanelErrorResponse";
+import DeletePanelResponse from "@/domain/shared/Responses/DeleteDataResponse";
+import DeletePanelErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
 export type DeletePanelData = {

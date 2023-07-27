@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import CreatePanel from "@/domain/Panel/UseCases/CreatePanel";
-import ErrorResponse from "@/domain/Panel/UseCases/Response/ErrorResponse";
-import SuccessfulResponse from "@/domain/Panel/UseCases/Response/SuccessfulResponse";
-import UpdateSuccessfulResponse from "@/domain/Panel/UseCases/Response/UpdateSuccessfulResponse";
-import DeletePanelResponse from "@/domain/Panel/UseCases/Response/DeletePanelResponse";
+import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
+import SuccessfulResponse from "@/domain/shared/Responses/SuccessfulResponse";
+import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
+import DeletePanelResponse from "@/domain/shared/Responses/DeleteDataResponse";
+import ShowPanelResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ShowPanelErrorResponse from "@/domain/shared/Responses/ShowErrorResponse";
+import ArchivePanelResponse from "@/domain/shared/Responses/ArchiveDataResponse";
 import Panel from "@/domain/Panel/Entities/Panel";
 import PanelController from "@/infra/adapters/Express/controllers/PanelController";
 import PanelRepository from "@/infra/Memory/Panel/Repositories/PanelRepository";
@@ -11,12 +14,9 @@ import BusinessError from "@/domain/shared/errors/BusinessError";
 import DeletePanel from "@/domain/Panel/UseCases/DeletePanel";
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
-import ShowPanelResponse from "@/domain/Panel/UseCases/Response/ShowPanelResponse";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import type { PanelPresentation } from "@/domain/Panel/Presenters/PanelPresenter";
-import ShowPanelErrorResponse from "@/domain/Panel/UseCases/Response/ShowPanelErrorResponse";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
-import ArchivePanelResponse from "@/domain/Panel/UseCases/Response/ArchivePanelResponse";
 
 describe("Panel Controller", () => {
   let panelController: PanelController;
