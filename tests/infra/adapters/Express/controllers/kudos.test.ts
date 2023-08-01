@@ -17,10 +17,12 @@ import ShowKudosErrorResponse from "@/domain/shared/Responses/ShowErrorResponse"
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
 import ArchiveKudosResponse from "@/domain/shared/Responses/ArchiveDataResponse";
 import KudosController from "@/infra/adapters/Express/controllers/KudosController";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 
 describe("Kudos Controller", () => {
   let kudosController: KudosController;
   let kudosRepository: KudosRepository;
+  let panelRepository: PanelRepository;
   let createKudosUseCase: CreateKudos;
   let deleteKudosUseCase: DeleteKudos;
   let updateKudosUseCase: UpdateKudos;
@@ -36,9 +38,14 @@ describe("Kudos Controller", () => {
       delete: jest.fn(),
       findBySlug: jest.fn(),
     } as KudosRepository;
+
+    panelRepository = {
+      findBySlug: jest.fn(),
+    } as Partial<PanelRepository> as PanelRepository;
+
     createKudosUseCase = new CreateKudos(kudosRepository);
     deleteKudosUseCase = new DeleteKudos(kudosRepository);
-    updateKudosUseCase = new UpdateKudos(kudosRepository);
+    updateKudosUseCase = new UpdateKudos(kudosRepository, panelRepository);
     showKudosUseCase = new ShowKudos(kudosRepository);
     archiveKudosUseCase = new ArchiveKudos(kudosRepository);
     presenter = new KudosPresenter();

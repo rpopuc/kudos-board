@@ -1,4 +1,4 @@
-import Repository from "@/domain/Kudos/Repositories/KudosRepository";
+import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import UpdateKudosData from "@/domain/Kudos/DTO/UpdateKudosData";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import EmptyData from "@/domain/shared/errors/EmptyData";
@@ -6,9 +6,10 @@ import ValidationResponse from "@/domain/shared/ValidationResponse";
 import UpdateSuccessfulResponse from "@/domain/shared/Responses/UpdateSuccessfulResponse";
 import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
-import Kudos, { Status } from "../Entities/Kudos";
+import Kudos, { Status } from "@/domain/Kudos/Entities/Kudos";
 import InvalidStatus from "@/domain/shared/errors/InvalidStatus";
 import UpdateDataResponse from "@/domain/shared/Responses/UpdateDataResponse";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
 
 export type UpdateKudosRequest = {
   kudosSlug: string;
@@ -17,7 +18,7 @@ export type UpdateKudosRequest = {
 };
 
 class UpdateKudos {
-  constructor(private repository: Repository) {}
+  constructor(private kudosRepository: KudosRepository, private panelRepository: PanelRepository) {}
 
   validate(updateKudosData: KudosData): ValidationResponse {
     const result = new ValidationResponse(true);
@@ -41,15 +42,31 @@ class UpdateKudos {
     return result;
   }
 
+  async validateOwnership(kudos: Kudos, userId: string): Promise<ErrorResponse<Kudos> | null> {
+    if (kudos.from.id === userId) {
+      return null;
+    }
+
+    const panel = await this.panelRepository.findBySlug(kudos.panelSlug);
+
+    if (panel?.owner === userId) {
+      return null;
+    }
+
+    return new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not edit a kudos that is not yours.")]);
+  }
+
   async handle({ kudosSlug, userId, updateKudosData }: UpdateKudosRequest): Promise<UpdateDataResponse<Kudos>> {
-    const existingKudos = await this.repository.findBySlug(kudosSlug);
+    const existingKudos = await this.kudosRepository.findBySlug(kudosSlug);
 
     if (!existingKudos) {
       return new ErrorResponse([new BusinessError("KUDOS_NOT_FOUND", "Could not found a kudos with the provided ID.")]);
     }
 
-    if (existingKudos.from.id !== userId) {
-      return new ErrorResponse([new BusinessError("NOT_AUTHORIZED", "You can not edit a kudos that is not yours.")]);
+    const ownershipValidation = await this.validateOwnership(existingKudos, userId);
+
+    if (ownershipValidation !== null) {
+      return ownershipValidation;
     }
 
     const updatedKudosData = {
@@ -66,7 +83,7 @@ class UpdateKudos {
       return new ErrorResponse(validation.errors);
     }
 
-    const updatedKudos = await this.repository.update({ slug: kudosSlug, kudosData: updatedKudosData });
+    const updatedKudos = await this.kudosRepository.update({ slug: kudosSlug, kudosData: updatedKudosData });
 
     if (!updatedKudos) {
       return new ErrorResponse([new BusinessError("KUDOS_NOT_UPDATED", "Internal error")]);
