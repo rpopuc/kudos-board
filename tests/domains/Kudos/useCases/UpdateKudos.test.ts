@@ -6,10 +6,14 @@ import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import Kudos, { Status } from "@/domain/Kudos/Entities/Kudos";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
+import Panel from "@/domain/Panel/Entities/Panel";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("UpdateKudos", () => {
   let updateKudos: UpdateKudos;
   let mockRepository: KudosRepository;
+  let panelRepository: PanelRepository;
 
   beforeEach(() => {
     mockRepository = {
@@ -20,7 +24,11 @@ describe("UpdateKudos", () => {
       findBySlug: jest.fn(),
     } as KudosRepository;
 
-    updateKudos = new UpdateKudos(mockRepository);
+    panelRepository = {
+      findBySlug: jest.fn(),
+    } as Partial<PanelRepository> as PanelRepository;
+
+    updateKudos = new UpdateKudos(mockRepository, panelRepository);
   });
 
   it("should update an existing kudos", async () => {
@@ -192,6 +200,42 @@ describe("UpdateKudos", () => {
     expect(result).toBeInstanceOf(ErrorResponse);
     expect(result.errors[0].status).toBe("NOT_AUTHORIZED");
     expect(result.errors[0].message).toBe("You can not edit a kudos that is not yours.");
+  });
+
+  it("should be able to update te kudos with panel's owner id", async () => {
+    const kudosSlug = "my-kudos";
+
+    const currentUpdatedAt = new Date("2021-01-01 00:00:00");
+    const existingKudosData: KudosData = {
+      panelSlug: "panel-slug",
+      title: "Old Title",
+      from: { name: "Owner", id: "owner-id" },
+      description: "Old Description",
+      to: "Old Recipient",
+      updatedAt: currentUpdatedAt,
+      status: Status.ACTIVE,
+    };
+
+    const updateKudosData: UpdateKudosData = {
+      title: "New Title",
+    };
+
+    const existingPanel = {
+      title: "Old Title",
+      owner: "panel-owner",
+      password: new PlainTextPassword("oldPassword"),
+      updatedAt: currentUpdatedAt,
+    } as Partial<Panel> as Panel;
+
+    mockRepository.findBySlug = jest.fn().mockReturnValue(existingKudosData);
+    panelRepository.findBySlug = jest.fn().mockReturnValue(existingPanel);
+    mockRepository.update = jest.fn().mockImplementation(() => existingKudosData);
+
+    const result = await updateKudos.handle({ kudosSlug, userId: "panel-owner", updateKudosData });
+
+    expect(mockRepository.findBySlug).toHaveBeenCalledWith(kudosSlug);
+    expect(mockRepository.update).toHaveBeenCalledTimes(1);
+    expect(result).toBeInstanceOf(UpdateSuccessfulResponse);
   });
 
   it("should return an error if the response from update do not succeeded", async () => {
