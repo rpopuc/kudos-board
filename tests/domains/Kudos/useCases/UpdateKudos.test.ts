@@ -202,7 +202,7 @@ describe("UpdateKudos", () => {
     expect(result.errors[0].message).toBe("You can not edit a kudos that is not yours.");
   });
 
-  it("should be able to update te kudos with panel's owner id", async () => {
+  it("should be able to update the kudos with panel's owner id", async () => {
     const kudosSlug = "my-kudos";
 
     const currentUpdatedAt = new Date("2021-01-01 00:00:00");
