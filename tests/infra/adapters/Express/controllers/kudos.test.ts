@@ -47,7 +47,7 @@ describe("Kudos Controller", () => {
     deleteKudosUseCase = new DeleteKudos(kudosRepository);
     updateKudosUseCase = new UpdateKudos(kudosRepository, panelRepository);
     showKudosUseCase = new ShowKudos(kudosRepository);
-    archiveKudosUseCase = new ArchiveKudos(kudosRepository);
+    archiveKudosUseCase = new ArchiveKudos(kudosRepository, panelRepository);
     presenter = new KudosPresenter();
 
     kudosController = new KudosController(

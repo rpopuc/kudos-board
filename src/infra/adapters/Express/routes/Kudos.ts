@@ -9,16 +9,18 @@ import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
+import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
 
 class Kudos {
   static setup(app: express.Application) {
     const repository = Container.get<KudosRepositoryInterface>(TYPES.KudosRepository);
+    const panelRepository = Container.get<PanelRepositoryInterface>(TYPES.KudosRepository);
 
     const createKudosUseCase = new CreateKudos(repository);
     const deleteKudosUseCase = new DeleteKudos(repository);
-    const updateKudosUseCase = new UpdateKudos(repository);
+    const updateKudosUseCase = new UpdateKudos(repository, panelRepository);
     const showKudosUseCase = new ShowKudos(repository);
-    const archiveKudosUseCase = new ArchiveKudos(repository);
+    const archiveKudosUseCase = new ArchiveKudos(repository, panelRepository);
 
     const controller = new KudosController(
       createKudosUseCase,
