@@ -1,12 +1,17 @@
 import DeleteKudos from "@/domain/Kudos/UseCases/DeleteKudos";
-import KudosEntity from "@/domain/Kudos/Entities/Kudos";
+import KudosEntity, { Status } from "@/domain/Kudos/Entities/Kudos";
 import KudosRepository from "@/domain/Kudos/Repositories/KudosRepository";
 import DeleteKudosErrorResponse from "@/domain/shared/Responses/DeleteErrorResponse";
 import KudosData from "@/domain/Kudos/DTO/KudosData";
 import DeleteKudosResponse from "@/domain/shared/Responses/DeleteDataResponse";
+import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
+import Kudos from "@/domain/Kudos/Entities/Kudos";
+import Panel from "@/domain/Panel/Entities/Panel";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 describe("DeleteKudos", () => {
-  let mockedRepository: KudosRepository;
+  let kudosRepository: KudosRepository;
+  let panelRepository: PanelRepository;
   let kudosData: KudosData;
   let kudos: KudosEntity;
 
@@ -21,20 +26,24 @@ describe("DeleteKudos", () => {
 
     kudos = new KudosEntity(kudosData);
 
-    mockedRepository = {
+    kudosRepository = {
       create: jest.fn(),
       update: jest.fn(),
       archive: jest.fn(),
       delete: jest.fn(),
       findBySlug: jest.fn(),
     } as KudosRepository;
+
+    panelRepository = {
+      findBySlug: jest.fn(),
+    } as Partial<PanelRepository> as PanelRepository;
   });
 
   test("should delete an existing kudos successfuly", async () => {
-    mockedRepository.findBySlug = jest.fn().mockReturnValue(kudos);
-    mockedRepository.delete = jest.fn().mockReturnValue(true);
+    kudosRepository.findBySlug = jest.fn().mockReturnValue(kudos);
+    kudosRepository.delete = jest.fn().mockReturnValue(true);
 
-    const deleteKudos = new DeleteKudos(mockedRepository);
+    const deleteKudos = new DeleteKudos(kudosRepository, panelRepository);
 
     const operationResponse = await deleteKudos.handle({ slug: kudos.slug, userId: "user-id" });
 
@@ -42,9 +51,9 @@ describe("DeleteKudos", () => {
   });
 
   test("should return a DeleteKudosResponse when trying to delete a non-existent kudos", async () => {
-    mockedRepository.delete = jest.fn().mockReturnValue(false);
+    kudosRepository.delete = jest.fn().mockReturnValue(false);
 
-    const deleteKudos = new DeleteKudos(mockedRepository);
+    const deleteKudos = new DeleteKudos(kudosRepository, panelRepository);
 
     const slug = "kudos";
     const operationResponse = await deleteKudos.handle({ slug, userId: "user-id" });
@@ -54,10 +63,10 @@ describe("DeleteKudos", () => {
   });
 
   test("should return a DeleteKudosErrorResponse when trying to delete a kudos", async () => {
-    mockedRepository.findBySlug = jest.fn().mockReturnValue(kudos);
-    mockedRepository.delete = jest.fn().mockReturnValue(false);
+    kudosRepository.findBySlug = jest.fn().mockReturnValue(kudos);
+    kudosRepository.delete = jest.fn().mockReturnValue(false);
 
-    const deleteKudos = new DeleteKudos(mockedRepository);
+    const deleteKudos = new DeleteKudos(kudosRepository, panelRepository);
 
     const operationResponse = await deleteKudos.handle({ slug: kudos.slug, userId: "user-id" });
 
@@ -67,15 +76,42 @@ describe("DeleteKudos", () => {
   });
 
   test("should return an error when trying to delete a kudos from another owner", async () => {
-    mockedRepository.findBySlug = jest.fn().mockReturnValue(kudos);
-    mockedRepository.delete = jest.fn().mockReturnValue(false);
+    kudosRepository.findBySlug = jest.fn().mockReturnValue(kudos);
+    kudosRepository.delete = jest.fn().mockReturnValue(false);
 
-    const deleteKudos = new DeleteKudos(mockedRepository);
+    const deleteKudos = new DeleteKudos(kudosRepository, panelRepository);
 
     const operationResponse = await deleteKudos.handle({ slug: kudos.slug, userId: "invalid-user-id" });
 
     expect(operationResponse).toBeInstanceOf(DeleteKudosErrorResponse);
     expect(operationResponse.errors[0].status).toBe("NOT_AUTHORIZED");
     expect(operationResponse.ok).toBe(false);
+  });
+
+  it("should be able to archive the kudos with panel's owner id", async () => {
+    const currentUpdatedAt = new Date("2021-01-01 00:00:00");
+    const existingKudosData = {
+      panelSlug: "panel-slug",
+      from: { name: "Owner", id: "owner-id" },
+      status: Status.ACTIVE,
+    } as Partial<Kudos> as Kudos;
+
+    const existingPanel = {
+      title: "Old Title",
+      owner: "panel-owner",
+      password: new PlainTextPassword("oldPassword"),
+      updatedAt: currentUpdatedAt,
+    } as Partial<Panel> as Panel;
+
+    kudosRepository.findBySlug = jest.fn().mockReturnValue(existingKudosData);
+    panelRepository.findBySlug = jest.fn().mockReturnValue(existingPanel);
+    kudosRepository.delete = jest.fn().mockImplementation(() => true);
+
+    const deleteKudos = new DeleteKudos(kudosRepository, panelRepository);
+
+    const operationResponse = await deleteKudos.handle({ slug: kudos.slug, userId: "panel-owner" });
+
+    expect(operationResponse.ok).toBe(true);
+    expect(kudosRepository.delete).toHaveBeenCalledTimes(1);
   });
 });
