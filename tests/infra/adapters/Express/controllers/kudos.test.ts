@@ -44,7 +44,7 @@ describe("Kudos Controller", () => {
     } as Partial<PanelRepository> as PanelRepository;
 
     createKudosUseCase = new CreateKudos(kudosRepository);
-    deleteKudosUseCase = new DeleteKudos(kudosRepository);
+    deleteKudosUseCase = new DeleteKudos(kudosRepository, panelRepository);
     updateKudosUseCase = new UpdateKudos(kudosRepository, panelRepository);
     showKudosUseCase = new ShowKudos(kudosRepository);
     archiveKudosUseCase = new ArchiveKudos(kudosRepository, panelRepository);
