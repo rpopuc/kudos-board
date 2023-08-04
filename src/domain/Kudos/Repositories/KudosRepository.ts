@@ -16,6 +16,8 @@ interface KudosRepository {
   archive(slug: string): Promise<boolean>;
 
   findBySlug(slug: string): Promise<KudosEntity | null>;
+
+  findByPanelSlug(panelSlug: string): Promise<KudosEntity[]>;
 }
 
 export default KudosRepository;

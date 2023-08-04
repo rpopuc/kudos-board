@@ -7,6 +7,7 @@ import KudosPresenter from "@/domain/Kudos/Presenters/KudosPresenter";
 import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
+import ListKudos from "@/domain/Kudos/UseCases/ListKudos";
 
 class KudosController {
   constructor(
@@ -15,6 +16,7 @@ class KudosController {
     private updateKudosUseCase: UpdateKudos,
     private showKudosUseCase: ShowKudos,
     private archiveKudosUseCase: ArchiveKudos,
+    private listKudosUseCase: ListKudos,
     private presenter: KudosPresenter,
   ) {}
 
@@ -101,6 +103,24 @@ class KudosController {
         res.status(200).json({ message: "Kudos archived successfully" });
       } else {
         res.status(400).json({ errors: archiveKudosResponse.errors.map(error => error.message) });
+      }
+    });
+  }
+
+  list(): RequestHandler {
+    return asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const response = await this.listKudosUseCase.handle({
+        panelSlug: req.params.panelSlug,
+      });
+
+      if (response.ok && response.data !== null) {
+        res.json(this.presenter.many(response.data));
+      } else {
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
       }
     });
   }

@@ -14,6 +14,7 @@ describe("ShowKudos", () => {
       archive: jest.fn(),
       delete: jest.fn(),
       findBySlug: jest.fn(),
+      findByPanelSlug: jest.fn(),
     } as KudosRepository;
 
     showKudos = new ShowKudos(mockRepository);

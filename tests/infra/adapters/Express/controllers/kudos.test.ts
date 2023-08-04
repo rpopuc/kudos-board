@@ -18,6 +18,8 @@ import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
 import ArchiveKudosResponse from "@/domain/shared/Responses/ArchiveDataResponse";
 import KudosController from "@/infra/adapters/Express/controllers/KudosController";
 import PanelRepository from "@/domain/Panel/Repositories/PanelRepository";
+import ListKudos from "@/domain/Kudos/UseCases/ListKudos";
+import ListKudosResponse from "@/domain/shared/Responses/ListDataResponse";
 
 describe("Kudos Controller", () => {
   let kudosController: KudosController;
@@ -28,6 +30,7 @@ describe("Kudos Controller", () => {
   let updateKudosUseCase: UpdateKudos;
   let showKudosUseCase: ShowKudos;
   let archiveKudosUseCase: ArchiveKudos;
+  let listKudosUseCase: ListKudos;
   let presenter: KudosPresenter;
 
   beforeEach(() => {
@@ -37,6 +40,7 @@ describe("Kudos Controller", () => {
       archive: jest.fn(),
       delete: jest.fn(),
       findBySlug: jest.fn(),
+      findByPanelSlug: jest.fn(),
     } as KudosRepository;
 
     panelRepository = {
@@ -48,6 +52,7 @@ describe("Kudos Controller", () => {
     updateKudosUseCase = new UpdateKudos(kudosRepository, panelRepository);
     showKudosUseCase = new ShowKudos(kudosRepository);
     archiveKudosUseCase = new ArchiveKudos(kudosRepository, panelRepository);
+    listKudosUseCase = new ListKudos(kudosRepository);
     presenter = new KudosPresenter();
 
     kudosController = new KudosController(
@@ -56,6 +61,7 @@ describe("Kudos Controller", () => {
       updateKudosUseCase,
       showKudosUseCase,
       archiveKudosUseCase,
+      listKudosUseCase,
       presenter,
     );
   });
@@ -460,6 +466,76 @@ describe("Kudos Controller", () => {
       expect(archiveKudosUseCase.handle).toHaveBeenCalledTimes(1);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["You can not archive a kudos that does not exist."] });
+    });
+  });
+
+  describe("@list", () => {
+    it("should list the stored kudos", async () => {
+      const mockRequest = {
+        params: {
+          panelSlug: "panel-slug",
+        },
+      } as Request<{ panelSlug: string }>;
+
+      const mockResponse = {
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      const kudosData = {
+        from: { id: "test", name: "Test Name" },
+        to: "to name",
+        panelSlug: "panel-slug",
+        title: "Test Kudos",
+        description: "Test Kudos Description",
+      };
+      const kudos = [new Kudos(kudosData)];
+      const presenterData = [
+        {
+          from: "test",
+          to: "to name",
+          title: "Test Kudos",
+          description: "Test Kudos Description",
+          slug: "test-kudos",
+          createdAt: new Date(),
+        },
+      ] as KudosPresentation[];
+
+      jest.spyOn(listKudosUseCase, "handle").mockResolvedValueOnce(new ListKudosResponse<Kudos>(true, kudos));
+      jest.spyOn(presenter, "many").mockReturnValue(presenterData);
+
+      await kudosController.list()(mockRequest, mockResponse, () => {});
+
+      expect(listKudosUseCase.handle).toHaveBeenCalledWith({ panelSlug: "panel-slug" });
+      expect(presenter.many).toHaveBeenCalledWith(kudos);
+      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining(presenterData));
+    });
+
+    it("should return an error message when kudos not found", async () => {
+      const mockRequest = {
+        params: {
+          panelSlug: "panel-slug",
+        },
+      } as Request<{ panelSlug: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(listKudosUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ListKudosResponse<Kudos>(false, [], [new BusinessError("KUDOS_NOT_FOUND", "Could not find kudos.")]),
+        );
+
+      jest.spyOn(presenter, "many");
+
+      await kudosController.list()(mockRequest, mockResponse, () => {});
+
+      expect(presenter.many).not.toHaveBeenCalled();
+      expect(listKudosUseCase.handle).toHaveBeenCalledWith({ panelSlug: "panel-slug" });
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find kudos."] });
     });
   });
 });

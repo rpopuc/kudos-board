@@ -15,6 +15,10 @@ class KudosPresenter {
 
     return { from: from.name, to, title, description, slug, createdAt };
   }
+
+  many(kudos: Kudos[]): KudosPresentation[] {
+    return kudos.map(kudos => this.single(kudos));
+  }
 }
 
 export default KudosPresenter;
