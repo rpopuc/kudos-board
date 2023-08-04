@@ -22,6 +22,7 @@ describe("UpdateKudos", () => {
       archive: jest.fn(),
       delete: jest.fn(),
       findBySlug: jest.fn(),
+      findByPanelSlug: jest.fn(),
     } as KudosRepository;
 
     panelRepository = {

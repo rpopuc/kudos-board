@@ -15,6 +15,7 @@ describe("KudosRepository", () => {
   beforeEach(() => {
     kudosCollection = {
       insertOne: jest.fn().mockResolvedValue({ _id: "kudosId" }),
+      find: jest.fn(),
       findFirst: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -293,6 +294,55 @@ describe("KudosRepository", () => {
       const kudos = await kudosRepository.findBySlug("test-kudos");
 
       expect(kudos).toBeNull();
+    });
+  });
+
+  describe("findByPanelSlug", () => {
+    it("should return a list of kudos from panel if it exists", async () => {
+      const now = new Date();
+
+      const kudosData: KudosData = {
+        slug: "test-kudos",
+        panelSlug: "panel-slug",
+        title: "Test Kudos",
+        description: "Description Kudos",
+        from: { id: "user-id", name: "John Doe" },
+        to: "To Name",
+        createdAt: now,
+        updatedAt: now,
+        status: Status.ACTIVE,
+      } as KudosData;
+
+      jest
+        .spyOn(kudosCollection, "find")
+        .mockImplementationOnce(async () => [
+          new KudosModel(
+            kudosData.slug ?? "",
+            kudosData.panelSlug ?? "",
+            kudosData.title,
+            kudosData.description,
+            kudosData.from,
+            kudosData.to,
+            now,
+            now,
+            Status.ACTIVE,
+            new ObjectId(),
+          ),
+        ]);
+
+      const kudos = await kudosRepository.findByPanelSlug("panel-slug");
+
+      expect(kudosCollection.find).toHaveBeenCalledTimes(1);
+      expect(kudos).toHaveLength(1);
+    });
+
+    it("should return an empty list if panel slug does not match", async () => {
+      jest.spyOn(kudosCollection, "find").mockImplementationOnce(async () => []);
+
+      const kudos = await kudosRepository.findByPanelSlug("panel-slug");
+
+      expect(kudosCollection.find).toHaveBeenCalledTimes(1);
+      expect(kudos).toHaveLength(0);
     });
   });
 });

@@ -1,14 +1,14 @@
-import ShowDataResponse from "@/domain/shared/Responses/ShowDataResponse";
+import ListDataResponse from "@/domain/shared/Responses/ListDataResponse";
 import BusinessError from "@/domain/shared/errors/BusinessError";
 
 type TestData = {
   message: string;
 };
 
-describe("ShowDataResponse", () => {
+describe("ListDataResponse", () => {
   test("should add an error", () => {
     const businessError = new BusinessError("ERROR_STATUS", "Business Error");
-    const response = new ShowDataResponse<TestData>(true, null, []);
+    const response = new ListDataResponse<TestData>(true, null, []);
 
     expect(response.ok).toBe(true);
     expect(response.data).toBe(null);
@@ -21,12 +21,14 @@ describe("ShowDataResponse", () => {
   });
 
   test("should create an instance with a valid data", () => {
-    const data: TestData = {
-      message: "Test",
-    };
+    const data: TestData[] = [
+      {
+        message: "Test",
+      },
+    ];
 
     const errors = [new BusinessError("ERROR_STATUS_1", "Error 1"), new BusinessError("ERROR_STATUS_2", "Error 2")];
-    const response = new ShowDataResponse(true, data, errors);
+    const response = new ListDataResponse(true, data, errors);
 
     expect(response.ok).toBe(true);
     expect(response.data).toBe(data);

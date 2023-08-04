@@ -10,6 +10,7 @@ import UpdateKudos from "@/domain/Kudos/UseCases/UpdateKudos";
 import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
 import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
+import ListKudos from "@/domain/Kudos/UseCases/ListKudos";
 
 class Kudos {
   static setup(app: express.Application) {
@@ -17,10 +18,11 @@ class Kudos {
     const panelRepository = Container.get<PanelRepositoryInterface>(TYPES.KudosRepository);
 
     const createKudosUseCase = new CreateKudos(repository);
-    const deleteKudosUseCase = new DeleteKudos(repository);
+    const deleteKudosUseCase = new DeleteKudos(repository, panelRepository);
     const updateKudosUseCase = new UpdateKudos(repository, panelRepository);
     const showKudosUseCase = new ShowKudos(repository);
     const archiveKudosUseCase = new ArchiveKudos(repository, panelRepository);
+    const listKudosUseCase = new ListKudos(repository);
 
     const controller = new KudosController(
       createKudosUseCase,
@@ -28,6 +30,7 @@ class Kudos {
       updateKudosUseCase,
       showKudosUseCase,
       archiveKudosUseCase,
+      listKudosUseCase,
       new KudosPresenter(),
     );
 
@@ -36,6 +39,7 @@ class Kudos {
     app.put("/kudos/:slug", controller.update());
     app.delete("/kudos/:slug", controller.delete());
     app.post("/kudos/:slug", controller.show());
+    app.get("/kudos/:panelSlug", controller.list());
   }
 }
 

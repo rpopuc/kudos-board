@@ -24,6 +24,7 @@ describe("CreateKudos", () => {
         archive: jest.fn(),
         delete: jest.fn(),
         findBySlug: jest.fn(),
+        findByPanelSlug: jest.fn(),
       } as Repository;
 
       createKudos = new CreateKudos(repositoryMock);
@@ -48,6 +49,7 @@ describe("CreateKudos", () => {
         update: jest.fn(),
         delete: jest.fn(),
         findBySlug: jest.fn(),
+        findByPanelSlug: jest.fn(),
       } as Repository;
 
       const createKudos = new CreateKudos(kudosRepository);

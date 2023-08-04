@@ -117,6 +117,26 @@ class KudosRepository implements KudosRepositoryInterface {
       status: kudosDocument.status,
     });
   }
+
+  async findByPanelSlug(panelSlug: string): Promise<KudosEntity[]> {
+    await this.db.connect();
+    const collection = await this.db.getCollection<KudosModel>("kudos");
+    const kudosDocuments = await collection.find({ panelSlug } as KudosModel);
+
+    return kudosDocuments.map(kudosDocument => {
+      return new KudosEntity({
+        slug: kudosDocument.slug,
+        panelSlug: kudosDocument.panelSlug,
+        title: kudosDocument.title,
+        description: kudosDocument.description,
+        from: kudosDocument.from,
+        to: kudosDocument.to,
+        createdAt: kudosDocument.createdAt,
+        updatedAt: kudosDocument.updatedAt,
+        status: kudosDocument.status,
+      });
+    }) as KudosEntity[];
+  }
 }
 
 export default KudosRepository;
