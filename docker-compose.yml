@@ -9,7 +9,7 @@ services:
       - ./:/var/www/
     command: npm run dev
     environment:
-      - PORT=80
+      - PORT=3001
 
   database:
     image: mongo:latest

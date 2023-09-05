@@ -4,4 +4,4 @@ services:
 
   app:
     ports:
-      - 80:80
+      - 3001:3001
