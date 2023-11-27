@@ -1,0 +1,5 @@
+definitions:
+  KudosJsonUpdateRequest:
+    application/json:
+      schema:
+        $ref: "#/definitions/KudosUpdateRequest"

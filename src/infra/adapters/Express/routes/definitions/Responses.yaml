@@ -1,0 +1,43 @@
+definitions:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  responses:
+      NotFound:
+        description: The specified resource was not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/schemas/Error'
+      Unauthorized:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/schemas/Error'
+      ServerError:
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/schemas/Error'
+      KudosInvalidOwner:
+        description: Kudos não pertence ao usuário
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/schemas/Error'
+      KudosInvalidPanel:
+        description: Kudos não pertence ao painel
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/schemas/Error'

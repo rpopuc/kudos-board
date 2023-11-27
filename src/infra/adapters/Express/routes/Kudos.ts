@@ -34,11 +34,163 @@ class Kudos {
       new KudosPresenter(),
     );
 
+    /**
+     * @swagger
+     * /kudos:
+     *   post:
+     *     tags: [Kudos]
+     *     summary: Adiciona um novo kudos.
+     *     description: Adiciona um novo kudos.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         $ref: '#/definitions/KudosJsonRequest'
+     *     responses:
+     *       200:
+     *         description: Kudos registrado com sucesso.
+     *         content:
+     *            $ref: '#/definitions/KudosJsonResponse'
+     *       404:
+     *         $ref: '#/definitions/responses/NotFound'
+     *       500:
+     *         $ref: '#/definitions/responses/ServerError'
+     */
     app.post("/kudos", controller.store());
+
+    /**
+     * @swagger
+     * /kudos:
+     *   put:
+     *      tags: [Kudos]
+     *      summary: Arquiva um Kudos
+     *      description: Arquiva um kudos
+     *      parameters:
+     *        - in: path
+     *          name: slug
+     *          required: true
+     *          description: Slug do kudos
+     *          schema:
+     *            type: string
+     *            example: "kudos-slug"
+     *      responses:
+     *       200:
+     *         description: Kudos arquivado com sucesso.
+     *         content:
+     *            application/json:
+     *             schema:
+     *                type: object
+     *                properties:
+     *                    message:
+     *                       type: string
+     *                       example: "Kudos archived successfully"
+     *       404:
+     *         $ref: '#/definitions/responses/NotFound'
+     *       500:
+     *         $ref: '#/definitions/responses/ServerError'
+     */
     app.put("/kudos/archive/:slug", controller.archive());
+
+    /**
+     * @swagger
+     * /kudos/{slug}:
+     *   put:
+     *      tags: [Kudos]
+     *      summary: Atualiza os dados de um Kudos
+     *      description: Atualiza os dados de um Kudos
+     *      parameters:
+     *        - in: path
+     *          name: slug
+     *          required: true
+     *          description: Slug do kudos
+     *          schema:
+     *            type: string
+     *            example: "kudos-slug"
+     *      requestBody:
+     *          required: true
+     *          content:
+     *             $ref: '#/definitions/KudosJsonUpdateRequest'
+     *      responses:
+     *       200:
+     *         description: Kudos atualizado com sucesso.
+     *         content:
+     *            $ref: '#/definitions/KudosJsonResponse'
+     *       404:
+     *         $ref: '#/definitions/responses/NotFound'
+     *       500:
+     *         $ref: '#/definitions/responses/ServerError'
+     */
     app.put("/kudos/:slug", controller.update());
+
+    /**
+     * @swagger
+     * /kudos/{slug}:
+     *   delete:
+     *      tags: [Kudos]
+     *      summary: Exclui um Kudos
+     *      description: Exlui um Kudos
+     *      parameters:
+     *        - in: path
+     *          name: slug
+     *          required: true
+     *          description: Slug do kudos
+     *          schema:
+     *            type: string
+     *            example: "kudos-slug"
+     *      responses:
+     *       200:
+     *         description: Kudos excluído com sucesso.
+     *         content:
+     *            application/json:
+     *              schema:
+     *                 type: object
+     *                 properties:
+     *                    message:
+     *                      type: string
+     *                      example: "Kudos deleted successfully"
+     *       404:
+     *         $ref: '#/definitions/responses/NotFound'
+     *       500:
+     *         $ref: '#/definitions/responses/ServerError'
+     */
     app.delete("/kudos/:slug", controller.delete());
+
+    /**
+     * @swagger
+     * /kudos/{slug}:
+     *   post:
+     *      tags: [Kudos]
+     *      summary: Obtém os dados de um Kudos
+     *      description: Obtém os dados de um Kudos
+     *      parameters:
+     *        - in: path
+     *          name: slug
+     *          required: true
+     *          description: Slug do kudos
+     *          schema:
+     *            type: string
+     *            example: "kudos-slug"
+     *      requestBody:
+     *          required: false
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                    password:
+     *                      type: string
+     *                      example: "Kudos panel password"
+     *      responses:
+     *       200:
+     *         description: Dados do Kudos
+     *         content:
+     *            $ref: '#/definitions/KudosJsonResponse'
+     *       404:
+     *         $ref: '#/definitions/responses/NotFound'
+     *       500:
+     *         $ref: '#/definitions/responses/ServerError'
+     */
     app.post("/kudos/:slug", controller.show());
+
     app.get("/kudos/:panelSlug", controller.list());
   }
 }

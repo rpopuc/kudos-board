@@ -19,6 +19,12 @@ class PanelController {
     private presenter: PanelPresenter,
   ) {}
 
+  index(): RequestHandler {
+    return asyncHandler(async (req: Request, res: Response): Promise<void> => {
+        res.json({ok: true}).status(200);
+    })
+  }
+
   show(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;

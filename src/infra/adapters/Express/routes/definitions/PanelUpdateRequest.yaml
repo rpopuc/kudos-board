@@ -1,0 +1,14 @@
+definitions:
+  PanelUpdateRequest:
+    application/json:
+      schema:
+        properties:
+          title:
+            type: string
+            example: "Kudos Title"
+          description:
+            type: string
+            example: "Kudos Description"
+          to:
+            type: string
+            example: "Kudos Receiver"
