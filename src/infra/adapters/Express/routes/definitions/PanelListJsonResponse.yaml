@@ -1,7 +1,0 @@
-definitions:
-  PanelListJsonResponse:
-    application/json:
-      schema:
-        type: array
-        items:
-          $ref: "#/definitions/Panel"

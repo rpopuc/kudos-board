@@ -1,0 +1,686 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Kudos Board",
+    "version": "1.0.0",
+    "description": "API Kudos Board"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Base URL"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "KudosRequest": {
+        "type": "object",
+        "required": [
+          "panelSlug",
+          "title",
+          "description",
+          "from",
+          "to"
+        ],
+        "properties": {
+          "panelSlug": {
+            "type": "string",
+            "example": "panel123"
+          },
+          "title": {
+            "type": "string",
+            "example": "Kudos Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Kudos Description"
+          },
+          "from": {
+            "type": "string",
+            "example": "Kudos Author"
+          },
+          "to": {
+            "type": "string",
+            "example": "Kudos Receiver"
+          }
+        }
+      },
+      "KudosResponse": {
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "title",
+          "description",
+          "slug",
+          "createdAt"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "Kudos Slug identifier"
+          },
+          "from": {
+            "type": "string",
+            "example": "Kudos Author"
+          },
+          "to": {
+            "type": "string",
+            "example": "Kudos Receiver"
+          },
+          "title": {
+            "type": "string",
+            "example": "Kudos Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Kudos Description"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "Kudos` creation date"
+          }
+        }
+      },
+      "KudosUpdateRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Kudos Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Kudos Description"
+          },
+          "to": {
+            "type": "string",
+            "example": "Kudos Receiver"
+          }
+        }
+      },
+      "PanelListResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PanelResponse"
+        }
+      },
+      "PanelRequest": {
+        "type": "object",
+        "required": [
+          "panelSlug",
+          "title",
+          "description",
+          "from",
+          "to"
+        ],
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "panel123"
+          },
+          "clientPassword": {
+            "type": "string",
+            "example": "clientPanel123"
+          },
+          "title": {
+            "type": "string",
+            "example": "Panel Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Panel Description"
+          }
+        }
+      },
+      "PanelResponse": {
+        "type": "object",
+        "required": [
+          "owner",
+          "title",
+          "slug",
+          "createdAt"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "Panel slug identifier"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Panel owner"
+          },
+          "title": {
+            "type": "string",
+            "example": "Panel Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Panel Description"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "Panel creation date"
+          }
+        }
+      },
+      "PanelUpdateRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Kudos Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "Kudos Description"
+          },
+          "to": {
+            "type": "string",
+            "example": "Kudos Receiver"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/kudos": {
+      "post": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Adiciona um novo kudos.",
+        "description": "Adiciona um novo kudos.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KudosRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Kudos registrado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KudosResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/kudos/archive/{slug}": {
+      "put": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Arquiva um Kudos",
+        "description": "Arquiva um kudos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do kudos",
+            "schema": {
+              "type": "string",
+              "example": "kudos-slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kudos arquivado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Kudos archived successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/kudos/{slug}": {
+      "put": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Atualiza os dados de um Kudos",
+        "description": "Atualiza os dados de um Kudos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do kudos",
+            "schema": {
+              "type": "string",
+              "example": "kudos-slug"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KudosUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Kudos atualizado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KudosResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Exclui um Kudos",
+        "description": "Exlui um Kudos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do kudos",
+            "schema": {
+              "type": "string",
+              "example": "kudos-slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kudos excluído com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Kudos deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Obtém os dados de um Kudos",
+        "description": "Obtém os dados de um Kudos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do kudos",
+            "schema": {
+              "type": "string",
+              "example": "kudos-slug"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "Kudos panel password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dados do Kudos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KudosResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/panel": {
+      "post": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Adiciona um novo painel.",
+        "description": "Adiciona um novo painel.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PanelRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Painel registrado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Painel não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Lista os painéis do usuário",
+        "description": "Lista os painéis do usuário",
+        "responses": {
+          "200": {
+            "description": "Painéis do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Painel não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/panel/archive/{slug}": {
+      "put": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Arquiva um Painel",
+        "description": "Arquiva um painel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do painel",
+            "schema": {
+              "type": "string",
+              "example": "panel-slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Painel arquivado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Panel archived successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Painel não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/panel/{slug}": {
+      "put": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Atualiza os dados de um Painel.",
+        "description": "Atualiza os dados de um Painel.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do painel",
+            "schema": {
+              "type": "string",
+              "example": "panel-slug"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PanelUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Painel atualizado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Painel não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Exclui um Painel",
+        "description": "Exlui um Painel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do painel",
+            "schema": {
+              "type": "string",
+              "example": "painel-slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Painel excluído com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Panel deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Panel"
+        ],
+        "summary": "Obtém os dados de um Painel",
+        "description": "Obtém os dados de um Painel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "description": "Slug do painel",
+            "schema": {
+              "type": "string",
+              "example": "panel-slug"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "Kudos panel password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dados do Kudos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Painel não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

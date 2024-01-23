@@ -1,0 +1,23 @@
+components:
+  schemas:
+    PanelRequest:
+      type: object
+      required:
+        - panelSlug
+        - title
+        - description
+        - from
+        - to
+      properties:
+        password:
+          type: string
+          example: "panel123"
+        clientPassword:
+          type: string
+          example: "clientPanel123"
+        title:
+          type: string
+          example: "Panel Title"
+        description:
+          type: string
+          example: "Panel Description"

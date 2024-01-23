@@ -1,5 +1,0 @@
-definitions:
-  PanelJsonRequest:
-    application/json:
-      schema:
-        $ref: "#/definitions/PanelRequest"

@@ -44,22 +44,26 @@ class Kudos {
      *     requestBody:
      *       required: true
      *       content:
-     *         $ref: '#/definitions/KudosJsonRequest'
+     *         application/json:
+     *            schema:
+     *              $ref: "#/components/schemas/KudosRequest"
      *     responses:
      *       200:
      *         description: Kudos registrado com sucesso.
      *         content:
-     *            $ref: '#/definitions/KudosJsonResponse'
+     *            application/json:
+     *              schema:
+     *                $ref: "#/components/schemas/KudosResponse"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Kudos não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.post("/kudos", controller.store());
 
     /**
      * @swagger
-     * /kudos:
+     * /kudos/archive/{slug}:
      *   put:
      *      tags: [Kudos]
      *      summary: Arquiva um Kudos
@@ -84,9 +88,9 @@ class Kudos {
      *                       type: string
      *                       example: "Kudos archived successfully"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Kudos não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.put("/kudos/archive/:slug", controller.archive());
 
@@ -108,16 +112,20 @@ class Kudos {
      *      requestBody:
      *          required: true
      *          content:
-     *             $ref: '#/definitions/KudosJsonUpdateRequest'
+     *            application/json:
+     *              schema:
+     *                 $ref: "#/components/schemas/KudosUpdateRequest"
      *      responses:
      *       200:
      *         description: Kudos atualizado com sucesso.
      *         content:
-     *            $ref: '#/definitions/KudosJsonResponse'
+     *            application/json:
+     *               schema:
+     *                 $ref: "#/components/schemas/KudosResponse"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Kudos não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.put("/kudos/:slug", controller.update());
 
@@ -148,9 +156,9 @@ class Kudos {
      *                      type: string
      *                      example: "Kudos deleted successfully"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Kudos não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.delete("/kudos/:slug", controller.delete());
 
@@ -183,11 +191,13 @@ class Kudos {
      *       200:
      *         description: Dados do Kudos
      *         content:
-     *            $ref: '#/definitions/KudosJsonResponse'
+     *            application/json:
+     *               schema:
+     *                 $ref: "#/components/schemas/KudosResponse"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Kudos não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.post("/kudos/:slug", controller.show());
 

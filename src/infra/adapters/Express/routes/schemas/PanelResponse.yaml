@@ -1,0 +1,25 @@
+components:
+  schemas:
+    PanelResponse:
+      type: object
+      required:
+        - owner
+        - title
+        - slug
+        - createdAt
+      properties:
+        slug:
+          type: string
+          example: "Panel slug identifier"
+        owner:
+          type: string
+          example: "Panel owner"
+        title:
+          type: string
+          example: "Panel Title"
+        description:
+          type: string
+          example: "Panel Description"
+        createdAt:
+          type: string
+          example: "Panel creation date"

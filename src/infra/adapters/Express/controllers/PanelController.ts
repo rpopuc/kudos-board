@@ -21,8 +21,8 @@ class PanelController {
 
   index(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-        res.json({ok: true}).status(200);
-    })
+      res.json({ ok: true }).status(200);
+    });
   }
 
   show(): RequestHandler {

@@ -14,7 +14,8 @@
     "dev": "ts-node-dev --respawn --watch ./src ./index.ts 0.0.0.0",
     "help": "ts-node-dev --help",
     "prettier": "prettier -c 'src/**/*.ts' 'tests/**/*.ts'",
-    "prettier:fix": "prettier -w 'src/**/*.ts' 'tests/**/*.ts'"
+    "prettier:fix": "prettier -w 'src/**/*.ts' 'tests/**/*.ts'",
+    "build-swagger": "swagger-jsdoc -d definition.json ./src/infra/adapters/Express/routes/*.ts ./src/infra/adapters/Express/routes/schemas/*.yaml"
   },
   "author": "",
   "license": "ISC",

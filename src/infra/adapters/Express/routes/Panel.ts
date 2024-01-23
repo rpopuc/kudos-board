@@ -41,16 +41,20 @@ class Panel {
      *     requestBody:
      *       required: true
      *       content:
-     *         $ref: '#/definitions/PanelJsonRequest'
+     *          application/json:
+     *             schema:
+     *                $ref: '#/components/schemas/PanelRequest'
      *     responses:
      *       200:
      *         description: Painel registrado com sucesso.
      *         content:
-     *            $ref: '#/definitions/PanelJsonResponse'
+     *            application/json:
+     *               schema:
+     *                  $ref: '#/components/schemas/PanelResponse'
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Painel não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.post("/panel", controller.store());
 
@@ -81,9 +85,9 @@ class Panel {
      *                       type: string
      *                       example: "Panel archived successfully"
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Painel não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.put("/panel/archive/:slug", controller.archive());
 
@@ -105,16 +109,20 @@ class Panel {
      *      requestBody:
      *          required: true
      *          content:
-     *             $ref: '#/definitions/PanelJsonUpdateRequest'
+     *              application/json:
+     *                schema:
+     *                   $ref: '#/components/schemas/PanelUpdateRequest'
      *      responses:
      *       200:
      *         description: Painel atualizado com sucesso.
      *         content:
-     *            $ref: '#/definitions/PanelJsonResponse'
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/PanelResponse'
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Painel não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.put("/panel/:slug", controller.update());
 
@@ -145,7 +153,7 @@ class Panel {
      *                      type: string
      *                      example: "Panel deleted successfully"
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.delete("/panel/:slug", controller.delete());
 
@@ -178,11 +186,13 @@ class Panel {
      *       200:
      *         description: Dados do Kudos
      *         content:
-     *            $ref: '#/definitions/PanelJsonResponse'
+     *            application/json:
+     *              schema:
+     *                $ref: '#/components/schemas/PanelResponse'
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Painel não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.post("/panel/:slug", controller.show());
 
@@ -197,11 +207,13 @@ class Panel {
      *       200:
      *         description: Painéis do usuário
      *         content:
-     *            $ref: '#/definitions/PanelListJsonResponse'
+     *            application/json:
+     *              schema:
+     *                 $ref: '#/components/schemas/PanelListResponse'
      *       404:
-     *         $ref: '#/definitions/responses/NotFound'
+     *         description: Painel não encontrado.
      *       500:
-     *         $ref: '#/definitions/responses/ServerError'
+     *         description: Erro interno.
      */
     app.get("/panel", controller.index());
   }

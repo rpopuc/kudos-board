@@ -1,5 +1,0 @@
-definitions:
-  KudosJsonResponse:
-    application/json:
-      schema:
-        $ref: "#/definitions/KudosResponse"
