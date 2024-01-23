@@ -10,6 +10,7 @@ components:
       properties:
         slug:
           type: string
+          format: uuid
           example: "Panel slug identifier"
         owner:
           type: string
@@ -22,4 +23,5 @@ components:
           example: "Panel Description"
         createdAt:
           type: string
+          format: date-time
           example: "Panel creation date"

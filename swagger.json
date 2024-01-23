@@ -151,10 +151,12 @@
         "properties": {
           "slug": {
             "type": "string",
+            "format": "uuid",
             "example": "Panel slug identifier"
           },
           "owner": {
             "type": "string",
+            "format": "^[a-zA-Z]([A-Za-z ]+){3}$",
             "example": "Panel owner"
           },
           "title": {
@@ -167,6 +169,7 @@
           },
           "createdAt": {
             "type": "string",
+            "format": "date-time",
             "example": "Panel creation date"
           }
         }

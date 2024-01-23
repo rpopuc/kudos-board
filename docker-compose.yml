@@ -2,6 +2,30 @@ version: "3"
 
 services:
 
+  proxy:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
+      - "--certificatesResolvers.myresolver.acme.email=youremail@example.com"
+      - "--certificatesResolvers.myresolver.acme.storage=/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ".docker/config/traefik/acme.json:/acme.json"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.local`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+
   app:
     build:
       context: ./.docker/build/app
@@ -10,6 +34,12 @@ services:
     command: npm run dev
     environment:
       - PORT=3001
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.appplication.rule=Host(`${APP_URL}`) && !PathPrefix(`${MOCK_API_PATH}`)"
+      - "traefik.http.routers.appplication.entrypoints=websecure"
+      - "traefik.http.routers.appplication.tls=true"
+      - "traefik.http.services.appplication.loadbalancer.server.port=3001"
 
   database:
     image: mongo:latest
@@ -19,7 +49,7 @@ services:
       - .docker/data/mongo:/data/db
       - .docker/config/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
-  mock:
+  mock-api:
     image: muonsoft/openapi-mock
     environment:
       OPENAPI_MOCK_SPECIFICATION_URL: '/var/www/swagger.json'
@@ -29,3 +59,11 @@ services:
       - .:/var/www/
     working_dir: /var/www/
     tty: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mqm_backend.rule=Host(`${APP_URL}`) && PathPrefix(`${MOCK_API_PATH}`)"
+      - "traefik.http.routers.mqm_backend.entrypoints=websecure"
+      - "traefik.http.routers.mqm_backend.tls=true"
+      - "traefik.http.services.mqm_backend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.mqm_backend.middlewares=mqm_strip-api-prefix@docker"
+      - "traefik.http.middlewares.mqm_strip-api-prefix.stripprefix.prefixes=${MOCK_API_PATH}"
