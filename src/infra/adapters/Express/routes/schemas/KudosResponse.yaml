@@ -29,3 +29,7 @@ components:
           type: string
           format: date-time
           example: "Kudos` creation date"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "Kudos` last update date"

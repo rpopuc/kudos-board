@@ -52,7 +52,7 @@ services:
   mock-api:
     image: muonsoft/openapi-mock
     environment:
-      OPENAPI_MOCK_SPECIFICATION_URL: '/var/www/swagger.json'
+      OPENAPI_MOCK_SPECIFICATION_URL: 'http://app:3001/docs.json'
     ports:
       - "8080:8080"
     volumes:
@@ -67,3 +67,5 @@ services:
       - "traefik.http.services.mqm_backend.loadbalancer.server.port=8080"
       - "traefik.http.routers.mqm_backend.middlewares=mqm_strip-api-prefix@docker"
       - "traefik.http.middlewares.mqm_strip-api-prefix.stripprefix.prefixes=${MOCK_API_PATH}"
+    depends_on:
+      - app

@@ -463,7 +463,7 @@
           "200": {
             "description": "Dados do Kudos",
             "content": {
-              "application/xml": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/KudosListResponse"
                 }
