@@ -164,6 +164,35 @@ class Kudos {
 
     /**
      * @swagger
+     * /kudos/panel/{panelSlug}:
+     *   get:
+     *      tags: [Kudos]
+     *      summary: Obtém a lista de kudos a partir de um panel
+     *      description: Obtém os dados de um Kudos
+     *      parameters:
+     *        - in: path
+     *          name: panelSlug
+     *          required: true
+     *          description: Slug do panelSlug
+     *          schema:
+     *            type: string
+     *            example: "panel-slug"
+     *      responses:
+     *       200:
+     *         description: Dados do Kudos
+     *         content:
+     *            application/json:
+     *               schema:
+     *                 $ref: "#/components/schemas/KudosListResponse"
+     *       404:
+     *         description: Kudos não encontrado.
+     *       500:
+     *         description: Erro interno.
+     */
+    app.get("/kudos/panel/:panelSlug", controller.list());
+
+    /**
+     * @swagger
      * /kudos/{slug}:
      *   post:
      *      tags: [Kudos]
@@ -200,8 +229,6 @@ class Kudos {
      *         description: Erro interno.
      */
     app.post("/kudos/:slug", controller.show());
-
-    app.get("/kudos/:panelSlug", controller.list());
   }
 }
 

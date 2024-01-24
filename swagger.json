@@ -20,6 +20,12 @@
       }
     },
     "schemas": {
+      "KudosListResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/KudosResponse"
+        }
+      },
       "KudosRequest": {
         "type": "object",
         "required": [
@@ -156,7 +162,6 @@
           },
           "owner": {
             "type": "string",
-            "format": "^[a-zA-Z]([A-Za-z ]+){3}$",
             "example": "Panel owner"
           },
           "title": {
@@ -422,6 +427,45 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/KudosResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kudos não encontrado."
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/kudos/panel/{panelSlug}": {
+      "get": {
+        "tags": [
+          "Kudos"
+        ],
+        "summary": "Obtém a lista de kudos a partir de um panel",
+        "description": "Obtém os dados de um Kudos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "panelSlug",
+            "required": true,
+            "description": "Slug do panelSlug",
+            "schema": {
+              "type": "string",
+              "example": "panel-slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do Kudos",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/KudosListResponse"
                 }
               }
             }
