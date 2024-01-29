@@ -1,5 +1,7 @@
 version: "3"
 
+name: kudos-board-api
+
 services:
 
   proxy:
@@ -25,6 +27,8 @@ services:
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+      # - "traefik.http.routers.traefik.entrypoints=web"
+      # - "traefik.http.routers.traefik.middlewares=redirect-to-https"
 
   app:
     build:

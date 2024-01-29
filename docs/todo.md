@@ -1,3 +1,10 @@
+# Todo
+
+- [ ] Adicionar autenticação via JWT
+
+
+----
+
 - atualizar controllers Delete e Update para passar user id via header
 
 - MongoRepository
