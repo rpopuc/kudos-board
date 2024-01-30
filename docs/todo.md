@@ -5,6 +5,12 @@
     - [x] Criar script para geração da documentação: `npm run build-swagger`
     - [x] Fornecer mock para frontend
 - [ ] Adicionar registro de usuários
+- [ ] Remover arquivo swagger.json do repositório
+- [ ] Criar um arquivo de rotas só para o swagger docs
+- [ ] Organizar pastas
+    - Application
+    - Domain
+    - UI
 - [ ] Adicionar autenticação via JWT
 - [ ] Revisar contrato da API
     - Revisar todos os endpoints e analisar se são suficientes para o frontend montar a aplicação
@@ -13,6 +19,7 @@
 - [ ] Preparar imagem da aplicação para produção
     - [ ] Script para geração da imagem
     - [ ] Script na pipeline para geração da imagem e registro no github
+- [ ] Verificar vulnerabilidades das dependências do Node
 
 ----
 
