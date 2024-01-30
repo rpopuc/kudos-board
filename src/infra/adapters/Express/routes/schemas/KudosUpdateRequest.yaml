@@ -1,0 +1,13 @@
+components:
+  schemas:
+    KudosUpdateRequest:
+      properties:
+        title:
+          type: string
+          example: "Kudos Title"
+        description:
+          type: string
+          example: "Kudos Description"
+        to:
+          type: string
+          example: "Kudos Receiver"

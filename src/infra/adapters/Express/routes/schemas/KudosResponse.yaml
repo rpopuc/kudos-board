@@ -1,0 +1,35 @@
+components:
+  schemas:
+    KudosResponse:
+      type: object
+      required:
+        - from
+        - to
+        - title
+        - description
+        - slug
+        - createdAt
+      properties:
+        slug:
+          type: string
+          example: "Kudos Slug identifier"
+        from:
+          type: string
+          example: "Kudos Author"
+        to:
+          type: string
+          example: "Kudos Receiver"
+        title:
+          type: string
+          example: "Kudos Title"
+        description:
+          type: string
+          example: "Kudos Description"
+        createdAt:
+          type: string
+          format: date-time
+          example: "Kudos` creation date"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "Kudos` last update date"

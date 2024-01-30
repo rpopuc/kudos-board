@@ -28,17 +28,13 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/infra/adapters/Express/routes/*.ts", "./src/infra/adapters/Express/routes/schemas/*.yaml"],
+  apis: ["./src/infra/adapters/Express/routes/*.ts", "./src/infra/adapters/Express/routes/definitions/*.yaml"],
 };
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 const app = express();
 
 app.use(express.json()).use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.get("/docs.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(swaggerDocs));
-});
 
 PanelRouter.setup(app);
 KudosRouter.setup(app);

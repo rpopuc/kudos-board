@@ -1,0 +1,6 @@
+components:
+  schemas:
+    KudosListResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/KudosResponse"
