@@ -1,11 +1,5 @@
 class BusinessError {
-  public readonly message: string;
-  public readonly status: string;
-
-  constructor(status: string, message: string) {
-    this.message = message;
-    this.status = status;
-  }
+  constructor(readonly status: string, readonly message: string) {}
 }
 
 export default BusinessError;

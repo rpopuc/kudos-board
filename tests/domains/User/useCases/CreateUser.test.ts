@@ -3,6 +3,7 @@ import UserRepository from "@/domain/User/Repositories/UserRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import UserData from "@/domain/User/DTO/UserData";
 import UserEntity from "@/domain/User/Entities/User";
+import KudosData from "@/domain/Kudos/DTO/KudosData";
 
 describe("CreateUser", () => {
   describe("handle", () => {
@@ -58,6 +59,71 @@ describe("CreateUser", () => {
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have password");
       expect(response.errors[0].status).toBe("EMPTY_PASSWORD");
+      expect(response.data).toBe(null);
+    });
+
+    it("should return an error if email is missing", async () => {
+      const invalidUserData: UserData = {
+        email: "",
+        name: "Example User",
+        password: new PlainTextPassword("examplePassword"),
+      };
+
+      const response = await createUser.handle(invalidUserData);
+      expect(response.ok).toBe(false);
+      expect(response.errors[0].message).toBe("Does not have an email");
+      expect(response.errors[0].status).toBe("EMPTY_EMAIL");
+      expect(response.data).toBe(null);
+    });
+
+    it("should return an error if email is invalid", async () => {
+      const invalidUserData: UserData = {
+        email: "invalid-email",
+        name: "Example User",
+        password: new PlainTextPassword("examplePassword"),
+      };
+
+      const response = await createUser.handle(invalidUserData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have a valid email");
+      expect(response.errors[0].status).toBe("INVALID_EMAIL");
+      expect(response.data).toBe(null);
+    });
+
+    it("should return an error if name is missing", async () => {
+      const invalidUserData: UserData = {
+        email: "test@example.com",
+        name: "",
+        password: new PlainTextPassword("examplePassword"),
+      };
+
+      const response = await createUser.handle(invalidUserData);
+      expect(response.ok).toBe(false);
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("Does not have a name");
+      expect(response.errors[0].status).toBe("EMPTY_NAME");
+      expect(response.data).toBe(null);
+    });
+
+    it("should return an error if user email already exists", async () => {
+      const userData: UserData = {
+        email: "test@example.com",
+        name: "Example Test",
+        password: new PlainTextPassword("examplePassword"),
+      };
+
+      const memoryUserEntity = new UserEntity(userData);
+
+      jest.spyOn(userRepository, "find").mockImplementation(async () => memoryUserEntity);
+
+      const createUser = new CreateUser(userRepository);
+      const response = await createUser.handle(userData);
+
+      expect(response.ok).toBeFalsy();
+      expect(response.errors).toHaveLength(1);
+      expect(response.errors[0].message).toBe("User already registered with this email");
+      expect(response.errors[0].status).toBe("USER_ALREADY_REGISTERED");
       expect(response.data).toBe(null);
     });
   });

@@ -18,6 +18,28 @@ class CreateUser {
       });
     }
 
+    if (!userData.email.trim()) {
+      result.addError({
+        message: "Does not have an email",
+        status: "EMPTY_EMAIL",
+      });
+    }
+
+    if (!userData.name.trim()) {
+      result.addError({
+        message: "Does not have a name",
+        status: "EMPTY_NAME",
+      });
+    }
+
+    const regex = /\S+@\S+\.\S+/;
+    if (!regex.test(userData.email)) {
+      result.addError({
+        message: "Does not have a valid email",
+        status: "INVALID_EMAIL",
+      });
+    }
+
     return result;
   }
 
@@ -26,6 +48,16 @@ class CreateUser {
 
     if (!validation.ok) {
       return new ErrorResponse(validation.errors);
+    }
+
+    const userExists = await this.userRepository.find(userData.email);
+    if (userExists) {
+      return new ErrorResponse([
+        {
+          message: "User already registered with this email",
+          status: "USER_ALREADY_REGISTERED",
+        },
+      ]);
     }
 
     const user = await this.userRepository.create(userData);

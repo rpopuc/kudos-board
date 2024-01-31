@@ -8,3 +8,4 @@ docker-compose.override.yml
 tests/coverage
 .vscode/
 swagger.json
+.idea/
