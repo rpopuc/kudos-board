@@ -6,6 +6,7 @@ class User {
   public password: Password;
   public createdAt: Date;
   public updatedAt: Date;
+  public id: string;
 
   constructor(data: any) {
     this.email = data.email;
@@ -13,6 +14,7 @@ class User {
     this.password = data.password;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
+    this.id = data.id;
   }
 }
 

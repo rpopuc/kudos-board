@@ -3,7 +3,6 @@ import UserRepository from "@/domain/User/Repositories/UserRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 import UserData from "@/domain/User/DTO/UserData";
 import UserEntity from "@/domain/User/Entities/User";
-import KudosData from "@/domain/Kudos/DTO/KudosData";
 
 describe("CreateUser", () => {
   describe("handle", () => {
