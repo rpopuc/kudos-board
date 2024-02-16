@@ -1,5 +1,17 @@
 # Todo
 
+## Última ação
+
+- [x] Verificar criação de usuário pelo endpoint
+- [-] [CHORE] Ajustar os registros do inversify
+- [x] Verificar segurança da senha do usuário
+- [ ] Login do usuário
+- [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
+- [ ] Revisar testes lentos
+
+## Tarefas
+
+- [x] Criar repository para User
 - [x] Documentar a API
 - [x] Adicionar mock da API
     - [x] Criar script para geração da documentação: `npm run build-swagger`
@@ -20,6 +32,7 @@
     - [ ] Script para geração da imagem
     - [ ] Script na pipeline para geração da imagem e registro no github
 - [ ] Verificar vulnerabilidades das dependências do Node
+- [ ] Refatorar uso do inversify
 
 ----
 

@@ -15,11 +15,13 @@ class UserController {
       const response = await this.createUserUseCase.handle(data);
 
       if (response.ok && response.data !== null) {
-        res.json(this.presenter.single(response.data));
+        res.status(201).json(this.presenter.single(response.data));
       } else {
-        res.status(400).json({
-          errors: response.errors.map(error => error.message),
-        });
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
       }
     });
   }

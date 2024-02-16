@@ -1,12 +1,14 @@
+import { injectable, inject } from "inversify";
 import UserData from "@/domain/User/DTO/UserData";
-import UserRepository from "@/domain/User/Repositories/UserRepository";
+import UserRepository, { UserRepositoryType } from "@/domain/User/Repositories/UserRepository";
 import CreateUserResponse from "@/domain/shared/Responses/CreateDataResponse";
 import ErrorResponse from "@/domain/shared/Responses/ErrorResponse";
 import ValidationResponse from "@/domain/shared/ValidationResponse";
 import UserEntity from "@/domain/User/Entities/User";
 
+@injectable()
 class CreateUser {
-  constructor(private userRepository: UserRepository) {}
+  constructor(@inject(UserRepositoryType) private userRepository: UserRepository) {}
 
   validate(userData: UserData): ValidationResponse {
     const result = new ValidationResponse(true);

@@ -6,14 +6,16 @@ export type UpdateData = {
   userData: UserData;
 };
 
+export const UserRepositoryType = Symbol.for("UserRepository");
+
 interface UserRepository {
   create(userData: UserData): Promise<UserEntity>;
-
-  update(data: UpdateData): Promise<UserEntity | null>;
-
-  delete(email: string): Promise<boolean>;
-
   find(email: string): Promise<UserEntity | null>;
+
+  // update(data: UpdateData): Promise<UserEntity | null>;
+  //
+  // delete(email: string): Promise<boolean>;
+  //
 }
 
 export default UserRepository;

@@ -28,14 +28,15 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
       - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.routers.traefik.middlewares=redirect-to-https"
+#      - "traefik.http.routers.traefik.middlewares=redirect-to-https"
 
   app:
     build:
       context: ./.docker/build/app
     volumes:
       - ./:/var/www/
-    command: npm run dev
+#    command: npm run dev
+    tty: true
     environment:
       - PORT=3001
     labels:
@@ -44,9 +45,11 @@ services:
       - "traefik.http.routers.appplication.entrypoints=websecure"
       - "traefik.http.routers.appplication.tls=true"
       - "traefik.http.services.appplication.loadbalancer.server.port=3001"
+    ports:
+      - "3001:3001"
 
   database:
-    image: mongo:latest
+    image: mongo:7.0.5
     environment:
       MONGO_INITDB_DATABASE: app
     volumes:

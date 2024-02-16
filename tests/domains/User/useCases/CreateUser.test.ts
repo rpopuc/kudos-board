@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import CreateUser from "@/domain/User/UseCases/CreateUser";
 import UserRepository from "@/domain/User/Repositories/UserRepository";
 import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";

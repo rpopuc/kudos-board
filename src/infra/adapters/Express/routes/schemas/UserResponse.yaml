@@ -1,0 +1,16 @@
+components:
+  schemas:
+    UserResponse:
+      type: object
+      required:
+        - name
+        - email
+        - createdAt
+      properties:
+        id:
+            type: string
+            format: uuid
+            example: "60f6a9e3-3b3e-4e3e-8e3e-3b3e3e3e3e3e"
+        name:
+            type: string
+            example: "User Name"
