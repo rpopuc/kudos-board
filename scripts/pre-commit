@@ -2,8 +2,12 @@
 
 set -e
 
-# Run tests
-docker-compose exec -T app npm test
+
+# Try to fix code style
+docker compose exec -T app npm run prettier:fix
 
 # Validate code with Prettier
-docker-compose exec -T app npm run prettier
+docker compose exec -T app npm run prettier
+
+# Run tests
+docker compose exec -T app npm test

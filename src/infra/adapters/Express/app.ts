@@ -1,8 +1,19 @@
+// Inversity
+import "reflect-metadata";
+import { Container } from "inversify";
+import { ApplicationServiceProvider } from "@/infra/Providers/ApplicationServiceProvider";
+
+const container = new Container();
+const appServiceProvider = new ApplicationServiceProvider();
+appServiceProvider.register(container);
+
 import express from "express";
 import PanelRouter from "@/infra/adapters/Express/routes/Panel";
 import KudosRouter from "@/infra/adapters/Express/routes/Kudos";
+import UserRouter from "@/infra/adapters/Express/routes/UserRouter";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+// import { UserRepositoryType } from "@/domain/User/Repositories/UserRepository";
 
 const swaggerOptions = {
   definition: {
@@ -42,5 +53,6 @@ app.get("/docs.json", (req, res) => {
 
 PanelRouter.setup(app);
 KudosRouter.setup(app);
+UserRouter.setup(app, container);
 
 export default app;

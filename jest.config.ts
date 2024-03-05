@@ -34,11 +34,7 @@ export default {
   coverageProvider: "v8",
 
   // A list of reporter names that Jest uses when writing coverage reports
-  coverageReporters: [
-    "json",
-    "html",
-    "text"
-  ],
+  coverageReporters: ["json", "html", "text"],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -70,10 +66,7 @@ export default {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: [
-    "node_modules",
-    "src",
-  ],
+  moduleDirectories: ["node_modules", "src"],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
@@ -89,7 +82,7 @@ export default {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -126,10 +119,7 @@ export default {
   rootDir: "./",
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: [
-    "<rootDir>/tests/",
-    "<rootDir>/src/"
-  ],
+  roots: ["<rootDir>/tests/", "<rootDir>/src/"],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",

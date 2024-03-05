@@ -1,0 +1,19 @@
+components:
+  schemas:
+    UserRequest:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        password:
+          type: string
+          example: "user123"
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        name:
+          type: string
+          example: "User Name"

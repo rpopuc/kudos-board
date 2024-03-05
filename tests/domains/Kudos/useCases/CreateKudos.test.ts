@@ -107,7 +107,7 @@ describe("CreateKudos", () => {
     it("should return an error if description is missing", async () => {
       const from = { id: "user-1", name: "User 1" };
 
-      const invalidkudosData = {
+      const invalidKudosData = {
         title: "Example Title",
         description: "",
         from,
@@ -115,7 +115,7 @@ describe("CreateKudos", () => {
         panelSlug: "panel-slug-1",
       } as KudosData;
 
-      const response = await createKudos.handle(invalidkudosData);
+      const response = await createKudos.handle(invalidKudosData);
       expect(response.ok).toBe(false);
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have description");
@@ -126,7 +126,7 @@ describe("CreateKudos", () => {
     it("should return an error if recipient is missing", async () => {
       const from = { id: "user-1", name: "User 1" };
 
-      const invalidkudosData = {
+      const invalidKudosData = {
         title: "Example Title",
         description: "Example Description",
         from,
@@ -134,7 +134,7 @@ describe("CreateKudos", () => {
         panelSlug: "panel-slug-1",
       } as KudosData;
 
-      const response = await createKudos.handle(invalidkudosData);
+      const response = await createKudos.handle(invalidKudosData);
       expect(response.ok).toBe(false);
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have recipient");
@@ -145,7 +145,7 @@ describe("CreateKudos", () => {
     it("should return an error if panel slug is missing", async () => {
       const from = { id: "user-1", name: "User 1" };
 
-      const invalidkudosData = {
+      const invalidKudosData = {
         title: "Example Title",
         description: "Example Description",
         from,
@@ -153,7 +153,7 @@ describe("CreateKudos", () => {
         panelSlug: "",
       } as KudosData;
 
-      const response = await createKudos.handle(invalidkudosData);
+      const response = await createKudos.handle(invalidKudosData);
       expect(response.ok).toBe(false);
       expect(response.errors).toHaveLength(1);
       expect(response.errors[0].message).toBe("Does not have panel slug");
