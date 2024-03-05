@@ -12,11 +12,9 @@ export default class AuthController {
       const response = await this.loginUseCase.handle(data);
 
       if (response.ok) {
-        res.status(201).json({ok: response.ok});
+        res.status(201).json({ ok: response.ok });
       } else {
-        res
-          .json({errors: response.errors.map(error => error.message)})
-          .status(400);
+        res.json({ errors: response.errors.map(error => error.message) }).status(400);
       }
     });
   }

@@ -59,7 +59,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/kudos", controller.store())
+    app.post("/kudos", controller.store());
 
     /**
      * @swagger
