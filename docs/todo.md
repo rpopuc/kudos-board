@@ -5,9 +5,13 @@
 - [x] Verificar criação de usuário pelo endpoint
 - [-] [CHORE] Ajustar os registros do inversify
 - [x] Verificar segurança da senha do usuário
-- [ ] Login do usuário
+- [>] Login do usuário
+    - [x] Montar estrutura do use case, controller e rota
+    - [ ] Efetuar login
+    - [ ] Gerar JWT
 - [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
 - [ ] Revisar testes lentos
+- [ ] Melhorar imagem do app para retirar ttty
 
 ## Tarefas
 
@@ -33,6 +37,9 @@
     - [ ] Script na pipeline para geração da imagem e registro no github
 - [ ] Verificar vulnerabilidades das dependências do Node
 - [ ] Refatorar uso do inversify
+- [ ] Criar rotas de administração
+    - [ ] Listagem de usuários
+    - [ ] Exclusão de usuários
 
 ----
 

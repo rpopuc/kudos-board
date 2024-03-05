@@ -11,6 +11,7 @@ import express from "express";
 import PanelRouter from "@/infra/adapters/Express/routes/Panel";
 import KudosRouter from "@/infra/adapters/Express/routes/Kudos";
 import UserRouter from "@/infra/adapters/Express/routes/UserRouter";
+import AuthRouter from "@/infra/adapters/Express/routes/AuthRouter";
 import ApiDocsRouter from "@/infra/adapters/Express/routes/ApiDocsRouter";
 
 const app = express();
@@ -19,5 +20,6 @@ ApiDocsRouter.setup(app);
 PanelRouter.setup(app);
 KudosRouter.setup(app);
 UserRouter.setup(app, container);
+AuthRouter.setup(app, container);
 
 export default app;
