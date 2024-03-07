@@ -3,8 +3,7 @@ import Password from "@/domain/shared/valueObjects/Password";
 
 const SALT_ROUNDS = 10;
 
-export default class BCryptPassword implements Password
-{
+export default class BCryptPassword implements Password {
   private value: string;
   private plainTextPassword: string;
 

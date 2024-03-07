@@ -12,18 +12,20 @@ export default class AuthController {
       const data = req.body;
       const response = await this.loginUseCase.handle({
         email: data.email,
-        password: new PlainTextPassword(data.password)
+        password: new PlainTextPassword(data.password),
       });
 
       if (response.ok) {
         res.status(201).json({
           ok: response.ok,
-          token: response.token
+          token: response.token,
         });
       } else {
-        res.json({
-          errors: response.errors.map(error => error.message)
-        }).status(400);
+        res
+          .json({
+            errors: response.errors.map(error => error.message),
+          })
+          .status(400);
       }
     });
   }

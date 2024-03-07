@@ -9,30 +9,29 @@ import BusinessError from "@/domain/shared/errors/BusinessError";
 class Login {
   constructor(
     @inject(UserRepositoryType) private userRepository: UserRepository,
-    @inject(JWTServiceType) private jwtService: JWTService
+    @inject(JWTServiceType) private jwtService: JWTService,
   ) {}
 
   async handle(loginData: LoginData): Promise<LoginResponse> {
     const user = await this.userRepository.find(loginData.email);
 
     if (user === null) {
-      return new LoginResponse(false, [
-        new BusinessError('invalid-credentials', 'Invalid credentials')
-      ]);
+      return new LoginResponse(false, [new BusinessError("invalid-credentials", "Invalid credentials")]);
     }
 
     // TODO: Verificar o motivo da senha estar falhando
     if (!user.password.compare(loginData.password.getValue())) {
-      return new LoginResponse(false, [
-        new BusinessError('invalid-credentials', 'Invalid password')
-      ]);
+      return new LoginResponse(false, [new BusinessError("invalid-credentials", "Invalid password")]);
     }
 
-    const token = await this.jwtService.sign({
-      id: user.id,
-      email: user.email,
-      role: 'admin'
-    }, 3600);
+    const token = await this.jwtService.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: "admin",
+      },
+      3600,
+    );
 
     return new LoginResponse(true, [], token);
   }
