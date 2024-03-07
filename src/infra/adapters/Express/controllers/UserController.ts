@@ -4,6 +4,7 @@ import { RequestHandler } from "express";
 import CreateUser from "@/domain/User/UseCases/CreateUser";
 import Password from "@/infra/shared/ValueObjects/BCryptPassword";
 import UserPresenter from "@/domain/User/Presenters/UserPresenter";
+import BCryptPassword from "@/infra/shared/ValueObjects/BCryptPassword";
 
 class UserController {
   constructor(private createUserUseCase: CreateUser, private presenter: UserPresenter) {}
@@ -11,7 +12,7 @@ class UserController {
   store(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const data = req.body;
-      data.password = new Password(data.password);
+      data.password = new BCryptPassword(data.password);
       const response = await this.createUserUseCase.handle(data);
 
       if (response.ok && response.data !== null) {

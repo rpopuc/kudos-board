@@ -1,0 +1,18 @@
+components:
+  schemas:
+    AuthResponse:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+            type: boolean
+            example: true
+        token:
+            type: string
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2VzcyIsImlhdCI6MTYxNzIwNzIwM30.1"
+        errors:
+            type: array
+            items:
+                type: string
+            example: []

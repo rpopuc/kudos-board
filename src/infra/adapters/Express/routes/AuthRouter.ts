@@ -20,7 +20,7 @@ export default class AuthRouter {
      *       content:
      *          application/json:
      *             schema:
-     *                $ref: '#/components/schemas/UserRequest'
+     *                $ref: '#/components/schemas/AuthRequest'
      *     responses:
      *       201:
      *         description: Usuário registrado com sucesso.
