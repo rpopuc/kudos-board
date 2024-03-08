@@ -8,7 +8,7 @@ import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
-import { AuthenticatedRequest } from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware"
+import { AuthenticatedRequest } from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 class PanelController {
   constructor(

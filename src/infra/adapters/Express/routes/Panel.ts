@@ -222,7 +222,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-     app.get("/panel", authorizeMiddleware, controller.index());
+    app.get("/panel", authorizeMiddleware, controller.index());
   }
 }
 
