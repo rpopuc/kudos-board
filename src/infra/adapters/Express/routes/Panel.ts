@@ -10,6 +10,7 @@ import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
+import authorizeMiddleware from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 class Panel {
   static setup(app: express.Application) {
@@ -200,22 +201,28 @@ class Panel {
      * @swagger
      * /panel:
      *   get:
-     *      tags: [Panel]
-     *      summary: Lista os painéis do usuário
-     *      description: Lista os painéis do usuário
-     *      responses:
+     *       tags: [Panel]
+     *       summary: Lista os painéis do usuário
+     *       description: Lista os painéis do usuário
+     *       security:
+     *          - BearerAuth: []
      *       200:
      *         description: Painéis do usuário
      *         content:
      *            application/json:
      *              schema:
-     *                 $ref: '#/components/schemas/PanelListResponse'
+     *                 type: object
+     *                 properties:
+     *                    ok:
+     *                      type: boolean
+     *                    userId:
+     *                      type: string
      *       404:
      *         description: Painel não encontrado.
      *       500:
      *         description: Erro interno.
      */
-    // app.get("/panel", controller.index());
+     app.get("/panel", authorizeMiddleware, controller.index());
   }
 }
 
