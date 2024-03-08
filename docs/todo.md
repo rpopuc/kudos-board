@@ -7,11 +7,18 @@
 - [x] Verificar segurança da senha do usuário
 - [>] Login do usuário
     - [x] Montar estrutura do use case, controller e rota
-    - [ ] Efetuar login
-    - [ ] Gerar JWT
+    - [x] Efetuar login
+    - [x] Gerar JWT
+    - [x] Autorização JWT
+    - [ ] Configurar o secret por env
+    - [ ] Configurar o TTL por env
+    - [ ] Colocar os middlewares em todas as rotas
+    - [ ] Revisar os testes para esses cenários
 - [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
 - [ ] Revisar testes lentos
 - [ ] Melhorar imagem do app para retirar ttty
+- [ ] Verificar se o Kudos pertence ao Painel
+- [ ] Verificar se o Painel pertence ao usuário
 
 ## Tarefas
 
