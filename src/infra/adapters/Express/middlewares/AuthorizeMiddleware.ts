@@ -14,8 +14,8 @@ export interface AuthenticatedRequest extends Request {
 }
 
 const respondWithError = (res: Response) => {
-  return res.status(401).json({ message: 'Acesso não autorizado' });
-}
+  return res.status(401).json({ message: "Acesso não autorizado" });
+};
 
 export default async function authorizeMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
@@ -26,7 +26,7 @@ export default async function authorizeMiddleware(req: AuthenticatedRequest, res
       return respondWithError(res);
     }
 
-    const decodedToken: AuthorizationToken = (await jwtService.verify(token))
+    const decodedToken: AuthorizationToken = await jwtService.verify(token);
 
     // Adiciona a identificação do usuário autenticado na requisição
     req.authorizedUserId = decodedToken.id;

@@ -25,9 +25,9 @@ class Login {
     }
 
     const token = await this.jwtService.sign({
-        id: user.id,
-        email: user.email,
-        role: "admin",
+      id: user.id,
+      email: user.email,
+      role: "admin",
     });
 
     return new LoginResponse(true, [], token);
