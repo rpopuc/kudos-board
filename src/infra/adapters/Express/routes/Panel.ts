@@ -39,6 +39,8 @@ class Panel {
      *     tags: [Panel]
      *     summary: Adiciona um novo painel.
      *     description: Adiciona um novo painel.
+     *     security:
+     *          - BearerAuth: []
      *     requestBody:
      *       required: true
      *       content:
@@ -57,7 +59,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/panel", controller.store());
+    app.post("/panel", authorizeMiddleware, controller.store());
 
     /**
      * @swagger
@@ -66,6 +68,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Arquiva um Painel
      *      description: Arquiva um painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -90,7 +94,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/panel/archive/:slug", controller.archive());
+    app.put("/panel/archive/:slug", authorizeMiddleware, controller.archive());
 
     /**
      * @swagger
@@ -99,6 +103,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Atualiza os dados de um Painel.
      *      description: Atualiza os dados de um Painel.
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -125,7 +131,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/panel/:slug", controller.update());
+    app.put("/panel/:slug", authorizeMiddleware, controller.update());
 
     /**
      * @swagger
@@ -134,6 +140,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Exclui um Painel
      *      description: Exlui um Painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -156,7 +164,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.delete("/panel/:slug", controller.delete());
+    app.delete("/panel/:slug", authorizeMiddleware, controller.delete());
 
     /**
      * @swagger
@@ -165,6 +173,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Obtém os dados de um Painel
      *      description: Obtém os dados de um Painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -195,7 +205,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/panel/:slug", controller.show());
+    app.post("/panel/:slug", authorizeMiddleware, controller.show());
 
     /**
      * @swagger

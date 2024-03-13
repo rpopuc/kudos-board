@@ -7,6 +7,6 @@ export type Payload = {
 export const JWTServiceType = Symbol.for("JWTService");
 
 export default interface JWTService {
-  sign(payload: Payload, expiresInInSeconds: number): Promise<string>;
+  sign(payload: Payload): Promise<string>;
   verify(token: string): Promise<boolean>;
 }

@@ -24,14 +24,11 @@ class Login {
       return new LoginResponse(false, [new BusinessError("invalid-credentials", "Invalid password")]);
     }
 
-    const token = await this.jwtService.sign(
-      {
+    const token = await this.jwtService.sign({
         id: user.id,
         email: user.email,
         role: "admin",
-      },
-      3600,
-    );
+    });
 
     return new LoginResponse(true, [], token);
   }
