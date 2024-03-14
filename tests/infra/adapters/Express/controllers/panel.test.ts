@@ -51,11 +51,9 @@ describe("Panel Controller", () => {
   describe("@index", () => {
     it("should list registered panels", async () => {
       const mockRequest = {
-        params: {
-        },
-        body: {
-        },
-        authorizedUserId: 'user-id',
+        params: {},
+        body: {},
+        authorizedUserId: "user-id",
       } as AuthenticatedRequest;
 
       const mockResponse = {
@@ -64,10 +62,12 @@ describe("Panel Controller", () => {
 
       await panelController.index()(mockRequest, mockResponse, () => {});
 
-      expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
-        ok: true,
-        userId: 'user-id',
-      }));
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ok: true,
+          userId: "user-id",
+        }),
+      );
     });
 
     it("should return an error message when panel not found", async () => {
