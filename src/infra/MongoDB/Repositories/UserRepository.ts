@@ -6,6 +6,8 @@ import UserRepositoryInterface from "@/domain/User/Repositories/UserRepository";
 import UserData from "@/domain/User/DTO/UserData";
 import { User as UserDocument } from "@/infra/MongoDB/models/User";
 import { DatabaseInterface, DatabaseInterfaceType } from "@/infra/MongoDB/services/DatabaseInterface";
+import BCryptPassword from "@/infra/shared/ValueObjects/BCryptPassword";
+import PlainTextPassword from "@/infra/shared/ValueObjects/PlainTextPassword";
 
 @injectable()
 class UserRepository implements UserRepositoryInterface {
@@ -46,6 +48,7 @@ class UserRepository implements UserRepositoryInterface {
     return new UserEntity({
       ...document,
       id: document._id,
+      password: BCryptPassword.fromHashedValue(document.password),
     });
   }
 }

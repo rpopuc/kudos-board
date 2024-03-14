@@ -17,6 +17,7 @@ import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import type { PanelPresentation } from "@/domain/Panel/Presenters/PanelPresenter";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
+import { AuthenticatedRequest } from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 describe("Panel Controller", () => {
   let panelController: PanelController;
@@ -45,6 +46,60 @@ describe("Panel Controller", () => {
       archivePanelUseCase,
       presenter,
     );
+  });
+
+  describe("@index", () => {
+    it("should list registered panels", async () => {
+      const mockRequest = {
+        params: {},
+        body: {},
+        authorizedUserId: "user-id",
+      } as AuthenticatedRequest;
+
+      const mockResponse = {
+        json: jest.fn(),
+      } as Partial<Response> as Response;
+
+      await panelController.index()(mockRequest, mockResponse, () => {});
+
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ok: true,
+          userId: "user-id",
+        }),
+      );
+    });
+
+    it("should return an error message when panel not found", async () => {
+      const mockRequest = {
+        params: {
+          slug: "test-panel",
+        },
+        body: {
+          clientPassword: "teste12345",
+        },
+      } as Request<{ slug: string }>;
+
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      } as Partial<Response> as Response;
+
+      jest
+        .spyOn(showPanelUseCase, "handle")
+        .mockResolvedValueOnce(
+          new ShowPanelErrorResponse([new BusinessError("PANEL_NOT_FOUND", "Could not find panel.")]),
+        );
+
+      jest.spyOn(presenter, "single");
+
+      await panelController.show()(mockRequest, mockResponse, () => {});
+
+      expect(presenter.single).not.toHaveBeenCalled();
+      expect(showPanelUseCase.handle).toHaveBeenCalledWith({ panelSlug: "test-panel", clientPassword: "teste12345" });
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({ errors: ["Could not find panel."] });
+    });
   });
 
   describe("@show", () => {

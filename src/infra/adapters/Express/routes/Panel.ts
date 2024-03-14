@@ -10,6 +10,7 @@ import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
+import authorizeMiddleware from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 class Panel {
   static setup(app: express.Application) {
@@ -38,6 +39,8 @@ class Panel {
      *     tags: [Panel]
      *     summary: Adiciona um novo painel.
      *     description: Adiciona um novo painel.
+     *     security:
+     *          - BearerAuth: []
      *     requestBody:
      *       required: true
      *       content:
@@ -56,7 +59,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/panel", controller.store());
+    app.post("/panel", authorizeMiddleware, controller.store());
 
     /**
      * @swagger
@@ -65,6 +68,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Arquiva um Painel
      *      description: Arquiva um painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -89,7 +94,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/panel/archive/:slug", controller.archive());
+    app.put("/panel/archive/:slug", authorizeMiddleware, controller.archive());
 
     /**
      * @swagger
@@ -98,6 +103,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Atualiza os dados de um Painel.
      *      description: Atualiza os dados de um Painel.
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -124,7 +131,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/panel/:slug", controller.update());
+    app.put("/panel/:slug", authorizeMiddleware, controller.update());
 
     /**
      * @swagger
@@ -133,6 +140,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Exclui um Painel
      *      description: Exlui um Painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -155,7 +164,7 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.delete("/panel/:slug", controller.delete());
+    app.delete("/panel/:slug", authorizeMiddleware, controller.delete());
 
     /**
      * @swagger
@@ -164,6 +173,8 @@ class Panel {
      *      tags: [Panel]
      *      summary: Obtém os dados de um Painel
      *      description: Obtém os dados de um Painel
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -194,28 +205,34 @@ class Panel {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/panel/:slug", controller.show());
+    app.post("/panel/:slug", authorizeMiddleware, controller.show());
 
     /**
      * @swagger
      * /panel:
      *   get:
-     *      tags: [Panel]
-     *      summary: Lista os painéis do usuário
-     *      description: Lista os painéis do usuário
-     *      responses:
+     *       tags: [Panel]
+     *       summary: Lista os painéis do usuário
+     *       description: Lista os painéis do usuário
+     *       security:
+     *          - BearerAuth: []
      *       200:
      *         description: Painéis do usuário
      *         content:
      *            application/json:
      *              schema:
-     *                 $ref: '#/components/schemas/PanelListResponse'
+     *                 type: object
+     *                 properties:
+     *                    ok:
+     *                      type: boolean
+     *                    userId:
+     *                      type: string
      *       404:
      *         description: Painel não encontrado.
      *       500:
      *         description: Erro interno.
      */
-    // app.get("/panel", controller.index());
+    app.get("/panel", authorizeMiddleware, controller.index());
   }
 }
 

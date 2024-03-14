@@ -8,6 +8,7 @@ import PanelPresenter from "@/domain/Panel/Presenters/PanelPresenter";
 import UpdatePanel from "@/domain/Panel/UseCases/UpdatePanel";
 import ShowPanel from "@/domain/Panel/UseCases/ShowPanel";
 import ArchivePanel from "@/domain/Panel/UseCases/ArchivePanel";
+import { AuthenticatedRequest } from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 class PanelController {
   constructor(
@@ -19,11 +20,11 @@ class PanelController {
     private presenter: PanelPresenter,
   ) {}
 
-  // index(): RequestHandler {
-  //   return asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  //     res.json({ ok: true }).status(200);
-  //   });
-  // }
+  index(): RequestHandler {
+    return asyncHandler(async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+      res.json({ ok: true, userId: req.authorizedUserId }).status(200);
+    });
+  }
 
   show(): RequestHandler {
     return asyncHandler(async (req: Request, res: Response): Promise<void> => {

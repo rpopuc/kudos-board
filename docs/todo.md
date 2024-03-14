@@ -5,9 +5,22 @@
 - [x] Verificar criação de usuário pelo endpoint
 - [-] [CHORE] Ajustar os registros do inversify
 - [x] Verificar segurança da senha do usuário
-- [ ] Login do usuário
+- [>] Login do usuário
+    - [x] Montar estrutura do use case, controller e rota
+    - [x] Efetuar login
+    - [x] Gerar JWT
+    - [x] Autorização JWT
+    - [x] Configurar o secret por env
+    - [x] Configurar o TTL por env
+    - [x] Colocar os middlewares em todas as rotas de Panel
+    - [ ] Colocar os middlewares em todas as rotas de Kudos
+    - [ ] Implementar o método REAL de PanelController::index
+    - [ ] Revisar os testes para esses cenários
 - [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
 - [ ] Revisar testes lentos
+- [ ] Melhorar imagem do app para retirar ttty
+- [ ] Verificar se o Kudos pertence ao Painel
+- [ ] Verificar se o Painel pertence ao usuário
 
 ## Tarefas
 
@@ -33,6 +46,9 @@
     - [ ] Script na pipeline para geração da imagem e registro no github
 - [ ] Verificar vulnerabilidades das dependências do Node
 - [ ] Refatorar uso do inversify
+- [ ] Criar rotas de administração
+    - [ ] Listagem de usuários
+    - [ ] Exclusão de usuários
 
 ----
 
