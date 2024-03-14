@@ -14,6 +14,7 @@
     - [x] Configurar o TTL por env
     - [x] Colocar os middlewares em todas as rotas de Panel
     - [ ] Colocar os middlewares em todas as rotas de Kudos
+    - [ ] Implementar o método REAL de PanelController::index
     - [ ] Revisar os testes para esses cenários
 - [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
 - [ ] Revisar testes lentos
