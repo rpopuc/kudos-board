@@ -16,8 +16,7 @@ class PanelController {
     private deletePanelUseCase: DeletePanel,
     private updatePanelUseCase: UpdatePanel,
     private showPanelUseCase: ShowPanel,
-    private archivePanelUseCase: ArchivePanel,
-    private presenter: PanelPresenter,
+    private archivePanelUseCase: ArchivePanel,    private presenter: PanelPresenter,
   ) {}
 
   index(): RequestHandler {
