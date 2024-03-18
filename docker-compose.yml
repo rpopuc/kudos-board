@@ -35,8 +35,7 @@ services:
       context: ./.docker/build/app
     volumes:
       - ./:/var/www/
-#    command: npm run dev
-    tty: true
+    command: npm run dev
     environment:
       - PORT=3001
     labels:

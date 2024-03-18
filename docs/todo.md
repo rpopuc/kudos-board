@@ -14,13 +14,13 @@
     - [x] Configurar o TTL por env
     - [x] Colocar os middlewares em todas as rotas de Panel
     - [x] Colocar os middlewares em todas as rotas de Kudos
-    - [ ] Arrumar script de pré-commit para bloquer quando houver alteração no código
     - [ ] Revisão dos endpoints com o método de autenticação 
       - Implementar o método REAL de PanelController::index
     - [ ] Revisar os testes para esses cenários
+- [x] Arrumar script de pré-commit para bloquear quando houver alteração no código
+- [ ] Melhorar imagem do app para retirar ttty
 - [ ] Revisar arquitetura de UserData entre Controller + UseCase + Repository
 - [ ] Revisar testes lentos
-- [ ] Melhorar imagem do app para retirar ttty
 - [ ] Verificar se o Kudos pertence ao Painel
 - [ ] Verificar se o Painel pertence ao usuário
 
