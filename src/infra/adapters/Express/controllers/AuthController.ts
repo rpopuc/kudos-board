@@ -16,10 +16,7 @@ export default class AuthController {
       });
 
       if (response.ok) {
-        res.status(201).json({
-          ok: response.ok,
-          token: response.token,
-        });
+        res.status(201).send(response.token);
       } else {
         res
           .json({

@@ -1,13 +1,13 @@
 #!/bin/sh
 
-set -e
-
+# Validate code with Prettier
+docker-compose exec -T app npm run prettier
+prettier_result=$?
 
 # Try to fix code style
-docker compose exec -T app npm run prettier:fix
-
-# Validate code with Prettier
-docker compose exec -T app npm run prettier
+docker-compose exec -T app npm run prettier:fix
 
 # Run tests
-docker compose exec -T app npm test
+if [ $prettier_result -eq 0 ]; then
+  docker-compose exec -T app npm run test
+fi

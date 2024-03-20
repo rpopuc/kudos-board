@@ -11,6 +11,7 @@ import ShowKudos from "@/domain/Kudos/UseCases/ShowKudos";
 import ArchiveKudos from "@/domain/Kudos/UseCases/ArchiveKudos";
 import PanelRepositoryInterface from "@/domain/Panel/Repositories/PanelRepository";
 import ListKudos from "@/domain/Kudos/UseCases/ListKudos";
+import authorizeMiddleware from "@/infra/adapters/Express/middlewares/AuthorizeMiddleware";
 
 class Kudos {
   static setup(app: express.Application) {
@@ -41,6 +42,8 @@ class Kudos {
      *     tags: [Kudos]
      *     summary: Adiciona um novo kudos.
      *     description: Adiciona um novo kudos.
+     *     security:
+     *          - BearerAuth: []
      *     requestBody:
      *       required: true
      *       content:
@@ -59,7 +62,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/kudos", controller.store());
+    app.post("/kudos", authorizeMiddleware, controller.store());
 
     /**
      * @swagger
@@ -68,6 +71,8 @@ class Kudos {
      *      tags: [Kudos]
      *      summary: Arquiva um Kudos
      *      description: Arquiva um kudos
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -92,7 +97,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/kudos/archive/:slug", controller.archive());
+    app.put("/kudos/archive/:slug", authorizeMiddleware, controller.archive());
 
     /**
      * @swagger
@@ -101,6 +106,8 @@ class Kudos {
      *      tags: [Kudos]
      *      summary: Atualiza os dados de um Kudos
      *      description: Atualiza os dados de um Kudos
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -127,7 +134,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.put("/kudos/:slug", controller.update());
+    app.put("/kudos/:slug", authorizeMiddleware, controller.update());
 
     /**
      * @swagger
@@ -136,6 +143,8 @@ class Kudos {
      *      tags: [Kudos]
      *      summary: Exclui um Kudos
      *      description: Exlui um Kudos
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -160,7 +169,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.delete("/kudos/:slug", controller.delete());
+    app.delete("/kudos/:slug", authorizeMiddleware, controller.delete());
 
     /**
      * @swagger
@@ -169,6 +178,8 @@ class Kudos {
      *      tags: [Kudos]
      *      summary: Obtém a lista de kudos a partir de um panel
      *      description: Obtém os dados de um Kudos
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: panelSlug
@@ -189,7 +200,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.get("/kudos/panel/:panelSlug", controller.list());
+    app.get("/kudos/panel/:panelSlug", authorizeMiddleware, controller.list());
 
     /**
      * @swagger
@@ -198,6 +209,8 @@ class Kudos {
      *      tags: [Kudos]
      *      summary: Obtém os dados de um Kudos
      *      description: Obtém os dados de um Kudos
+     *      security:
+     *          - BearerAuth: []
      *      parameters:
      *        - in: path
      *          name: slug
@@ -228,7 +241,7 @@ class Kudos {
      *       500:
      *         description: Erro interno.
      */
-    app.post("/kudos/:slug", controller.show());
+    app.post("/kudos/:slug", authorizeMiddleware, controller.show());
   }
 }
 
